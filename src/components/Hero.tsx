@@ -10,7 +10,7 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-silk-charcoal" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -27,7 +27,7 @@ const Hero = () => {
             </div>
             
             <p className="text-muted-foreground text-lg leading-relaxed max-w-lg">
-              Відкрийте для себе розкіш натурального шовку. 100% шовк найвищої якості, 
+              Відкрийте для себе преміум натурального шовку. 100% шовк найвищої якості, 
               створений для тих, хто цінує елегантність та бездоганний стиль.
             </p>
 

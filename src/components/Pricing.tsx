@@ -25,7 +25,7 @@ const Pricing = () => {
             <div className="space-y-4">
               <p className="text-primary uppercase tracking-[0.3em] text-sm">Ціни</p>
               <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
-                Інвестиція в <span className="text-primary">якість та розкіш</span>
+                Інвестиція в <span className="text-primary">якість та преміум</span>
               </h2>
             </div>
 
@@ -37,7 +37,7 @@ const Pricing = () => {
             <ul className="space-y-4">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-primary" />
                   </div>
                   <span className="text-foreground">{feature}</span>
@@ -59,7 +59,7 @@ const Pricing = () => {
           {/* Image Card */}
           <div className="relative">
             <div className="bg-card border border-border/50 p-8">
-              <div className="bg-foreground p-8 mb-6">
+              <div className="bg-background p-8 mb-6">
                 <img
                   src={silkScrunchie}
                   alt="Silk4me Scrunchie"

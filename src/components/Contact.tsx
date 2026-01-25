@@ -3,13 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Send, Phone, Mail, MapPin } from "lucide-react";
+import { Send, Phone, MapPin, Instagram } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
+
+interface FormSubmission {
+  id: string;
+  name: string;
+  phone: string;
+  message: string;
+  timestamp: string;
+}
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
     message: "",
   });
@@ -19,11 +26,24 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
+    // Store submission in localStorage for visibility
+    const submission: FormSubmission = {
+      id: crypto.randomUUID(),
+      name: formData.name,
+      phone: formData.phone,
+      message: formData.message,
+      timestamp: new Date().toISOString(),
+    };
+    
+    const existingSubmissions = JSON.parse(localStorage.getItem('silk4me_submissions') || '[]');
+    existingSubmissions.push(submission);
+    localStorage.setItem('silk4me_submissions', JSON.stringify(existingSubmissions));
+    
+    // Simulate form submission delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
     
-    toast.success("Дякуємо! Ми зв'яжемося з вами найближчим часом.");
-    setFormData({ name: "", email: "", phone: "", message: "" });
+    toast.success("Дякуємо! Ми зв'яжемося з вами через Instagram або телефон.");
+    setFormData({ name: "", phone: "", message: "" });
     setIsSubmitting(false);
   };
 
@@ -34,11 +54,11 @@ const Contact = () => {
           {/* Form */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <p className="text-primary uppercase tracking-[0.3em] text-sm">Контакти</p>
-              <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
-                Отримайте <span className="text-primary">персональну консультацію</span>
+              <p className="text-gold uppercase tracking-[0.3em] text-sm">Контакти</p>
+              <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
+                Отримайте <span className="text-gold">персональну консультацію</span>
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-background/80">
                 Заповніть форму, і наш консультант зв'яжеться з вами для підбору ідеального варіанту.
               </p>
             </div>
@@ -50,7 +70,7 @@ const Contact = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="bg-background border-border/50 focus:border-primary h-12"
+                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
                 <Input
                   type="tel"
@@ -58,28 +78,20 @@ const Contact = () => {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
-                  className="bg-background border-border/50 focus:border-primary h-12"
+                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
               </div>
-              <Input
-                type="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                className="bg-background border-border/50 focus:border-primary h-12"
-              />
               <Textarea
                 placeholder="Ваше повідомлення (необов'язково)"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="bg-background border-border/50 focus:border-primary min-h-[120px] resize-none"
+                className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[120px] resize-none"
               />
               <Button 
                 type="submit" 
                 variant="luxury" 
                 size="lg" 
-                className="w-full md:w-auto"
+                className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border-gold hover:border-gold-light"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Надсилання..." : "Надіслати запит"}
@@ -88,25 +100,30 @@ const Contact = () => {
             </form>
 
             {/* Contact Info */}
-            <div className="grid md:grid-cols-3 gap-6 pt-8 border-t border-border/50">
+            <div className="grid md:grid-cols-3 gap-6 pt-8 border-t border-background/20">
               <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-primary" />
-                <span className="text-sm text-muted-foreground">+380 XX XXX XX XX</span>
+                <Phone className="w-5 h-5 text-gold" />
+                <span className="text-sm text-background/80">+380 XX XXX XX XX</span>
               </div>
+              <a 
+                href="https://www.instagram.com/silk4me" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 group"
+              >
+                <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">Написати в Instagram</span>
+              </a>
               <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-primary" />
-                <span className="text-sm text-muted-foreground">hello@silk4me.ua</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-primary" />
-                <span className="text-sm text-muted-foreground">Київ, Україна</span>
+                <MapPin className="w-5 h-5 text-gold" />
+                <span className="text-sm text-background/80">Київ, Україна</span>
               </div>
             </div>
           </div>
 
           {/* Image */}
           <div className="relative hidden lg:block">
-            <div className="absolute -inset-4 border border-primary/20" />
+            <div className="absolute -inset-4 border border-gold/20" />
             <img
               src={silkLifestyle}
               alt="Silk4me Lifestyle"

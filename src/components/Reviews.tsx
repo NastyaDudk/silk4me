@@ -4,7 +4,7 @@ const reviews = [
   {
     name: "Олена К.",
     role: "Дизайнерка інтер'єрів",
-    text: "Шовкова постіль від Silk4me — це найкраща інвестиція в якість сну. Відчуття неймовірної розкоші кожного ранку.",
+    text: "Шовкова постіль від Silk4me — це найкраща інвестиція в якість сну. Відчуття неймовірної преміальності кожного ранку.",
     rating: 5,
   },
   {
@@ -32,9 +32,9 @@ const Reviews = () => {
     <section id="reviews" className="py-24 bg-silk-charcoal">
       <div className="container mx-auto px-6">
         <div className="text-center space-y-4 mb-16">
-          <p className="text-primary uppercase tracking-[0.3em] text-sm">Відгуки</p>
-          <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
-            Що кажуть наші <span className="text-primary">клієнти</span>
+          <p className="text-gold uppercase tracking-[0.3em] text-sm">Відгуки</p>
+          <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
+            Що кажуть наші <span className="text-gold">клієнти</span>
           </h2>
         </div>
 
@@ -43,13 +43,13 @@ const Reviews = () => {
           {reviews.map((review, index) => (
             <div
               key={index}
-              className="relative p-8 bg-background border border-border/50 hover:border-primary/30 transition-all duration-300"
+              className="relative p-8 bg-background border border-border/50 hover:border-gold/30 transition-all duration-300"
             >
-              <Quote className="absolute top-6 right-6 w-8 h-8 text-primary/20" />
+              <Quote className="absolute top-6 right-6 w-8 h-8 text-gold/20" />
               
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: review.rating }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                  <Star key={i} className="w-4 h-4 fill-gold text-gold" />
                 ))}
               </div>
               
@@ -69,8 +69,8 @@ const Reviews = () => {
         <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <p className="text-4xl md:text-5xl font-serif text-primary mb-2">{stat.value}</p>
-              <p className="text-sm text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+              <p className="text-4xl md:text-5xl font-serif text-gold mb-2">{stat.value}</p>
+              <p className="text-sm text-background/70 uppercase tracking-wider">{stat.label}</p>
             </div>
           ))}
         </div>

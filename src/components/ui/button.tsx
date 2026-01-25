@@ -9,14 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-none",
+        default: "bg-primary text-primary-foreground hover:bg-primary/80 rounded-none",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-md",
-        outline: "border border-border bg-transparent text-foreground hover:bg-secondary hover:text-foreground rounded-none",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-none",
-        ghost: "hover:bg-secondary hover:text-foreground rounded-none",
-        link: "text-primary underline-offset-4 hover:underline",
-        luxury: "bg-primary text-primary-foreground hover:bg-gold-light border border-primary hover:border-gold-light rounded-none uppercase tracking-[0.2em] font-light",
-        luxuryOutline: "bg-transparent border border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase tracking-[0.2em] font-light",
+        outline: "border border-border bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground rounded-none",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground rounded-none",
+        ghost: "hover:bg-accent hover:text-accent-foreground rounded-none",
+        link: "text-primary underline-offset-4 hover:text-gold hover:underline",
+        luxury: "bg-primary text-primary-foreground hover:bg-primary/85 border border-primary hover:border-primary/85 rounded-none uppercase tracking-[0.2em] font-light",
+        luxuryOutline: "bg-transparent border border-primary text-primary hover:bg-accent hover:text-accent-foreground hover:border-accent rounded-none uppercase tracking-[0.2em] font-light",
       },
       size: {
         default: "h-10 px-4 py-2",

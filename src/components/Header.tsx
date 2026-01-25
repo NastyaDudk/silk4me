@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +33,7 @@ const Header = () => {
               <button
                 key={item.href}
                 onClick={() => scrollToSection(item.href)}
-                className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-primary transition-colors duration-300"
+                className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-gold transition-colors duration-300"
               >
                 {item.label}
               </button>
@@ -59,7 +58,7 @@ const Header = () => {
                 <button
                   key={item.href}
                   onClick={() => scrollToSection(item.href)}
-                  className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-primary transition-colors duration-300 text-left"
+                  className="text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-gold transition-colors duration-300 text-left"
                 >
                   {item.label}
                 </button>
