@@ -74,7 +74,7 @@ export default {
   		},
   		fontFamily: {
   			serif: [
-  				'Lora',
+  				'Crimson Pro',
   				'ui-serif',
   				'Georgia',
   				'Cambria',
@@ -83,7 +83,7 @@ export default {
   				'serif'
   			],
   			sans: [
-  				'Work Sans',
+  				'DM Sans',
   				'ui-sans-serif',
   				'system-ui',
   				'-apple-system',
@@ -96,7 +96,7 @@ export default {
   				'sans-serif'
   			],
   			mono: [
-  				'Inconsolata',
+  				'SF Mono',
   				'ui-monospace',
   				'SFMono-Regular',
   				'Menlo',
