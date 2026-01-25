@@ -26,13 +26,13 @@
 @layer base {
   :root {
     /* SILK4ME Brand Theme - Light Mode */
-    --background: 149 32% 83%; /* Shine Whitegold #F8F3E7 */
+    --background: 43 53% 94%; /* Shine Whitegold #F8F3E7 */
     --foreground: 0 0% 30%; /* Dark Gray #4D4D4D */
 
     --card: 34 52% 91%; /* Sand #F5EBDD */
     --card-foreground: 0 0% 30%; /* Dark Gray */
 
-    --popover: 43 53% 94%; /* Shine Whitegold */
+    --popover: 0 0% 70%; /* Shine Whitegold */
     --popover-foreground: 0 0% 30%; /* Dark Gray */
 
     --primary: 163 44% 21%; /* Deep Forest #1E4D40 */
