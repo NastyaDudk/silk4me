@@ -5,6 +5,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Pro&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=SF+Mono&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,7 +26,7 @@
 @layer base {
   :root {
     /* SILK4ME Brand Theme - Light Mode */
-    --background: 43 53% 94%; /* Shine Whitegold #F8F3E7 */
+    --background: 149 32% 83%; /* Shine Whitegold #F8F3E7 */
     --foreground: 0 0% 30%; /* Dark Gray #4D4D4D */
 
     --card: 34 52% 91%; /* Sand #F5EBDD */
@@ -41,7 +44,7 @@
     --muted: 34 52% 91%; /* Sand */
     --muted-foreground: 0 0% 40%; /* Slightly lighter than Dark Gray for better readability */
 
-    --accent: 39 42% 74%; /* Gold Beige #D9C4A1 */
+    --accent: 163 44% 21%; /* Gold Beige #D9C4A1 */
     --accent-foreground: 163 44% 21%; /* Deep Forest */
 
     --destructive: 0 72% 50%;
@@ -70,14 +73,14 @@
     --sidebar-accent-foreground: 163 44% 21%; /* Deep Forest */
     --sidebar-border: 163 44% 30%; /* Lighter border for dark sidebar */
     --sidebar-ring: 39 42% 74%; /* Gold Beige */
-    
+
     --chart-1: 163 44% 21%;
     --chart-2: 150 32% 83%;
     --chart-3: 39 42% 74%;
     --chart-4: 34 52% 91%;
     --chart-5: 0 0% 70%;
     --sidebar: 43 53% 94%;
-    
+
     --font-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
     --font-serif: 'Crimson Pro', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
     --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
