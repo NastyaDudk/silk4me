@@ -1,0 +1,19 @@
+{
+  "name": "silk4me-server",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "node-telegram-bot-api": "^0.67.0"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "Anastasiia_Dudka <sopiloka@gmail.com>",
+  "license": "ISC",
+  "description": ""
+}
