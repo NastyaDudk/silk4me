@@ -26,7 +26,7 @@
 @layer base {
   :root {
     /* SILK4ME Brand Theme - Light Mode */
-    --background: 43 53% 94%; /* Shine Whitegold #F8F3E7 */
+    --background: 149 32% 83%; /* Shine Whitegold #F8F3E7 */
     --foreground: 0 0% 30%; /* Dark Gray #4D4D4D */
 
     --card: 34 52% 91%; /* Sand #F5EBDD */
@@ -44,7 +44,7 @@
     --muted: 34 52% 91%; /* Sand */
     --muted-foreground: 0 0% 40%; /* Slightly lighter than Dark Gray for better readability */
 
-    --accent: 163 44% 21%; /* Gold Beige #D9C4A1 */
+    --accent: 39 42% 74%; /* Gold Beige #D9C4A1 */
     --accent-foreground: 163 44% 21%; /* Deep Forest */
 
     --destructive: 0 72% 50%;
