@@ -83,7 +83,7 @@ export default {
   				'serif'
   			],
   			sans: [
-  				'Work Sans',
+  				'Space Grotesk',
   				'ui-sans-serif',
   				'system-ui',
   				'-apple-system',
@@ -96,7 +96,7 @@ export default {
   				'sans-serif'
   			],
   			mono: [
-  				'Inconsolata',
+  				'Space Mono',
   				'ui-monospace',
   				'SFMono-Regular',
   				'Menlo',
@@ -134,7 +134,7 @@ export default {
   					transform: 'translateY(0)'
   				}
   			},
-  			'shimmer': {
+  			shimmer: {
   				'0%': {
   					backgroundPosition: '-200% 0'
   				},
@@ -147,7 +147,7 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
   			'fade-in': 'fade-in 0.6s ease-out forwards',
-  			'shimmer': 'shimmer 3s infinite linear'
+  			shimmer: 'shimmer 3s infinite linear'
   		},
   		boxShadow: {
   			'2xs': 'var(--shadow-2xs)',
