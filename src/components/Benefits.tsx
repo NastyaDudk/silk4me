@@ -4,7 +4,7 @@ const benefits = [
   {
     icon: Sparkles,
     title: "Неймовірна м'якість",
-    description: "Шовк ніжно огортає шкіру, забезпечуючи відчуття розкоші та комфорту протягом усієї ночі.",
+    description: "Шовк ніжно огортає шкіру, забезпечуючи відчуття преміальності та комфорту протягом усієї ночі.",
   },
   {
     icon: Wind,
@@ -13,8 +13,8 @@ const benefits = [
   },
   {
     icon: Crown,
-    title: "Розкішний вигляд",
-    description: "Благородний блиск та елегантні складки чорного шовку створюють атмосферу справжньої розкоші.",
+    title: "Преміальний вигляд",
+    description: "Благородний блиск та елегантні складки чорного шовку створюють атмосферу справжньої вишуканості.",
   },
   {
     icon: Shield,
@@ -38,11 +38,11 @@ const Benefits = () => {
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="group p-8 bg-card border border-border/50 hover:border-primary/50 transition-all duration-500"
+              className="group p-8 bg-card border border-border/50 hover:border-gold/50 transition-all duration-500"
             >
               <div className="mb-6">
                 <benefit.icon 
-                  className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300" 
+                  className="w-10 h-10 text-primary group-hover:text-gold group-hover:scale-110 transition-all duration-300" 
                   strokeWidth={1.5}
                 />
               </div>

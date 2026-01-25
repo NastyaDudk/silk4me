@@ -9,64 +9,75 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* SILK4ME Brand Design System
+   Color Palette:
+   - Mint #C7E2D4 → HSL 150 32% 83%
+   - Deep Forest #1E4D40 → HSL 163 44% 21%
+   - Shine Whitegold #F8F3E7 → HSL 43 53% 94%
+   - Sand #F5EBDD → HSL 34 52% 91%
+   - Gold Beige #D9C4A1 → HSL 39 42% 74%
+   - Gray #B3B3B3 → HSL 0 0% 70%
+   - Dark Gray #4D4D4D → HSL 0 0% 30%
 */
 
 @layer base {
   :root {
-    /* Luxury Black & Gold Theme */
-    --background: 209 40% 96%;
-    --foreground: 222 47% 11%;
+    /* SILK4ME Brand Theme - Light Mode */
+    --background: 43 53% 94%; /* Shine Whitegold #F8F3E7 */
+    --foreground: 0 0% 30%; /* Dark Gray #4D4D4D */
 
-    --card: 210 40% 98%;
-    --card-foreground: 222 47% 11%;
+    --card: 34 52% 91%; /* Sand #F5EBDD */
+    --card-foreground: 0 0% 30%; /* Dark Gray */
 
-    --popover: 214 31% 91%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 43 53% 94%; /* Shine Whitegold */
+    --popover-foreground: 0 0% 30%; /* Dark Gray */
 
-    --primary: 216 19% 26%;
-    --primary-foreground: 210 19% 98%;
+    --primary: 163 44% 21%; /* Deep Forest #1E4D40 */
+    --primary-foreground: 43 53% 94%; /* Shine Whitegold - light text on dark */
 
-    --secondary: 215 19% 34%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 150 32% 83%; /* Mint #C7E2D4 */
+    --secondary-foreground: 163 44% 21%; /* Deep Forest - dark text on light */
 
-    --muted: 215 20% 65%;
-    --muted-foreground: 222 47% 11%;
+    --muted: 34 52% 91%; /* Sand */
+    --muted-foreground: 0 0% 40%; /* Slightly lighter than Dark Gray for better readability */
 
-    --accent: 210 40% 98%;
-    --accent-foreground: 215 16% 46%;
+    --accent: 39 42% 74%; /* Gold Beige #D9C4A1 */
+    --accent-foreground: 163 44% 21%; /* Deep Forest */
 
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 85% 97%;
 
-    --border: 212 26% 83%;
-    --input: 212 26% 83%;
-    --ring: 216 19% 26%;
+    --border: 0 0% 70%; /* Gray #B3B3B3 */
+    --input: 0 0% 70%; /* Gray */
+    --ring: 163 44% 21%; /* Deep Forest */
 
     --radius: 0rem;
 
-    /* Custom luxury tokens */
-    --gold: 45 60% 55%;
-    --gold-light: 45 50% 70%;
-    --gold-dark: 45 60% 40%;
-    --silk-black: 0 0% 6%;
-    --silk-charcoal: 0 0% 12%;
+    /* Custom SILK4ME tokens */
+    --gold: 39 42% 74%; /* Gold Beige */
+    --gold-light: 39 42% 82%; /* Lighter Gold Beige */
+    --gold-dark: 39 42% 60%; /* Darker Gold Beige */
+    --silk-black: 163 44% 21%; /* Deep Forest (used as dark accent) */
+    --silk-charcoal: 163 44% 15%; /* Darker Deep Forest */
+    --mint: 150 32% 83%; /* Mint */
+    --sand: 34 52% 91%; /* Sand */
 
-    --sidebar-background: 0 0% 5%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 216 19% 26%;
-    --sidebar-primary-foreground: 210 19% 98%;
-    --sidebar-accent: 215 19% 34%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 212 26% 83%;
-    --sidebar-ring: 216 19% 26%;
-    --chart-1: 217 10% 64%;
-    --chart-2: 215 20% 65%;
-    --chart-3: 215 16% 46%;
-    --chart-4: 219 8% 46%;
-    --chart-5: 215 19% 34%;
-    --sidebar: 210 40% 98%;
+    --sidebar-background: 163 44% 15%; /* Dark Deep Forest */
+    --sidebar-foreground: 43 53% 94%; /* Light text on dark sidebar */
+    --sidebar-primary: 39 42% 74%; /* Gold Beige */
+    --sidebar-primary-foreground: 163 44% 21%; /* Deep Forest */
+    --sidebar-accent: 150 32% 83%; /* Mint */
+    --sidebar-accent-foreground: 163 44% 21%; /* Deep Forest */
+    --sidebar-border: 163 44% 30%; /* Lighter border for dark sidebar */
+    --sidebar-ring: 39 42% 74%; /* Gold Beige */
+    
+    --chart-1: 163 44% 21%;
+    --chart-2: 150 32% 83%;
+    --chart-3: 39 42% 74%;
+    --chart-4: 34 52% 91%;
+    --chart-5: 0 0% 70%;
+    --sidebar: 43 53% 94%;
+    
     --font-sans: 'DM Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
     --font-serif: 'Crimson Pro', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
     --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
@@ -83,54 +94,57 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    /* SILK4ME Brand Theme - Dark Mode */
+    --background: 163 44% 12%; /* Very dark Deep Forest */
+    --foreground: 43 53% 94%; /* Shine Whitegold */
 
-    --card: 217 32% 17%;
-    --card-foreground: 210 40% 98%;
+    --card: 163 44% 18%; /* Slightly lighter Deep Forest */
+    --card-foreground: 43 53% 94%; /* Shine Whitegold */
 
-    --popover: 215 24% 26%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 163 44% 15%;
+    --popover-foreground: 43 53% 94%;
 
-    --primary: 212 26% 83%;
-    --primary-foreground: 228 84% 4%;
+    --primary: 39 42% 74%; /* Gold Beige as primary in dark mode */
+    --primary-foreground: 163 44% 12%; /* Dark background */
 
-    --secondary: 215 19% 34%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 163 44% 25%; /* Lighter Deep Forest */
+    --secondary-foreground: 43 53% 94%; /* Light text */
 
-    --muted: 215 16% 46%;
-    --muted-foreground: 210 40% 98%;
+    --muted: 163 44% 20%;
+    --muted-foreground: 43 53% 85%; /* Slightly dimmed whitegold */
 
-    --accent: 228 84% 4%;
-    --accent-foreground: 215 20% 65%;
+    --accent: 150 32% 83%; /* Mint */
+    --accent-foreground: 163 44% 12%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 85% 97%;
 
-    --border: 215 19% 34%;
-    --input: 215 19% 34%;
-    --ring: 212 26% 83%;
+    --border: 163 44% 30%;
+    --input: 163 44% 30%;
+    --ring: 39 42% 74%;
 
-    --gold: 45 60% 55%;
-    --gold-light: 45 50% 70%;
-    --gold-dark: 45 60% 40%;
-    --silk-black: 0 0% 6%;
-    --silk-charcoal: 0 0% 12%;
+    --gold: 39 42% 74%;
+    --gold-light: 39 42% 82%;
+    --gold-dark: 39 42% 60%;
+    --silk-black: 163 44% 8%;
+    --silk-charcoal: 163 44% 15%;
+    --mint: 150 32% 83%;
+    --sand: 34 52% 91%;
 
-    --sidebar-background: 0 0% 5%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 212 26% 83%;
-    --sidebar-primary-foreground: 228 84% 4%;
-    --sidebar-accent: 215 20% 65%;
-    --sidebar-accent-foreground: 228 84% 4%;
-    --sidebar-border: 215 19% 34%;
-    --sidebar-ring: 212 26% 83%;
-    --chart-1: 215 12% 83%;
-    --chart-2: 212 26% 83%;
-    --chart-3: 215 20% 65%;
-    --chart-4: 217 10% 64%;
-    --chart-5: 215 16% 46%;
-    --sidebar: 217 32% 17%;
+    --sidebar-background: 163 44% 8%;
+    --sidebar-foreground: 43 53% 94%;
+    --sidebar-primary: 39 42% 74%;
+    --sidebar-primary-foreground: 163 44% 12%;
+    --sidebar-accent: 150 32% 70%;
+    --sidebar-accent-foreground: 163 44% 12%;
+    --sidebar-border: 163 44% 25%;
+    --sidebar-ring: 39 42% 74%;
+    --chart-1: 39 42% 74%;
+    --chart-2: 150 32% 83%;
+    --chart-3: 163 44% 40%;
+    --chart-4: 34 52% 80%;
+    --chart-5: 43 53% 94%;
+    --sidebar: 163 44% 18%;
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
     --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);

@@ -56,6 +56,8 @@ export default {
   				black: 'hsl(var(--silk-black))',
   				charcoal: 'hsl(var(--silk-charcoal))'
   			},
+  			mint: 'hsl(var(--mint))',
+  			sand: 'hsl(var(--sand))',
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
