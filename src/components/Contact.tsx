@@ -8,9 +8,7 @@ import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
 const TG_BOT_URL = "https://t.me/silk4me_bot";
 
-// 1) Если задан VITE_API_URL — используем его
-// 2) Иначе: на локалке -> localhost
-// 3) Иначе: на GitHub Pages -> Render
+// Локально -> localhost, в проде -> Render
 const isLocal =
   typeof window !== "undefined" &&
   (window.location.hostname === "localhost" ||
@@ -20,8 +18,8 @@ const DEFAULT_API = isLocal
   ? "http://localhost:5050/api/lead"
   : "https://silk4me.onrender.com/api/lead";
 
-  const API_URL =
-  import.meta.env.VITE_API_URL || "https://silk4me.onrender.com/api/lead";
+// Если задан VITE_API_URL (на время сборки) — используем его, иначе DEFAULT_API
+const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -85,10 +83,13 @@ const Contact = () => {
           {/* Form */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <p className="text-gold uppercase tracking-[0.3em] text-sm">Контакти</p>
+              <p className="text-gold uppercase tracking-[0.3em] text-sm">
+                Контакти
+              </p>
 
               <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
-                Отримайте <span className="text-gold">персональну консультацію</span>
+                Отримайте{" "}
+                <span className="text-gold">персональну консультацію</span>
               </h2>
 
               <p className="text-background/80">
@@ -169,7 +170,9 @@ const Contact = () => {
 
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-gold" />
-                <span className="text-sm text-background/80">Україна / Європа</span>
+                <span className="text-sm text-background/80">
+                  Україна / Європа
+                </span>
               </div>
             </div>
           </div>
