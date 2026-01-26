@@ -6,9 +6,21 @@ import { toast } from "sonner";
 import { Send, MapPin, Instagram, MessageCircle } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
-// Лучше так: локально будет http://localhost:5050, на проде — свой домен
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5050/api/lead";
 const TG_BOT_URL = "https://t.me/silk4me_bot";
+
+// 1) Если задан VITE_API_URL — используем его
+// 2) Иначе: на локалке -> localhost
+// 3) Иначе: на GitHub Pages -> Render
+const isLocal =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+
+const DEFAULT_API = isLocal
+  ? "http://localhost:5050/api/lead"
+  : "https://silk4me.onrender.com/api/lead";
+
+const API_URL = (import.meta.env.VITE_API_URL as string | undefined) || DEFAULT_API;
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -48,7 +60,7 @@ const Contact = () => {
           data?.details?.description ||
           data?.details?.error ||
           data?.error ||
-          "unknown_error";
+          `http_${res.status}`;
 
         console.error("Lead submit error:", details, data);
         toast.error("Не вдалося надіслати запит. Спробуйте ще раз.");
@@ -59,7 +71,7 @@ const Contact = () => {
       setFormData({ name: "", phone: "", message: "" });
     } catch (err) {
       console.error(err);
-      toast.error("Помилка з’єднання. Перевірте, чи запущено сервер.");
+      toast.error("Помилка з’єднання. Перевірте сервер або Render.");
     } finally {
       setIsSubmitting(false);
     }
@@ -72,13 +84,10 @@ const Contact = () => {
           {/* Form */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <p className="text-gold uppercase tracking-[0.3em] text-sm">
-                Контакти
-              </p>
+              <p className="text-gold uppercase tracking-[0.3em] text-sm">Контакти</p>
 
               <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
-                Отримайте{" "}
-                <span className="text-gold">персональну консультацію</span>
+                Отримайте <span className="text-gold">персональну консультацію</span>
               </h2>
 
               <p className="text-background/80">
@@ -133,18 +142,17 @@ const Contact = () => {
 
             {/* Contact Info */}
             <div className="grid md:grid-cols-3 gap-6 pt-8 border-t border-background/20 items-center">
-              {/* Только иконка Telegram */}
               <a
-  href={TG_BOT_URL}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="flex items-center gap-3 group"
->
-  <MessageCircle className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-  <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-    Написати в Telegram
-  </span>
-</a>
+                href={TG_BOT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 group"
+              >
+                <MessageCircle className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+                  Написати в Telegram
+                </span>
+              </a>
 
               <a
                 href="https://www.instagram.com/silk4me"
@@ -160,9 +168,7 @@ const Contact = () => {
 
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-gold" />
-                <span className="text-sm text-background/80">
-                  Україна / Європа
-                </span>
+                <span className="text-sm text-background/80">Україна / Європа</span>
               </div>
             </div>
           </div>
