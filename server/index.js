@@ -7,8 +7,8 @@ const app = express();
 
 /**
  * ✅ dotenv:
- * - Локально: читаем server/.env (если файл есть)
- * - На Render: переменные берутся из Environment Variables, dotenv не мешает
+ * - Локально: читаем server/.env
+ * - На Render: переменные берутся из Environment Variables
  */
 dotenv.config({
   path: path.resolve(process.cwd(), "server", ".env"),
@@ -26,25 +26,23 @@ const ALLOWED_ORIGINS = [
   "https://nastyadudk.github.io",
 ];
 
-app.use(
-  cors({
-    origin: (origin, cb) => {
-      // запросы без Origin (curl/postman) — разрешаем
-      if (!origin) return cb(null, true);
+const corsOptions = {
+  origin: (origin, cb) => {
+    // запросы без Origin (curl/postman) — разрешаем
+    if (!origin) return cb(null, true);
 
-      if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
 
-      // полезно видеть в логах Render, что именно блокируется
-      console.log("❌ CORS blocked origin:", origin);
-      return cb(new Error(`CORS blocked: ${origin}`), false);
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+    console.log("❌ CORS blocked origin:", origin);
+    return cb(new Error(`CORS blocked: ${origin}`), false);
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+};
 
-// ✅ обязательно для preflight (OPTIONS)
-app.options("*", cors());
+app.use(cors(corsOptions));
+// ✅ обязательно для preflight — ИМЕННО с теми же опциями
+app.options(/.*/, cors(corsOptions));
 
 app.use(express.json());
 
@@ -57,8 +55,7 @@ function getChatId() {
   const raw = process.env.TG_CHAT_ID;
   if (!raw) return "";
 
-  // chat_id может быть "-100..." (канал/группа) — это нормально
-  // Telegram API принимает как number, так и string
+  // chat_id может быть "-100..." — это нормально
   const n = Number(raw);
   return Number.isNaN(n) ? raw : n;
 }
@@ -87,15 +84,18 @@ app.get("/api/test-telegram", async (req, res) => {
       });
     }
 
-    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: "✅ TEST: Telegram connected",
-        disable_web_page_preview: true,
-      }),
-    });
+    const tgRes = await fetch(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: "✅ TEST: Telegram connected",
+          disable_web_page_preview: true,
+        }),
+      }
+    );
 
     const data = await tgRes.json().catch(() => ({}));
     return res.status(tgRes.ok ? 200 : 500).json(data);
@@ -110,7 +110,9 @@ app.post("/api/lead", async (req, res) => {
     const { name, phone, message } = req.body || {};
 
     if (!name || !phone) {
-      return res.status(400).json({ ok: false, error: "name_and_phone_required" });
+      return res
+        .status(400)
+        .json({ ok: false, error: "name_and_phone_required" });
     }
 
     const BOT_TOKEN = getToken();
@@ -132,15 +134,18 @@ app.post("/api/lead", async (req, res) => {
       `💬 Повідомлення: ${String(message || "").trim() || "—"}\n` +
       `🌐 Джерело: лендинг`;
 
-    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text,
-        disable_web_page_preview: true,
-      }),
-    });
+    const tgRes = await fetch(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text,
+          disable_web_page_preview: true,
+        }),
+      }
+    );
 
     const data = await tgRes.json().catch(() => ({}));
 
