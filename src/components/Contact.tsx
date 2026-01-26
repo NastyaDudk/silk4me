@@ -20,7 +20,8 @@ const DEFAULT_API = isLocal
   ? "http://localhost:5050/api/lead"
   : "https://silk4me.onrender.com/api/lead";
 
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined) || DEFAULT_API;
+  const API_URL =
+  import.meta.env.VITE_API_URL || "https://silk4me.onrender.com/api/lead";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
