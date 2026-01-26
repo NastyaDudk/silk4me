@@ -3,36 +3,67 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 
+const app = express();
+
+/**
+ * ✅ dotenv:
+ * - Локально: читаем server/.env (если файл есть)
+ * - На Render: переменные берутся из Environment Variables, dotenv не мешает
+ */
 dotenv.config({
   path: path.resolve(process.cwd(), "server", ".env"),
 });
 
-const app = express();
-
-// ✅ CORS: разрешаем локальный фронт (Vite обычно 5173, у тебя был 8080)
-const allowedOrigins = [
+/**
+ * ✅ CORS:
+ * Разрешаем:
+ * - локалка (Vite 5173)
+ * - GitHub Pages домен
+ */
+const ALLOWED_ORIGINS = [
   "http://localhost:5173",
-  "http://localhost:8080",
   "http://127.0.0.1:5173",
-  "http://127.0.0.1:8080",
+  "https://nastyadudk.github.io",
 ];
 
 app.use(
   cors({
     origin: (origin, cb) => {
-      // запросы без origin (curl, Postman) — разрешаем
+      // запросы без Origin (curl/postman) — разрешаем
       if (!origin) return cb(null, true);
-      if (allowedOrigins.includes(origin)) return cb(null, true);
-      return cb(new Error(`CORS blocked for origin: ${origin}`), false);
+
+      if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+
+      // полезно видеть в логах Render, что именно блокируется
+      console.log("❌ CORS blocked origin:", origin);
+      return cb(new Error(`CORS blocked: ${origin}`), false);
     },
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   })
 );
 
+// ✅ обязательно для preflight (OPTIONS)
+app.options("*", cors());
+
 app.use(express.json());
 
-// ✅ healthcheck
+/** ✅ helpers */
+function getToken() {
+  return process.env.TG_BOT_TOKEN || "";
+}
+
+function getChatId() {
+  const raw = process.env.TG_CHAT_ID;
+  if (!raw) return "";
+
+  // chat_id может быть "-100..." (канал/группа) — это нормально
+  // Telegram API принимает как number, так и string
+  const n = Number(raw);
+  return Number.isNaN(n) ? raw : n;
+}
+
+/** ✅ health */
 app.get("/", (req, res) => {
   res.send("✅ Silk4me API is running");
 });
@@ -41,27 +72,7 @@ app.get("/api/test", (req, res) => {
   res.json({ ok: true, message: "Server is alive" });
 });
 
-// ⚠️ Важно: порт берём из env, иначе 5050
-const PORT = Number(process.env.PORT) || 5050;
-
-// ✅ Утилита: корректно прочитать chat_id
-function getChatId() {
-  const raw = process.env.TG_CHAT_ID;
-  if (!raw) return null;
-
-  // Telegram принимает и число, и строку.
-  // Но иногда лучше отправлять как число (особенно для групп -100...)
-  const asNumber = Number(raw);
-  if (!Number.isNaN(asNumber)) return asNumber;
-
-  return raw; // fallback (например username канала)
-}
-
-function getToken() {
-  return process.env.TG_BOT_TOKEN || null;
-}
-
-// ✅ ТЕСТ: http://localhost:5050/api/test-telegram
+/** ✅ test telegram: GET /api/test-telegram */
 app.get("/api/test-telegram", async (req, res) => {
   try {
     const BOT_TOKEN = getToken();
@@ -76,9 +87,7 @@ app.get("/api/test-telegram", async (req, res) => {
       });
     }
 
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-    const tgRes = await fetch(url, {
+    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -95,16 +104,13 @@ app.get("/api/test-telegram", async (req, res) => {
   }
 });
 
-// ✅ ОСНОВНОЙ: форма отправляет сюда
+/** ✅ lead: POST /api/lead */
 app.post("/api/lead", async (req, res) => {
   try {
     const { name, phone, message } = req.body || {};
 
     if (!name || !phone) {
-      return res.status(400).json({
-        ok: false,
-        error: "name_and_phone_required",
-      });
+      return res.status(400).json({ ok: false, error: "name_and_phone_required" });
     }
 
     const BOT_TOKEN = getToken();
@@ -126,9 +132,7 @@ app.post("/api/lead", async (req, res) => {
       `💬 Повідомлення: ${String(message || "").trim() || "—"}\n` +
       `🌐 Джерело: лендинг`;
 
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-    const tgRes = await fetch(url, {
+    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -154,6 +158,7 @@ app.post("/api/lead", async (req, res) => {
   }
 });
 
+const PORT = Number(process.env.PORT) || 5050;
 app.listen(PORT, () => {
   console.log(`✅ Lead server: http://localhost:${PORT}`);
 });
