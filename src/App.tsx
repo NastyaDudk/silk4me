@@ -13,12 +13,12 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename="/silk4me/">
-  <Routes>
-    <Route path="/" element={<Index />} />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
-</BrowserRouter>
+      <BrowserRouter basename="/silk4me">
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
