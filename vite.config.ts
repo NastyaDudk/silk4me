@@ -3,16 +3,14 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/silk4me/", // 👈 имя репозитория на GitHub (обязательно со слэшами)
+  // важно для GitHub Pages: /<repo-name>/
+  base: mode === "production" ? "/silk4me/" : "/",
 
   server: {
     host: "::",
     port: 8080,
-    hmr: {
-      overlay: false,
-    },
+    hmr: { overlay: false },
   },
 
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
