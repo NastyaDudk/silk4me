@@ -91,10 +91,6 @@ const Contact = () => {
                 Отримайте{" "}
                 <span className="text-gold">персональну консультацію</span>
               </h2>
-
-              <p className="text-background/80">
-                Заповніть форму — заявка одразу надходить у Telegram.
-              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
