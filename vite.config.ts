@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
   base: "/silk4me/",
 
   plugins: [
-    tsconfigPaths(), // ✅ ОБЯЗАТЕЛЬНО первым
+    tsconfigPaths(),
     react(),
     mode === "development" && componentTagger(),
   ].filter(Boolean),
@@ -25,6 +25,11 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
+  },
+
+  // (необязательно, но помогает видеть реальную ошибку на Pages)
+  build: {
+    sourcemap: true,
   },
 }));
 
