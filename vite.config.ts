@@ -4,8 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  // важно для GitHub Pages: /<repo-name>/
-  base: mode === "production" ? "/silk4me/" : "/",
+  base: "/silk4me/",
 
   server: {
     host: "::",
