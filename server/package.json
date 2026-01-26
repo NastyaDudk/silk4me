@@ -1,19 +1,21 @@
 {
   "name": "silk4me-server",
+  "version": "1.0.0",
   "type": "module",
+  "main": "index.js",
+  "author": "Anastasiia Dudka <sopiloka@gmail.com>",
+  "license": "ISC",
+  "description": "Silk4me API + Telegram bot",
+
   "scripts": {
-    "dev": "node index.js"
+    "start": "node index.js",
+    "bot": "node bot.cjs"
   },
+
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",
     "node-telegram-bot-api": "^0.67.0"
-  },
-  "version": "1.0.0",
-  "main": "index.js",
-  "keywords": [],
-  "author": "Anastasiia_Dudka <sopiloka@gmail.com>",
-  "license": "ISC",
-  "description": ""
+  }
 }
