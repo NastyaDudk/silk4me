@@ -10,6 +10,35 @@
     />
     <meta name="author" content="Silk4me" />
 
+    <style>
+      /* 1) Курсор по умолчанию — НЕ “рука” на всём виджете */
+      elevenlabs-convai {
+        cursor: default !important;
+      }
+
+      /* 2) “Рука” только на кликабельных элементах (если они не в Shadow DOM) */
+      elevenlabs-convai button,
+      elevenlabs-convai [role="button"],
+      elevenlabs-convai a {
+        cursor: pointer !important;
+      }
+
+     
+  /* скрываем стандартный виджет на мобиле */
+  @media (max-width: 640px) {
+    elevenlabs-convai {
+      display: none !important;
+    }
+  }
+
+      /*
+        Важно:
+        Заголовок “Потрібна допомога?” обычно внутри Shadow DOM, поэтому
+        увеличивать шрифт через h3 может НЕ сработать.
+        Правильнее менять текст через атрибут action-text (ниже).
+      */
+    </style>
+
     <meta property="og:title" content="Silk4me — Black Collection" />
     <meta
       property="og:description"
@@ -28,172 +57,25 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-
-    <!-- ВАЖНО: стили виджета через shadow DOM — делаем это JS-ом ниже -->
-    <style>
-      /* На всякий случай: сам контейнер виджета не превращаем в "руку" */
-      elevenlabs-convai {
-        cursor: default;
-      }
-    </style>
   </head>
 
   <body>
     <div id="root"></div>
-
     <script type="module" src="/src/main.tsx"></script>
 
-    <!-- ElevenLabs ConvAI widget -->
-    <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
+    <!-- ElevenLabs widget -->
+    <elevenlabs-convai
+      agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"
+      action-text="Потрібна допомога?"
+      start-call-text="Поговорити з консультантом"
+      listening-text="Слухаю…"
+      speaking-text="Відповідаю…"
+    ></elevenlabs-convai>
+
     <script
       src="https://unpkg.com/@elevenlabs/convai-widget-embed"
       async
       type="text/javascript"
     ></script>
-
-    <!-- FIXES: курсор только на кнопке + "Потрібна допомога?" больше/жирнее + автосворачивание в "телефончик" после конца -->
-    <script>
-      (function () {
-        const WIDGET_SELECTOR = "elevenlabs-convai";
-
-        function textIncludes(node, str) {
-          return (node && node.textContent && node.textContent.toLowerCase().includes(str.toLowerCase())) || false;
-        }
-
-        function injectShadowStyles(shadow) {
-          if (shadow.__silk4mePatched) return;
-          shadow.__silk4mePatched = true;
-
-          const style = document.createElement("style");
-          style.textContent = `
-            /* По умолчанию — обычный курсор везде */
-            :host, * { cursor: default !important; }
-
-            /* Курсор "рука" ТОЛЬКО на основной кнопке звонка */
-            button, [role="button"] { cursor: default !important; }
-            .call, .call * { cursor: pointer !important; }
-
-            /* Чуть увеличиваем/утолщаем заголовок "Потрібна допомога?" */
-            .need-help-title {
-              font-size: 18px !important;
-              font-weight: 600 !important;
-              line-height: 1.25 !important;
-            }
-
-            /* На мобиле пусть кнопка-телефончик всегда видна */
-            @media (max-width: 640px) {
-              :host { z-index: 9999 !important; }
-            }
-          `;
-          shadow.appendChild(style);
-        }
-
-        function patchCursorAndTitle(shadow) {
-          // 1) Найти текст "Потрібна допомога?" и сделать класс
-          const walker = document.createTreeWalker(shadow, NodeFilter.SHOW_ELEMENT, null);
-          let node;
-          while ((node = walker.nextNode())) {
-            if (textIncludes(node, "Потрібна допомога")) {
-              node.classList.add("need-help-title");
-              break;
-            }
-          }
-
-          // 2) Сделать "руку" только на кнопке "Поговорити з консультантом"
-          //    Мы помечаем ближайшую кнопку/элемент как .call
-          const walker2 = document.createTreeWalker(shadow, NodeFilter.SHOW_ELEMENT, null);
-          let n2;
-          while ((n2 = walker2.nextNode())) {
-            if (textIncludes(n2, "Поговорити") || textIncludes(n2, "Start a call")) {
-              // поднимаемся до ближайшей кнопки/role=button
-              let p = n2;
-              while (p && p !== shadow) {
-                const isBtn = p.tagName === "BUTTON" || p.getAttribute?.("role") === "button";
-                if (isBtn) {
-                  p.classList.add("call");
-                  break;
-                }
-                p = p.parentNode;
-              }
-              break;
-            }
-          }
-        }
-
-        function tryMinimizeToPhone(shadow) {
-          // Ищем кнопки закрытия/сворачивания в шапке (обычно крестик/стрелка)
-          const candidates = shadow.querySelectorAll("button,[role='button']");
-          for (const el of candidates) {
-            const label =
-              (el.getAttribute && (el.getAttribute("aria-label") || el.getAttribute("title"))) || "";
-            const txt = (el.textContent || "").trim();
-
-            const looksLikeMinimize =
-              /minimi|collapse|close|hide|схов|закр|згор/i.test(label) ||
-              /×|✕|⤢|↙|↘|˅|⌄/i.test(txt);
-
-            if (looksLikeMinimize) {
-              el.click();
-              return true;
-            }
-          }
-          return false;
-        }
-
-        function setupAutoCollapse(shadow) {
-          // Сворачиваем в телефончик после окончания разговора (экран с оценкой / ended)
-          const obs = new MutationObserver(() => {
-            // Если видим "How was this conversation?" или "You ended the conversation" — сворачиваем
-            const allText = shadow.textContent || "";
-            if (
-              allText.includes("How was this conversation") ||
-              allText.includes("You ended the conversation") ||
-              allText.toLowerCase().includes("ended the conversation")
-            ) {
-              // небольшая пауза, чтобы UI успел отрисоваться
-              setTimeout(() => {
-                tryMinimizeToPhone(shadow);
-              }, 300);
-            }
-
-            // каждый раз перепатчим курсор/тайтл, потому что UI может перерисовываться
-            patchCursorAndTitle(shadow);
-          });
-
-          obs.observe(shadow, { subtree: true, childList: true, characterData: true });
-        }
-
-        async function init() {
-          const el = document.querySelector(WIDGET_SELECTOR);
-          if (!el) return;
-
-          // Ждём shadowRoot (у виджета он обычно появляется после загрузки скрипта)
-          const maxWaitMs = 12000;
-          const start = Date.now();
-
-          while (!el.shadowRoot) {
-            if (Date.now() - start > maxWaitMs) return;
-            await new Promise((r) => setTimeout(r, 200));
-          }
-
-          const shadow = el.shadowRoot;
-
-          // Вставляем стили внутрь shadow DOM
-          injectShadowStyles(shadow);
-
-          // Патчим заголовок/кнопку
-          patchCursorAndTitle(shadow);
-
-          // Автосворачивание в телефончик после завершения
-          setupAutoCollapse(shadow);
-        }
-
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", init);
-        } else {
-          init();
-        }
-      })();
-    </script>
   </body>
 </html>
