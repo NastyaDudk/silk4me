@@ -29,54 +29,56 @@ const Hero = () => {
                 Ексклюзивна колекція
               </p>
 
-              {/* Заголовок в одну строку (и кликабельный на коллекцию) */}
+              {/* Заголовок в одну строку (кликабельный) */}
               <button
                 type="button"
                 onClick={goToCollection}
                 className="text-left group"
                 aria-label="Перейти до Black Collection"
               >
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium leading-tight text-foreground">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium leading-tight text-foreground group-hover:text-primary transition-colors">
                   BLCK Collection
                 </h1>
               </button>
             </div>
 
-            {/* Текст — крупнее и читабельнее */}
-            <p className="text-muted-foreground text-xl leading-relaxed max-w-xl">
-            Основа твоєї молодості і краси без зусиль.
-            Основа здорового сну.
-            Основа моменту «нарешті для себе».
+            {/* Текст — читабельнее + переносы */}
+            <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
+              {`Основа твоєї молодості і краси без зусиль.
+Основа здорового сну.
+Основа моменту «нарешті для себе».
 
-            Коли чорний заспокоює, а шовк піклується.
+Коли чорний заспокоює, а шовк піклується.`}
             </p>
 
-            {/* Промокод — премиум акцент */}
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-            <span className="text-sm tracking-[0.22em] uppercase text-foreground">
-             Знижка за промокодом
-           </span>
+            {/* Промокод — более заметный */}
+            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <span className="text-sm font-semibold tracking-[0.25em] uppercase text-gold">
+                Знижка за промокодом
+              </span>
 
-           <span className="
-           rounded-lg
-           border border-primary/40
-           bg-primary/10
-           px-5 py-2
-           text-sm font-semibold
-           tracking-[0.3em] uppercase
-           text-primary
-           ">
-           {PROMO_CODE}
-           </span>
-           </div>
+              <span
+                className="
+                  rounded-sm
+                  border border-gold/50
+                  bg-background
+                  px-6 py-3
+                  text-sm font-semibold
+                  tracking-[0.3em] uppercase
+                  text-foreground
+                "
+              >
+                {PROMO_CODE}
+              </span>
+            </div>
 
-            {/* Buttons — ещё чуть меньше по ширине */}
+            {/* Buttons — одинаковая ширина */}
             <div className="flex flex-col sm:flex-row gap-4 relative z-10 pt-2">
               <Button
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
-                className="w-fit px-5 text-sm"
+                className="w-full sm:w-[260px]"
               >
                 Отримати консультацію
               </Button>
@@ -85,13 +87,13 @@ const Hero = () => {
                 variant="luxuryOutline"
                 size="lg"
                 onClick={goToCollection}
-                className="w-fit px-5 text-sm"
+                className="w-full sm:w-[260px]"
               >
                 Переглянути колекцію
               </Button>
             </div>
 
-            {/* Stats (крупнее/читабельнее) */}
+            {/* Stats */}
             <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
               <div className="text-center">
                 <div className="text-3xl md:text-4xl font-medium tracking-tight text-foreground">
@@ -126,7 +128,7 @@ const Hero = () => {
           <div className="relative hidden lg:block z-0">
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-transparent rounded-sm pointer-events-none" />
 
-            {/* Обёртка = границы анимации */}
+            {/* Обёртка = границы */}
             <div className="relative overflow-hidden">
               <img
                 src={silkModel}
@@ -135,7 +137,7 @@ const Hero = () => {
                 draggable={false}
               />
 
-              {/* Плавающий кликабельный бейдж (НЕ вылазит за картинку) */}
+              {/* Бейдж */}
               <a
                 href={PAJAMA_URL}
                 target="_blank"
@@ -153,12 +155,9 @@ const Hero = () => {
                   transition-shadow
                 "
                 style={{
-                  // Стартовая позиция (нижняя часть картинки)
                   left: "8%",
                   top: "72%",
-                  // Двигаем только translate — он считается от этой точки
                   animation: "badge-float-in-bounds 3.6s ease-in-out infinite",
-                  // Чуть приятнее “ловить”
                   willChange: "transform",
                 }}
               >
@@ -174,7 +173,6 @@ const Hero = () => {
               </a>
             </div>
 
-            {/* keyframes: ограничиваем движение (не вылазит за края) */}
             <style>{`
               @keyframes badge-float-in-bounds {
                 0%   { transform: translate(0px, 0px) rotate(-1deg); }
