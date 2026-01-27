@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import silkScrunchie from "@/assets/silk-scrunchie.jpg";
+import silkPillow from "@/assets/SILK4ME (362).jpg";
 
 const features = [
   "100% натуральний шовк Mulberry",
@@ -61,8 +61,8 @@ const Pricing = () => {
             <div className="bg-card border border-border/50 p-8">
               <div className="bg-background p-8 mb-6">
                 <img
-                  src={silkScrunchie}
-                  alt="Silk4me Scrunchie"
+                  src={silkPillow}
+                  alt="Silk4me silkPillow"
                   className="w-full h-[300px] object-contain"
                 />
               </div>
