@@ -3,10 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Send, MapPin, Instagram, MessageCircle } from "lucide-react";
+import { Send, MapPin, Instagram, Mail } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
-
-const TG_BOT_URL = "https://t.me/silk4me_bot";
 
 // Локально -> localhost, в проде -> Render
 const isLocal =
@@ -140,18 +138,7 @@ const Contact = () => {
 
             {/* Contact Info */}
             <div className="grid md:grid-cols-3 gap-6 pt-8 border-t border-background/20 items-center">
-              <a
-                href={TG_BOT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 group"
-              >
-                <MessageCircle className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати в Telegram
-                </span>
-              </a>
-
+              {/* Instagram */}
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
@@ -164,6 +151,18 @@ const Contact = () => {
                 </span>
               </a>
 
+              {/* Email (замени на свою почту) */}
+              <a
+                href="mailto:Silkandnature@gmail.com"
+                className="flex items-center gap-3 group"
+              >
+                <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+                  Написати на пошту
+                </span>
+              </a>
+
+              {/* Location */}
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-gold" />
                 <span className="text-sm text-background/80">
