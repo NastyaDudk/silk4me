@@ -29,7 +29,7 @@ const Hero = () => {
                 Ексклюзивна колекція
               </p>
 
-              {/* Заголовок в одну строку (кликабельный) */}
+              {/* Заголовок (кликабельный) */}
               <button
                 type="button"
                 onClick={goToCollection}
@@ -42,7 +42,7 @@ const Hero = () => {
               </button>
             </div>
 
-            {/* Текст — читабельнее + переносы */}
+            {/* Текст */}
             <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
               {`Основа твоєї молодості і краси без зусиль.
 Основа здорового сну.
@@ -51,34 +51,30 @@ const Hero = () => {
 Коли чорний заспокоює, а шовк піклується.`}
             </p>
 
-            {/* Промокод — более заметный */}
-            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-              <span className="text-sm font-semibold tracking-[0.25em] uppercase text-gold">
+            {/* Промокод — как было: текст слева, код справа (без плашки/рамки) */}
+            <div className="mt-6 flex flex-wrap items-center gap-6">
+              <span className="text-sm font-semibold tracking-[0.25em] uppercase text-foreground">
                 Знижка за промокодом
               </span>
 
-              <span
-                className="
-                  rounded-sm
-                  border border-gold/50
-                  bg-background
-                  px-6 py-3
-                  text-sm font-semibold
-                  tracking-[0.3em] uppercase
-                  text-foreground
-                "
-              >
+              <span className="text-sm font-semibold tracking-[0.3em] uppercase text-foreground">
                 {PROMO_CODE}
               </span>
             </div>
 
-            {/* Buttons — одинаковая ширина */}
+            {/* Buttons — одинаковая ширина + текст помещается */}
             <div className="flex flex-col sm:flex-row gap-4 relative z-10 pt-2">
               <Button
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
-                className="w-full sm:w-[260px]"
+                className="
+                  w-full sm:w-[280px]
+                  px-6
+                  whitespace-normal
+                  leading-snug
+                  text-center
+                "
               >
                 Отримати консультацію
               </Button>
@@ -87,7 +83,13 @@ const Hero = () => {
                 variant="luxuryOutline"
                 size="lg"
                 onClick={goToCollection}
-                className="w-full sm:w-[260px]"
+                className="
+                  w-full sm:w-[280px]
+                  px-6
+                  whitespace-normal
+                  leading-snug
+                  text-center
+                "
               >
                 Переглянути колекцію
               </Button>
@@ -128,7 +130,6 @@ const Hero = () => {
           <div className="relative hidden lg:block z-0">
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-transparent rounded-sm pointer-events-none" />
 
-            {/* Обёртка = границы */}
             <div className="relative overflow-hidden">
               <img
                 src={silkModel}
