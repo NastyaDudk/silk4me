@@ -52,23 +52,23 @@ const Hero = () => {
             </p>
 
             {/* Промокод — премиум акцент */}
-           <div className="mt-4 flex flex-wrap items-center gap-3">
-          <span className="text-sm tracking-[0.22em] uppercase text-foreground/80">
-           Знижка за промокодом
-             </span>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+            <span className="text-sm tracking-[0.22em] uppercase text-foreground">
+             Знижка за промокодом
+           </span>
 
-            <span className="
-            rounded-md
-            border border-accent/60
-            bg-accent/15
-            px-5 py-2
-            text-sm font-medium
-            tracking-[0.28em] uppercase
-            text-foreground
-             ">
-    {PROMO_CODE}
-  </span>
-</div>
+           <span className="
+           rounded-lg
+           border border-primary/40
+           bg-primary/10
+           px-5 py-2
+           text-sm font-semibold
+           tracking-[0.3em] uppercase
+           text-primary
+           ">
+           {PROMO_CODE}
+           </span>
+           </div>
 
             {/* Buttons — ещё чуть меньше по ширине */}
             <div className="flex flex-col sm:flex-row gap-4 relative z-10 pt-2">
