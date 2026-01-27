@@ -168,6 +168,54 @@
       });
     })();
   </script>
+
+  <script>
+    (function () {
+      const OPEN_CLASS = "convai-open";
+      const WIDGET = "elevenlabs-convai";
+
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      async function getShadowRoot() {
+        const el = document.querySelector(WIDGET);
+        if (!el) return null;
+
+        const start = Date.now();
+        while (!el.shadowRoot) {
+          if (Date.now() - start > 12000) return null;
+          await sleep(150);
+        }
+        return el.shadowRoot;
+      }
+
+      async function watchConversationEnd() {
+        const shadow = await getShadowRoot();
+        if (!shadow) return;
+
+        const observer = new MutationObserver(() => {
+          const text = (shadow.textContent || "").toLowerCase();
+
+          if (
+            text.includes("how was this conversation") ||
+            text.includes("ended the conversation") ||
+            text.includes("conversation ended")
+          ) {
+            // ⬅️ ВОТ ГЛАВНОЕ
+            document.body.classList.remove(OPEN_CLASS);
+          }
+        });
+
+        observer.observe(shadow, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", watchConversationEnd);
+    })();
+  </script>
+
 </body>
 
 </html>
