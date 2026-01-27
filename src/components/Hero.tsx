@@ -57,22 +57,18 @@ const Hero = () => {
                 Знижка за промокодом
               </span>
 
-              <span
-                className="
-                  inline-flex items-center justify-center
-                  border border-foreground/40
-                  bg-background/60
-                  backdrop-blur-sm
-                  px-6 py-2
-                  text-sm font-medium
-                  tracking-[0.3em]
-                  uppercase
-                  text-foreground
-                "
-              >
-                {PROMO_CODE}
+              <span className="
+              rounded-lg
+              border border-primary/40
+              bg-primary/10
+              px-5 py-2
+              text-sm font-semibold
+              tracking-[0.3em] uppercase
+              text-primary
+                ">
+              {PROMO_CODE}
               </span>
-            </div>
+              </div>
 
             {/* BUTTONS — wider paddings, never wrap, same width */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">

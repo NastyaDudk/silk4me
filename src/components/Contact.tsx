@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Send, MapPin, Instagram, Mail } from "lucide-react";
+import { Send, MapPin, Instagram, Mail, MessageCircle } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
+
+const TG_BOT_URL = "https://t.me/silk4me_bot";
 
 // Локально -> localhost, в проде -> Render
 const isLocal =
@@ -16,7 +18,6 @@ const DEFAULT_API = isLocal
   ? "http://localhost:5050/api/lead"
   : "https://silk4me.onrender.com/api/lead";
 
-// Если задан VITE_API_URL (на время сборки) — используем его, иначе DEFAULT_API
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 
 const Contact = () => {
@@ -77,9 +78,9 @@ const Contact = () => {
   return (
     <section id="contact" className="py-24 bg-silk-charcoal">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid lg:grid-cols-2 gap-16 items-stretch">
           {/* Form */}
-          <div className="flex flex-col justify-between h-full space-y-8">
+          <div className="space-y-8">
             <div className="space-y-4">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
@@ -92,7 +93,8 @@ const Contact = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
+              {/* БОЛЬШЕ ОТСТУП после 2 полей */}
+              <div className="grid md:grid-cols-2 gap-4 mb-3">
                 <Input
                   placeholder="Ваше ім'я"
                   value={formData.name}
@@ -121,53 +123,71 @@ const Contact = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
-                className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[160px] resize-none"
+                className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[120px] resize-none"
               />
 
-              <Button
-                type="submit"
-                variant="luxury"
-                size="lg"
-                className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border-gold hover:border-gold-light"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                <Send className="w-4 h-4 ml-2" />
-              </Button>
+              {/* БОЛЬШЕ ОТСТУП перед кнопкой */}
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  variant="luxury"
+                  size="lg"
+                  className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border-gold hover:border-gold-light"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+                  {/* иконку НЕ трогаем */}
+                  <Send className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
             </form>
 
-            {/* Contact Info */}
-            <div className="grid lg:grid-cols-2 gap-16 items-stretch">
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/silk4me"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 group"
-              >
-                <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати в Instagram
-                </span>
-              </a>
+            {/* Contact Info — В ОДИН РЯД */}
+            <div className="pt-8 border-t border-background/20">
+              <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
+                <a
+                  href="https://www.instagram.com/silk4me"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 group"
+                >
+                  <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                  <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors whitespace-nowrap">
+                    Написати в Instagram
+                  </span>
+                </a>
 
-              {/* Email */}
-              <a
-                href="mailto:Silkandnature@gmail.com"
-                className="flex items-center gap-3 group"
-              >
-                <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати на пошту
-                </span>
-              </a>
+                <a
+                  href="mailto:Silkandnature@gmail.com"
+                  className="flex items-center gap-3 group"
+                >
+                  <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                  <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors whitespace-nowrap">
+                    Написати на пошту
+                  </span>
+                </a>
 
-              {/* Location */}
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-gold" />
-                <span className="text-sm text-background/80">
-                  Україна / Європа
-                </span>
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-gold" />
+                  <span className="text-sm text-background/80 whitespace-nowrap">
+                    Україна / Європа
+                  </span>
+                </div>
+
+                {/* если Telegram нужен — просто раскомментируй */}
+                {/*
+                <a
+                  href={TG_BOT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 group"
+                >
+                  <MessageCircle className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                  <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors whitespace-nowrap">
+                    Написати в Telegram
+                  </span>
+                </a>
+                */}
               </div>
             </div>
           </div>
@@ -176,10 +196,10 @@ const Contact = () => {
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
-            src={silkLifestyle}
-            alt="Silk4me Lifestyle"
-            className="w-full h-[560px] object-cover object-center"
-              />
+              src={silkLifestyle}
+              alt="Silk4me Lifestyle"
+              className="w-full h-full object-cover object-top"
+            />
           </div>
         </div>
       </div>
