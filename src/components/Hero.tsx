@@ -37,26 +37,38 @@ const Hero = () => {
                 aria-label="Перейти до Black Collection"
               >
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium leading-tight text-foreground">
-                  Black Collection
+                  BLCK Collection
                 </h1>
               </button>
             </div>
 
             {/* Текст — крупнее и читабельнее */}
             <p className="text-muted-foreground text-xl leading-relaxed max-w-xl">
-              Шовк, який відчувається з першого дотику. Легка прохолода, ідеальна
-              посадка та глибокий чорний — образ, який хочеться носити знову і знову.
+            Основа твоєї молодості і краси без зусиль.
+            Основа здорового сну.
+            Основа моменту «нарешті для себе».
+
+            Коли чорний заспокоює, а шовк піклується.
             </p>
 
-            {/* Промокод — аккуратный блок (без “-15%”) */}
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground">
-                Знижка за промокодом
-              </span>
-              <span className="border border-border/60 bg-background/60 px-4 py-2 text-sm tracking-[0.25em] uppercase">
-                {PROMO_CODE}
-              </span>
-            </div>
+            {/* Промокод — премиум акцент */}
+           <div className="mt-4 flex flex-wrap items-center gap-3">
+          <span className="text-sm tracking-[0.22em] uppercase text-foreground/80">
+           Знижка за промокодом
+             </span>
+
+            <span className="
+            rounded-md
+            border border-accent/60
+            bg-accent/15
+            px-5 py-2
+            text-sm font-medium
+            tracking-[0.28em] uppercase
+            text-foreground
+             ">
+    {PROMO_CODE}
+  </span>
+</div>
 
             {/* Buttons — ещё чуть меньше по ширине */}
             <div className="flex flex-col sm:flex-row gap-4 relative z-10 pt-2">
