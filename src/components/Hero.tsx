@@ -32,6 +32,7 @@ const Hero = () => {
               </p>
 
               <button
+                type="button"
                 onClick={goToCollection}
                 className="text-left group"
                 aria-label="Перейти до Black Collection"
@@ -50,18 +51,20 @@ const Hero = () => {
 Коли чорний заспокоює, а шовк піклується.`}
             </p>
 
-            {/* PROMO */}
-            <div className="mt-6 flex items-center gap-6">
-              <span className="text-sm font-semibold tracking-[0.25em] uppercase text-foreground">
+            {/* PROMO — label same color as title + premium framed code */}
+            <div className="mt-6 flex flex-wrap items-center gap-4">
+              <span className="text-sm tracking-[0.25em] uppercase text-foreground">
                 Знижка за промокодом
               </span>
 
               <span
                 className="
-                  px-5 py-2
+                  inline-flex items-center justify-center
                   border border-foreground/40
-                  rounded-md
-                  text-sm font-semibold
+                  bg-background/60
+                  backdrop-blur-sm
+                  px-6 py-2
+                  text-sm font-medium
                   tracking-[0.3em]
                   uppercase
                   text-foreground
@@ -71,17 +74,13 @@ const Hero = () => {
               </span>
             </div>
 
-            {/* BUTTONS */}
+            {/* BUTTONS — wider paddings, never wrap, same width */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
-                className="
-                  w-[280px]
-                  whitespace-nowrap
-                  text-center
-                "
+                className="w-[320px] px-7 whitespace-nowrap text-center"
               >
                 Отримати консультацію
               </Button>
@@ -90,11 +89,7 @@ const Hero = () => {
                 variant="luxuryOutline"
                 size="lg"
                 onClick={goToCollection}
-                className="
-                  w-[280px]
-                  whitespace-nowrap
-                  text-center
-                "
+                className="w-[320px] px-7 whitespace-nowrap text-center"
               >
                 Переглянути колекцію
               </Button>
@@ -153,9 +148,7 @@ const Hero = () => {
                   hover:shadow-md
                   transition-shadow
                 "
-                style={{
-                  animation: "badge-float 3.6s ease-in-out infinite",
-                }}
+                style={{ animation: "badge-float 3.6s ease-in-out infinite" }}
               >
                 <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-2 text-center">
                   Хіт продажу

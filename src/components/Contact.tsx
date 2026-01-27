@@ -79,7 +79,7 @@ const Contact = () => {
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Form */}
-          <div className="space-y-8">
+          <div className="flex flex-col justify-between h-full space-y-8">
             <div className="space-y-4">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
@@ -121,7 +121,7 @@ const Contact = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
-                className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[120px] resize-none"
+                className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[160px] resize-none"
               />
 
               <Button
@@ -137,7 +137,7 @@ const Contact = () => {
             </form>
 
             {/* Contact Info */}
-            <div className="grid md:grid-cols-3 gap-6 pt-8 border-t border-background/20 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 items-stretch">
               {/* Instagram */}
               <a
                 href="https://www.instagram.com/silk4me"
@@ -151,7 +151,7 @@ const Contact = () => {
                 </span>
               </a>
 
-              {/* Email (замени на свою почту) */}
+              {/* Email */}
               <a
                 href="mailto:Silkandnature@gmail.com"
                 className="flex items-center gap-3 group"
