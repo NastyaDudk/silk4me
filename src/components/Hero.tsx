@@ -27,9 +27,9 @@ const Hero = () => {
           {/* TEXT */}
           <div className="space-y-7 animate-fade-in">
             <div className="space-y-3">
-              <p className="uppercase tracking-[0.3em] text-sm text-foreground/70">
+              {/* <p className="uppercase tracking-[0.3em] text-sm text-foreground/70">
                 Ексклюзивна колекція
-              </p>
+              </p> */}
 
               <button
                 type="button"
@@ -38,7 +38,7 @@ const Hero = () => {
                 aria-label="Перейти до Black Collection"
               >
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-foreground group-hover:text-primary transition-colors">
-                  BLCK Collection
+                  BLCK Колекція
                 </h1>
               </button>
             </div>

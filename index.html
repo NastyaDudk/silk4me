@@ -4,33 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Silk4me — Black Collection | Преміум шовк</title>
-    <meta name="description" content="Ексклюзивна колекція чорного шовку від Silk4me. 100% натуральний шовк Mulberry найвищої якості 6A. Розкіш, елегантність та бездоганний стиль." />
+    <meta
+      name="description"
+      content="Ексклюзивна колекція чорного шовку від Silk4me. 100% натуральний шовк Mulberry найвищої якості 6A. Розкіш, елегантність та бездоганний стиль."
+    />
     <meta name="author" content="Silk4me" />
 
     <style>
-      /* Убираем cursor-pointer со всего виджета */
-      .elevenlabs-widget,
-      .elevenlabs-widget * {
-        cursor: default;
+      /* 1) Курсор по умолчанию — НЕ “рука” на всём виджете */
+      elevenlabs-convai {
+        cursor: default !important;
       }
-    
-      /* Курсор-рука только на кнопке */
-      .elevenlabs-widget button,
-      .elevenlabs-widget [role="button"] {
-        cursor: pointer;
+
+      /* 2) “Рука” только на кликабельных элементах (если они не в Shadow DOM) */
+      elevenlabs-convai button,
+      elevenlabs-convai [role="button"],
+      elevenlabs-convai a {
+        cursor: pointer !important;
       }
-    
-      /* Заголовок "Потрібна допомога?" */
-      .elevenlabs-widget h3,
-      .elevenlabs-widget .header-title {
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 1.3;
-      }
+
+     
+  /* скрываем стандартный виджет на мобиле */
+  @media (max-width: 640px) {
+    elevenlabs-convai {
+      display: none !important;
+    }
+  }
+
+      /*
+        Важно:
+        Заголовок “Потрібна допомога?” обычно внутри Shadow DOM, поэтому
+        увеличивать шрифт через h3 может НЕ сработать.
+        Правильнее менять текст через атрибут action-text (ниже).
+      */
     </style>
 
     <meta property="og:title" content="Silk4me — Black Collection" />
-    <meta property="og:description" content="Ексклюзивна колекція чорного шовку. 100% натуральний шовк Mulberry найвищої якості." />
+    <meta
+      property="og:description"
+      content="Ексклюзивна колекція чорного шовку. 100% натуральний шовк Mulberry найвищої якості."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
@@ -38,14 +51,31 @@
     <meta name="twitter:site" content="@silk4me" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <!-- ElevenLabs widget -->
+    <elevenlabs-convai
+      agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"
+      action-text="Потрібна допомога?"
+      start-call-text="Поговорити з консультантом"
+      listening-text="Слухаю…"
+      speaking-text="Відповідаю…"
+    ></elevenlabs-convai>
+
+    <script
+      src="https://unpkg.com/@elevenlabs/convai-widget-embed"
+      async
+      type="text/javascript"
+    ></script>
   </body>
 </html>
