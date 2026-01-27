@@ -178,14 +178,8 @@ const Contact = () => {
             <img
             src={silkLifestyle}
             alt="Silk4me Lifestyle"
-            className="
-            w-full 
-            h-[420px] 
-            object-cover 
-            object-[50%_70%]
-            pointer-events-none
-             "
-            />
+            className="w-full h-[560px] object-cover object-center"
+              />
           </div>
         </div>
       </div>
