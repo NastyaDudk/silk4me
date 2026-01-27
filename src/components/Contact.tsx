@@ -70,7 +70,7 @@ const Contact = () => {
     <section id="contact" className="py-24 bg-silk-charcoal">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16">
-          {/* Form */}
+          {/* LEFT: Form */}
           <div className="flex flex-col justify-between h-full space-y-8">
             <div className="space-y-4">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
@@ -108,7 +108,7 @@ const Contact = () => {
                 />
               </div>
 
-              {/* 🔽 ДОБАВИЛИ ОТСТУП СВЕРХУ */}
+              {/* Отступ перед текстовым полем */}
               <div className="pt-4">
                 <Textarea
                   placeholder="Ваше повідомлення (необов'язково)"
@@ -120,7 +120,7 @@ const Contact = () => {
                 />
               </div>
 
-              {/* 🔽 ДОБАВИЛИ ОТСТУП ПЕРЕД КНОПКОЙ */}
+              {/* Отступ перед кнопкой */}
               <div className="pt-4">
                 <Button
                   type="submit"
@@ -135,14 +135,19 @@ const Contact = () => {
               </div>
             </form>
 
-            
-           {/* Contact Info */}
-           <div className="flex flex-wrap items-center gap-10 pt-8">
+            {/* Contact Info */}
+            <div
+              className="
+                flex flex-col gap-6 pt-8
+                md:flex-row md:flex-wrap md:items-center md:gap-10
+              "
+            >
+              {/* Instagram */}
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 group"
+                className="flex items-center gap-3 group cursor-pointer"
               >
                 <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
@@ -150,14 +155,19 @@ const Contact = () => {
                 </span>
               </a>
 
-              <a href="Silkandnature@gmail.com" className="flex items-center gap-3 group">
+              {/* Email */}
+              <a
+                href="mailto:hello@silk4me.com"
+                className="flex items-center gap-3 group cursor-pointer"
+              >
                 <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
                   Написати на пошту
                 </span>
               </a>
 
-              <div className="flex items-center gap-3">
+              {/* Location — не кликабельно */}
+              <div className="flex items-center gap-3 cursor-default">
                 <MapPin className="w-5 h-5 text-gold" />
                 <span className="text-sm text-background/80">
                   Україна / Європа
@@ -166,7 +176,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Image — НЕ ТРОГАЕМ */}
+          {/* RIGHT: Image — НЕ ТРОГАЕМ */}
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
@@ -182,3 +192,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
