@@ -4,25 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Silk4me — Black Collection | Преміум шовк</title>
   <meta name="description"
     content="Ексклюзивна колекція чорного шовку від Silk4me. 100% натуральний шовк Mulberry найвищої якості 6A. Розкіш, елегантність та бездоганний стиль." />
   <meta name="author" content="Silk4me" />
+
   <meta property="og:title" content="Silk4me — Black Collection" />
   <meta property="og:description"
     content="Ексклюзивна колекція чорного шовку. 100% натуральний шовк Mulberry найвищої якості." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@silk4me" />
   <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@300;400;500&display=swap"
     rel="stylesheet" />
+
   <style>
-    /* ------------------------- MOBILE: показываем только "кнопку-телефончик", а сам виджет скрыт до клика -------------------------- */
+    /* ===== Mobile phone button ===== */
     .mobile-assistant {
       position: fixed;
       right: 16px;
@@ -35,7 +40,7 @@
       border: none;
       font-size: 22px;
       display: none;
-      /* включим на мобиле через media */
+      /* enabled on mobile below */
       place-items: center;
       z-index: 999999;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
@@ -47,78 +52,122 @@
       transform: translateY(1px);
     }
 
-    /* На десктопе — используем стандартный виджет ElevenLabs */
+    /* Make sure host itself isn't a pointer */
+    elevenlabs-convai {
+      cursor: default;
+    }
+
+    /* Desktop: keep standard widget behavior (no mobile phone button) */
     @media (min-width: 641px) {
       .mobile-assistant {
         display: none !important;
       }
     }
 
-    /* На мобиле: прячем виджет пока не нажали кнопку */
+    /* Mobile: show phone button, keep widget initialized but visually hidden until opened */
     @media (max-width: 640px) {
-      body:not(.convai-open) elevenlabs-convai {
-        display: none;
-      }
-
-      body:not(.convai-open) .mobile-assistant {
+      .mobile-assistant {
         display: grid;
       }
-    }
 
-    /* ------------------------- CURSOR: на десктопе рука только на кликабельном -------------------------- */
-    elevenlabs-convai button,
-    elevenlabs-convai [role="button"],
-    elevenlabs-convai a {
-      cursor: pointer;
-    }
+      elevenlabs-convai {
+        position: fixed;
+        right: 12px;
+        bottom: 86px;
+        /* leaves space for the phone button */
+        z-index: 999998;
 
-    /* ------------------------- "Потрібна допомога?" — чуть больше и жирнее (селекторы на случай разных версий виджета) -------------------------- */
-    elevenlabs-convai h1,
-    elevenlabs-convai h2,
-    elevenlabs-convai h3,
-    elevenlabs-convai [class*="title"],
-    elevenlabs-convai [class*="header"] h3 {
-      font-size: 18px;
-      font-weight: 650;
-      line-height: 1.25;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      body.convai-open elevenlabs-convai {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      body.convai-open .mobile-assistant {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script> <!-- ElevenLabs ConvAI widget -->
-  <elevenlabs-convaiagent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
-    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript">
+  <script type="module" src="/src/main.tsx"></script>
 
-    </script>
-    <!-- Mobile "phone" button to open the widget -->
-    <button class="mobile-assistant" aria-label="Поговорити з консультантом">
-      📞
-    </button>
+  <!-- ElevenLabs ConvAI widget -->
+  <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 
-    <!-- Mobile "phone" button -->
-    <button class="mobile-assistant" aria-label="Поговорити з консультантом">
-      📞
-    </button>
+  <!-- Mobile "phone" button -->
+  <button class="mobile-assistant" aria-label="Поговорити з консультантом">📞</button>
 
-    <script>
+  <script>
+    (function () {
+      const OPEN_CLASS = "convai-open";
+      const WIDGET_SELECTOR = "elevenlabs-convai";
+
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      async function getShadowRoot() {
+        const el = document.querySelector(WIDGET_SELECTOR);
+        if (!el) return null;
+
+        const start = Date.now();
+        while (!el.shadowRoot) {
+          if (Date.now() - start > 12000) return null;
+          await sleep(150);
+        }
+        return el.shadowRoot;
+      }
+
+      function findAndClickStart(shadow) {
+        // Try to click “Start a call” / “Поговорити...”
+        const candidates = shadow.querySelectorAll("button,[role='button'],a");
+        for (const el of candidates) {
+          const txt = (el.textContent || "").toLowerCase();
+          const aria = (el.getAttribute?.("aria-label") || "").toLowerCase();
+          const title = (el.getAttribute?.("title") || "").toLowerCase();
+
+          if (
+            txt.includes("start a call") ||
+            txt.includes("поговорити") ||
+            aria.includes("start a call") ||
+            aria.includes("поговорити") ||
+            title.includes("start a call") ||
+            title.includes("поговорити")
+          ) {
+            el.click();
+            return true;
+          }
+        }
+        return false;
+      }
+
+      async function openAndStartCall() {
+        document.body.classList.add(OPEN_CLASS);
+
+        const shadow = await getShadowRoot();
+        if (!shadow) return;
+
+        // UI may render asynchronously — retry for a bit
+        for (let i = 0; i < 25; i++) {
+          if (findAndClickStart(shadow)) return;
+          await sleep(200);
+        }
+      }
+
       document.addEventListener("DOMContentLoaded", () => {
         const btn = document.querySelector(".mobile-assistant");
-
-        if (!btn) return;
-
-        btn.addEventListener("click", () => {
-          document.body.classList.add("convai-open");
-
-          // По желанию: прокрутка к виджету
-          setTimeout(() => {
-            const widget = document.querySelector("elevenlabs-convai");
-            widget?.scrollIntoView({
-              behavior: "smooth",
-              block: "end",
-            });
-          }, 50);
-        });
+        btn?.addEventListener("click", openAndStartCall);
       });
-    </script>
+    })();
+  </script>
+</body>
+
+</html>
