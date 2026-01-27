@@ -70,26 +70,39 @@ const Hero = () => {
               </span>
               </div>
 
-            {/* BUTTONS — wider paddings, never wrap, same width */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                variant="luxury"
-                size="lg"
-                onClick={scrollToContact}
-                className="w-[320px] px-7 whitespace-nowrap text-center"
-              >
-                Отримати консультацію
-              </Button>
+            {/* BUTTONS */}
+<div
+  className="
+    flex flex-col items-center gap-4 pt-6
+    sm:flex-row sm:items-start
+  "
+>
+  <Button
+    variant="luxury"
+    size="lg"
+    onClick={scrollToContact}
+    className="
+      w-full max-w-[320px]
+      text-center
+      sm:w-[320px]
+    "
+  >
+    Отримати консультацію
+  </Button>
 
-              <Button
-                variant="luxuryOutline"
-                size="lg"
-                onClick={goToCollection}
-                className="w-[320px] px-7 whitespace-nowrap text-center"
-              >
-                Переглянути колекцію
-              </Button>
-            </div>
+  <Button
+    variant="luxuryOutline"
+    size="lg"
+    onClick={goToCollection}
+    className="
+      w-full max-w-[320px]
+      text-center
+      sm:w-[320px]
+    "
+  >
+    Переглянути колекцію
+  </Button>
+</div>
 
             {/* STATS */}
             <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
