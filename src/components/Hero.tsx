@@ -18,7 +18,12 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-12 lg:pt-14 overflow-hidden">
+    <section
+      className="
+        relative min-h-screen flex items-center overflow-hidden
+        pt-20 sm:pt-24 lg:pt-14
+      "
+    >
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
 
@@ -27,10 +32,6 @@ const Hero = () => {
           {/* TEXT */}
           <div className="space-y-7 animate-fade-in">
             <div className="space-y-3">
-              {/* <p className="uppercase tracking-[0.3em] text-sm text-foreground/70">
-                Ексклюзивна колекція
-              </p> */}
-
               <button
                 type="button"
                 onClick={goToCollection}
@@ -38,7 +39,7 @@ const Hero = () => {
                 aria-label="Перейти до Black Collection"
               >
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-foreground group-hover:text-primary transition-colors">
-                  BLCK Kолекція
+                  BLCK Колекція
                 </h1>
               </button>
             </div>
@@ -51,58 +52,57 @@ const Hero = () => {
 Коли чорний заспокоює, а шовк піклується.`}
             </p>
 
-            {/* PROMO — label same color as title + premium framed code */}
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            {/* PROMO — mobile centered, desktop left */}
+            <div
+              className="
+                mt-6 flex flex-col items-center text-center gap-3
+                sm:flex-row sm:items-center sm:text-left sm:justify-start sm:gap-4
+              "
+            >
               <span className="text-sm tracking-[0.25em] uppercase text-foreground">
                 Знижка за промокодом
               </span>
 
-              <span className="
-              rounded-lg
-              border border-primary/40
-              bg-primary/10
-              px-5 py-2
-              text-sm font-semibold
-              tracking-[0.3em] uppercase
-              text-primary
-                ">
-              {PROMO_CODE}
+              <span
+                className="
+                  rounded-lg
+                  border border-primary/40
+                  bg-primary/10
+                  px-5 py-2
+                  text-sm font-semibold
+                  tracking-[0.3em] uppercase
+                  text-primary
+                "
+              >
+                {PROMO_CODE}
               </span>
-              </div>
+            </div>
 
-            {/* BUTTONS */}
-<div
-  className="
-    flex flex-col items-center gap-4 pt-6
-    sm:flex-row sm:items-start
-  "
->
-  <Button
-    variant="luxury"
-    size="lg"
-    onClick={scrollToContact}
-    className="
-      w-full max-w-[320px]
-      text-center
-      sm:w-[320px]
-    "
-  >
-    Отримати консультацію
-  </Button>
+            {/* BUTTONS — centered on mobile, side-by-side on desktop */}
+            <div
+              className="
+                flex flex-col items-center gap-4 pt-6
+                sm:flex-row sm:items-start
+              "
+            >
+              <Button
+                variant="luxury"
+                size="lg"
+                onClick={scrollToContact}
+                className="w-full max-w-[320px] text-center sm:w-[320px]"
+              >
+                Отримати консультацію
+              </Button>
 
-  <Button
-    variant="luxuryOutline"
-    size="lg"
-    onClick={goToCollection}
-    className="
-      w-full max-w-[320px]
-      text-center
-      sm:w-[320px]
-    "
-  >
-    Переглянути колекцію
-  </Button>
-</div>
+              <Button
+                variant="luxuryOutline"
+                size="lg"
+                onClick={goToCollection}
+                className="w-full max-w-[320px] text-center sm:w-[320px]"
+              >
+                Переглянути колекцію
+              </Button>
+            </div>
 
             {/* STATS */}
             <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
