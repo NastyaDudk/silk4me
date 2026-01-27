@@ -7,8 +7,10 @@ const PROMO_CODE = "BLCK-15";
 
 const Hero = () => {
   const scrollToContact = () => {
-    const element = document.querySelector("#contact");
-    element?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelector("#contact")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   const goToCollection = () => {
@@ -22,27 +24,24 @@ const Hero = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
-          <div className="space-y-7 animate-fade-in relative z-10">
+          {/* TEXT */}
+          <div className="space-y-7 animate-fade-in">
             <div className="space-y-3">
-              <p className="text-primary uppercase tracking-[0.3em] text-sm font-light">
+              <p className="uppercase tracking-[0.3em] text-sm text-foreground/70">
                 Ексклюзивна колекція
               </p>
 
-              {/* Заголовок (кликабельный) */}
               <button
-                type="button"
                 onClick={goToCollection}
                 className="text-left group"
                 aria-label="Перейти до Black Collection"
               >
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium leading-tight text-foreground group-hover:text-primary transition-colors">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-foreground group-hover:text-primary transition-colors">
                   BLCK Collection
                 </h1>
               </button>
             </div>
 
-            {/* Текст */}
             <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
               {`Основа твоєї молодості і краси без зусиль.
 Основа здорового сну.
@@ -51,28 +50,36 @@ const Hero = () => {
 Коли чорний заспокоює, а шовк піклується.`}
             </p>
 
-            {/* Промокод — как было: текст слева, код справа (без плашки/рамки) */}
-            <div className="mt-6 flex flex-wrap items-center gap-6">
+            {/* PROMO */}
+            <div className="mt-6 flex items-center gap-6">
               <span className="text-sm font-semibold tracking-[0.25em] uppercase text-foreground">
                 Знижка за промокодом
               </span>
 
-              <span className="text-sm font-semibold tracking-[0.3em] uppercase text-foreground">
+              <span
+                className="
+                  px-5 py-2
+                  border border-foreground/40
+                  rounded-md
+                  text-sm font-semibold
+                  tracking-[0.3em]
+                  uppercase
+                  text-foreground
+                "
+              >
                 {PROMO_CODE}
               </span>
             </div>
 
-            {/* Buttons — одинаковая ширина + текст помещается */}
-            <div className="flex flex-col sm:flex-row gap-4 relative z-10 pt-2">
+            {/* BUTTONS */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
                 className="
-                  w-full sm:w-[280px]
-                  px-6
-                  whitespace-normal
-                  leading-snug
+                  w-[280px]
+                  whitespace-nowrap
                   text-center
                 "
               >
@@ -84,10 +91,8 @@ const Hero = () => {
                 size="lg"
                 onClick={goToCollection}
                 className="
-                  w-full sm:w-[280px]
-                  px-6
-                  whitespace-normal
-                  leading-snug
+                  w-[280px]
+                  whitespace-nowrap
                   text-center
                 "
               >
@@ -95,101 +100,84 @@ const Hero = () => {
               </Button>
             </div>
 
-            {/* Stats */}
+            {/* STATS */}
             <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-medium tracking-tight text-foreground">
-                  100%
-                </div>
-                <p className="mt-1 text-sm md:text-base text-muted-foreground uppercase tracking-wide">
+                <div className="text-4xl font-medium text-foreground">100%</div>
+                <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
                   натуральний шовк
                 </p>
               </div>
 
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-medium tracking-tight text-foreground">
-                  6A
-                </div>
-                <p className="mt-1 text-sm md:text-base text-muted-foreground uppercase tracking-wide">
+                <div className="text-4xl font-medium text-foreground">6A</div>
+                <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
                   найвища якість
                 </p>
               </div>
 
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-medium tracking-tight text-foreground">
-                  22
-                </div>
-                <p className="mt-1 text-sm md:text-base text-muted-foreground uppercase tracking-wide">
+                <div className="text-4xl font-medium text-foreground">22</div>
+                <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
                   momme
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Image */}
-          <div className="relative hidden lg:block z-0">
-            <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-transparent rounded-sm pointer-events-none" />
+          {/* IMAGE */}
+          <div className="relative hidden lg:block">
+            <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-transparent pointer-events-none" />
 
             <div className="relative overflow-hidden">
               <img
                 src={silkModel}
                 alt="Silk4me Black Collection"
-                className="relative w-full h-[600px] object-cover object-top block select-none"
+                className="w-full h-[600px] object-cover object-top"
                 draggable={false}
               />
 
-              {/* Бейдж */}
               <a
                 href={PAJAMA_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Відкрити Шовкову піжаму Black Edition"
                 className="
                   absolute
+                  left-[8%]
+                  top-[72%]
                   bg-background/90 backdrop-blur-sm
                   border border-border/50
                   px-6 py-4
                   max-w-[360px]
-                  cursor-pointer
                   shadow-sm
                   hover:shadow-md
                   transition-shadow
                 "
                 style={{
-                  left: "8%",
-                  top: "72%",
-                  animation: "badge-float-in-bounds 3.6s ease-in-out infinite",
-                  willChange: "transform",
+                  animation: "badge-float 3.6s ease-in-out infinite",
                 }}
               >
-                <p className="text-xs text-muted-foreground uppercase tracking-[0.25em] text-center mb-2">
+                <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-2 text-center">
                   Хіт продажу
                 </p>
                 <p className="text-lg font-serif text-foreground">
                   Шовкова піжама Black Edition
                 </p>
-                <p className="mt-2 text-xs text-muted-foreground underline underline-offset-4">
+                <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground">
                   Перейти до товару
                 </p>
               </a>
             </div>
 
             <style>{`
-              @keyframes badge-float-in-bounds {
-                0%   { transform: translate(0px, 0px) rotate(-1deg); }
-                25%  { transform: translate(40px, -12px) rotate(1.2deg); }
-                50%  { transform: translate(90px, 10px) rotate(-0.8deg); }
-                75%  { transform: translate(35px, 22px) rotate(1deg); }
-                100% { transform: translate(0px, 0px) rotate(-1deg); }
+              @keyframes badge-float {
+                0% { transform: translate(0,0); }
+                50% { transform: translate(40px, -10px); }
+                100% { transform: translate(0,0); }
               }
             `}</style>
           </div>
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce z-10">
-        <div className="w-px h-12 bg-gradient-to-b from-transparent to-primary" />
       </div>
     </section>
   );
