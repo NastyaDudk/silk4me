@@ -135,8 +135,9 @@ const Contact = () => {
               </div>
             </form>
 
-            {/* Contact Info */}
-            <div className="grid lg:grid-cols-2 gap-16 items-stretch">
+            
+           {/* Contact Info */}
+           <div className="flex flex-wrap items-center gap-10 pt-8">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
