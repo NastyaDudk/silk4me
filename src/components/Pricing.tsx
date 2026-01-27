@@ -68,9 +68,9 @@ const Pricing = () => {
               </div>
               <div className="text-center space-y-4">
                 <p className="text-sm text-muted-foreground uppercase tracking-wider">Популярний вибір</p>
-                <h3 className="text-2xl font-serif text-foreground">Шовкова резинка для волосся</h3>
+                <h3 className="text-2xl font-serif text-foreground">Шовкова наволочка</h3>
                 <p className="text-muted-foreground text-sm">
-                  Ідеальний подарунок для себе чи близьких. Не залишає заломів на волоссі.
+                Бестселер бренду. Аксесуар, що дозволяє відчути користь шовку як для шкіри, так і для волосся без зусиль. Ідеальний подарунок для себе чи близьких.
                 </p>
                 <div className="pt-4 border-t border-border/50">
                   <p className="text-primary font-serif text-xl">Преміум ціновий сегмент</p>
