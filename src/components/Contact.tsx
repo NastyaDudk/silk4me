@@ -176,10 +176,10 @@ const Contact = () => {
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
-              src={silkLifestyle}
-              alt="Silk4me Lifestyle"
-              className="w-full h-full object-cover object-top"
-            />
+            src={silkLifestyle}
+            alt="Silk4me Lifestyle"
+            className="w-full h-[360px] md:h-[420px] lg:h-[520px] object-cover object-top"
+/>
           </div>
         </div>
       </div>
