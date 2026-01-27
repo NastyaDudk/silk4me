@@ -136,44 +136,44 @@ const Contact = () => {
             </form>
 
             {/* Contact Info */}
-            <div
-              className="
-                flex flex-col gap-6 pt-8
-                md:flex-row md:flex-wrap md:items-center md:gap-10
-              "
-            >
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/silk4me"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 group cursor-pointer"
-              >
-                <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати в Instagram
-                </span>
-              </a>
+<div
+  className="
+    flex flex-col items-center text-center gap-6 pt-8
+    md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10
+  "
+>
+  {/* Instagram */}
+  <a
+    href="https://www.instagram.com/silk4me"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-3 group cursor-pointer"
+  >
+    <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+    <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+      Написати в Instagram
+    </span>
+  </a>
 
-              {/* Email */}
-              <a
-                href="mailto:hello@silk4me.com"
-                className="flex items-center gap-3 group cursor-pointer"
-              >
-                <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати на пошту
-                </span>
-              </a>
+  {/* Email */}
+  <a
+    href="mailto:Silkandnature@gmail.com"
+    className="flex items-center gap-3 group cursor-pointer"
+  >
+    <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+    <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+      Написати на пошту
+    </span>
+  </a>
 
-              {/* Location — не кликабельно */}
-              <div className="flex items-center gap-3 cursor-default">
-                <MapPin className="w-5 h-5 text-gold" />
-                <span className="text-sm text-background/80">
-                  Україна / Європа
-                </span>
-              </div>
-            </div>
+  {/* Location — не кликабельно */}
+  <div className="flex items-center gap-3 cursor-default">
+    <MapPin className="w-5 h-5 text-gold" />
+    <span className="text-sm text-background/80">
+      Україна / Європа
+    </span>
+  </div>
+</div>
           </div>
 
           {/* RIGHT: Image — НЕ ТРОГАЕМ */}
