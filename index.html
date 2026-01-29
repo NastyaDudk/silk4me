@@ -3,12 +3,11 @@
 
 <head>
   <!-- BASIC -->
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="robots" content="index,follow" />
   <meta name="author" content="Silk4me" />
-  <meta property="og:image" content="https://nastyadudk.github.io/silk4me/og-image.png" />
-  <meta name="twitter:image" content="https://nastyadudk.github.io/silk4me/og-image.png" />
   <meta name="google-site-verification" content="TCLnyHIswT1paA_50G2Qy-OIybRX-8s9iLzGLgKFkD8" />
 
   <!-- TITLE / DESCRIPTION -->
@@ -19,12 +18,12 @@
   <!-- CANONICAL -->
   <link rel="canonical" href="https://nastyadudk.github.io/silk4me/" />
 
-  <!-- THEME / APP ICONS -->
+  <!-- APP / THEME -->
   <meta name="theme-color" content="#1f4c41" />
-  <link rel="icon" href="/silk4me/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="/silk4me/favicon.ico" sizes="any" />
   <link rel="apple-touch-icon" href="/silk4me/apple-touch-icon.png" />
   <link rel="manifest" href="/silk4me/site.webmanifest" />
-  <meta name="theme-color" content="#1F4C41" />
+
   <!-- OPEN GRAPH -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Silk4me" />
@@ -35,21 +34,23 @@
   <meta property="og:image" content="https://nastyadudk.github.io/silk4me/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Silk4me — Black Collection — Mulberry Silk 6A" />
 
   <!-- TWITTER -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Silk4me — Black Collection | Преміум шовк Mulberry 6A" />
   <meta name="twitter:description" content="Ексклюзивний чорний шовк Mulberry 6A від бренду Silk4me." />
   <meta name="twitter:image" content="https://nastyadudk.github.io/silk4me/og-image.png" />
+  <meta name="twitter:image:alt" content="Silk4me — Black Collection — Mulberry Silk 6A" />
 
-  <!-- FONTS (keep minimal) -->
+  <!-- FONTS (minimal) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap"
     rel="stylesheet" />
 
-  <!-- STRUCTURED DATA -->
+  <!-- STRUCTURED DATA (JSON-LD) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -61,9 +62,11 @@
         "url": "https://nastyadudk.github.io/silk4me/",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://nastyadudk.github.io/silk4me/og-image.png"
+          "url": "https://nastyadudk.github.io/silk4me/apple-touch-icon.png"
         },
-        "sameAs": ["https://www.instagram.com/silk4me"]
+        "sameAs": [
+          "https://www.instagram.com/silk4me"
+        ]
       },
       {
         "@type": "WebSite",
@@ -172,8 +175,11 @@
 <body>
   <div id="root"></div>
 
-  <!-- APP (GitHub Pages needs base path) -->
-  <script type="module" src="/silk4me/src/main.tsx"></script>
+  <!-- APP
+    ВАЖНО: на проде (build) у Vite обычно генерируется /assets/*.js
+    Оставь этот путь таким, как в твоём dist/index.html после build.
+    Ниже пример для build: -->
+  <script type="module" src="./assets/index.js"></script>
 
   <!-- ElevenLabs ConvAI -->
   <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
@@ -243,7 +249,7 @@
         if (!shadow) return;
 
         const observer = new MutationObserver(() => {
-          // If conversation ended and UI shows "Start a call" again — collapse on mobile
+          // If UI shows "Start" state again — collapse on mobile
           if (isMobile() && findStartCandidate(shadow)) {
             document.body.classList.remove(OPEN_CLASS);
           }
