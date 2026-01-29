@@ -18,6 +18,18 @@ const DEFAULT_API = isLocal
 
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 
+type LeadPayload = {
+  name: string;
+  phone: string;
+  message?: string;
+};
+
+type ApiResponse = {
+  ok?: boolean;
+  success?: boolean;
+  error?: string;
+};
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -27,7 +39,7 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
 
@@ -40,18 +52,35 @@ const Contact = () => {
       return;
     }
 
+    const payload: LeadPayload = {
+      name,
+      phone,
+      ...(message ? { message } : {}),
+    };
+
     setIsSubmitting(true);
 
     try {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, message }),
+        body: JSON.stringify(payload),
       });
 
-      const data = await res.json().catch(() => null);
+      // Render/сервер иногда возвращает не-JSON на ошибках — читаем безопасно
+      const raw = await res.text().catch(() => "");
+      let data: ApiResponse | null = null;
 
-      if (!res.ok || !data?.ok) {
+      try {
+        data = raw ? (JSON.parse(raw) as ApiResponse) : null;
+      } catch {
+        data = null;
+      }
+
+      const ok = res.ok && (data?.ok === true || data?.success === true);
+
+      if (!ok) {
+        console.error("Lead submit error:", res.status, raw);
         toast.error("Не вдалося надіслати запит. Спробуйте ще раз.");
         return;
       }
@@ -65,6 +94,8 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
+
+  const email = "Silkandnature" + "@gmail.com"; // чуть меньше спама, чем явный mailto
 
   return (
     <section id="contact" className="py-24 bg-silk-charcoal">
@@ -90,7 +121,7 @@ const Contact = () => {
                   placeholder="Ваше ім'я"
                   value={formData.name}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData((prev) => ({ ...prev, name: e.target.value }))
                   }
                   required
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
@@ -98,10 +129,11 @@ const Contact = () => {
 
                 <Input
                   type="tel"
+                  inputMode="tel"
                   placeholder="Телефон"
                   value={formData.phone}
                   onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
+                    setFormData((prev) => ({ ...prev, phone: e.target.value }))
                   }
                   required
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
@@ -114,7 +146,7 @@ const Contact = () => {
                   placeholder="Ваше повідомлення (необов'язково)"
                   value={formData.message}
                   onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
+                    setFormData((prev) => ({ ...prev, message: e.target.value }))
                   }
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[160px] resize-none"
                 />
@@ -135,45 +167,45 @@ const Contact = () => {
               </div>
             </form>
 
-            {/* Contact Info */}
-<div
-  className="
-    flex flex-col items-center text-center gap-6 pt-8
-    md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10
-  "
->
-  {/* Instagram */}
-  <a
-    href="https://www.instagram.com/silk4me"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center gap-3 group cursor-pointer"
-  >
-    <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-    <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-      Написати в Instagram
-    </span>
-  </a>
+            {/* Contact Info (mobile center, desktop normal) */}
+            <div
+              className="
+                flex flex-col items-center text-center gap-6 pt-8
+                md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10
+              "
+            >
+              {/* Instagram */}
+              <a
+                href="https://www.instagram.com/silk4me"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 group cursor-pointer"
+              >
+                <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+                  Написати в Instagram
+                </span>
+              </a>
 
-  {/* Email */}
-  <a
-    href="mailto:Silkandnature@gmail.com"
-    className="flex items-center gap-3 group cursor-pointer"
-  >
-    <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-    <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-      Написати на пошту
-    </span>
-  </a>
+              {/* Email */}
+              <a
+                href={`mailto:${email}`}
+                className="flex items-center gap-3 group cursor-pointer"
+              >
+                <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+                  Написати на пошту
+                </span>
+              </a>
 
-  {/* Location — не кликабельно */}
-  <div className="flex items-center gap-3 cursor-default">
-    <MapPin className="w-5 h-5 text-gold" />
-    <span className="text-sm text-background/80">
-      Україна / Європа
-    </span>
-  </div>
-</div>
+              {/* Location — не кликабельно */}
+              <div className="flex items-center gap-3 cursor-default">
+                <MapPin className="w-5 h-5 text-gold" />
+                <span className="text-sm text-background/80">
+                  Україна / Європа
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* RIGHT: Image — НЕ ТРОГАЕМ */}
@@ -183,6 +215,7 @@ const Contact = () => {
               src={silkLifestyle}
               alt="Silk4me Lifestyle"
               className="w-full h-[560px] object-cover object-center"
+              draggable={false}
             />
           </div>
         </div>
