@@ -77,6 +77,63 @@
     ]
   }
   </script>
+
+  <style>
+    /* Mobile phone button */
+    .mobile-assistant {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 9999px;
+      background: #1f4c41;
+      color: #fff;
+      border: none;
+      font-size: 22px;
+      display: none;
+      place-items: center;
+      z-index: 999999;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-assistant:active {
+      transform: translateY(1px);
+    }
+
+    elevenlabs-convai {
+      cursor: default;
+    }
+
+    @media (max-width: 640px) {
+      .mobile-assistant {
+        display: grid;
+      }
+
+      elevenlabs-convai {
+        position: fixed;
+        right: 12px;
+        bottom: 86px;
+        z-index: 999998;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      body.convai-open elevenlabs-convai {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      body.convai-open .mobile-assistant {
+        display: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -88,6 +145,65 @@
   <!-- ElevenLabs ConvAI -->
   <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+  <!-- Mobile phone button -->
+  <button class="mobile-assistant" aria-label="Поговорити з консультантом">
+    📞
+  </button>
+
+  <script>
+    (function () {
+      const OPEN_CLASS = "convai-open";
+      const WIDGET_SELECTOR = "elevenlabs-convai";
+      const BTN_SELECTOR = ".mobile-assistant";
+
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const isMobile = () =>
+        window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
+
+      async function getShadowRoot() {
+        const el = document.querySelector(WIDGET_SELECTOR);
+        if (!el) return null;
+
+        const start = Date.now();
+        while (!el.shadowRoot) {
+          if (Date.now() - start > 15000) return null;
+          await sleep(150);
+        }
+        return el.shadowRoot;
+      }
+
+      function findStartButton(shadow) {
+        const nodes = shadow.querySelectorAll("button,[role='button'],a");
+        for (const el of nodes) {
+          const text = (el.textContent || "").toLowerCase();
+          if (text.includes("start") || text.includes("поговор")) {
+            return el;
+          }
+        }
+        return null;
+      }
+
+      async function openAndStartCall() {
+        document.body.classList.add(OPEN_CLASS);
+        const shadow = await getShadowRoot();
+        if (!shadow) return;
+
+        for (let i = 0; i < 25; i++) {
+          const btn = findStartButton(shadow);
+          if (btn) {
+            btn.click();
+            return;
+          }
+          await sleep(200);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.querySelector(BTN_SELECTOR);
+        btn?.addEventListener("click", openAndStartCall);
+      });
+    })();
+  </script>
 </body>
 
 </html>
