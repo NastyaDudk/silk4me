@@ -8,15 +8,13 @@
     (function () {
       var path = window.location.pathname;
 
-      // НЕ редиректим системные файлы
-      if (
-        path.endsWith('/sitemap.xml') ||
-        path.endsWith('/robots.txt')
-      ) {
+      // Если это запрос к файлу (есть расширение) — НИЧЕГО НЕ ДЕЛАЕМ
+      // Примеры: .xml .txt .ico .png .webmanifest .css .js
+      if (/\.[a-zA-Z0-9]+$/.test(path)) {
         return;
       }
 
-      // SPA redirect только для внутренних страниц
+      // SPA redirect только для роутов
       if (path.startsWith('/silk4me/')) {
         window.location.replace('/silk4me/');
       }
