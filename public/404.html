@@ -1,14 +1,29 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <script>
-      // SPA redirect for GitHub Pages
+<html lang="uk">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Silk4me</title>
+  <script>
+    (function () {
       var path = window.location.pathname;
+
+      // НЕ редиректим системные файлы
+      if (
+        path.endsWith('/sitemap.xml') ||
+        path.endsWith('/robots.txt')
+      ) {
+        return;
+      }
+
+      // SPA redirect только для внутренних страниц
       if (path.startsWith('/silk4me/')) {
         window.location.replace('/silk4me/');
       }
-    </script>
-  </head>
-  <body></body>
+    })();
+  </script>
+</head>
+
+<body></body>
+
 </html>
