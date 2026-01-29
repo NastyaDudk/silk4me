@@ -10,17 +10,26 @@
   <meta name="description"
     content="Ексклюзивна колекція чорного шовку від Silk4me. 100% натуральний шовк Mulberry найвищої якості 6A. Розкіш, елегантність та бездоганний стиль." />
   <meta name="author" content="Silk4me" />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://nastyadudk.github.io/silk4me/" />
 
+  <!-- Open Graph -->
   <meta property="og:title" content="Silk4me — Black Collection" />
   <meta property="og:description"
     content="Ексклюзивна колекція чорного шовку. 100% натуральний шовк Mulberry найвищої якості." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nastyadudk.github.io/silk4me/" />
   <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@silk4me" />
+  <meta name="twitter:title" content="Silk4me — Black Collection | Преміум шовк" />
+  <meta name="twitter:description"
+    content="Ексклюзивна колекція чорного шовку від Silk4me. 100% натуральний шовк Mulberry 6A." />
   <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -106,14 +115,19 @@
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 
   <!-- Mobile "phone" button -->
-  <button class="mobile-assistant" aria-label="Поговорити з консультантом">📞</button>
+  <button class="mobile-assistant" aria-label="Поговорити з консультантом">
+    📞
+  </button>
 
   <script>
     (function () {
       const OPEN_CLASS = "convai-open";
       const WIDGET_SELECTOR = "elevenlabs-convai";
+      const BTN_SELECTOR = ".mobile-assistant";
 
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const isMobile = () =>
+        window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
 
       async function getShadowRoot() {
         const el = document.querySelector(WIDGET_SELECTOR);
@@ -121,87 +135,61 @@
 
         const start = Date.now();
         while (!el.shadowRoot) {
-          if (Date.now() - start > 12000) return null;
+          if (Date.now() - start > 15000) return null;
           await sleep(150);
         }
         return el.shadowRoot;
       }
 
-      function findAndClickStart(shadow) {
-        // Try to click “Start a call” / “Поговорити...”
-        const candidates = shadow.querySelectorAll("button,[role='button'],a");
-        for (const el of candidates) {
+      function findStartCandidate(shadow) {
+        const nodes = shadow.querySelectorAll("button,[role='button'],a");
+        for (const el of nodes) {
           const txt = (el.textContent || "").toLowerCase();
           const aria = (el.getAttribute?.("aria-label") || "").toLowerCase();
           const title = (el.getAttribute?.("title") || "").toLowerCase();
 
-          if (
+          const looksLikeStart =
             txt.includes("start a call") ||
             txt.includes("поговорити") ||
             aria.includes("start a call") ||
             aria.includes("поговорити") ||
             title.includes("start a call") ||
-            title.includes("поговорити")
-          ) {
-            el.click();
-            return true;
-          }
+            title.includes("поговорити");
+
+          if (looksLikeStart) return el;
         }
-        return false;
+        return null;
+      }
+
+      function isStartButtonVisible(shadow) {
+        return !!findStartCandidate(shadow);
       }
 
       async function openAndStartCall() {
         document.body.classList.add(OPEN_CLASS);
 
+        // Try to click Start/Поговорити inside widget (if UI shows it)
         const shadow = await getShadowRoot();
         if (!shadow) return;
 
-        // UI may render asynchronously — retry for a bit
-        for (let i = 0; i < 25; i++) {
-          if (findAndClickStart(shadow)) return;
+        for (let i = 0; i < 30; i++) {
+          const btn = findStartCandidate(shadow);
+          if (btn) {
+            btn.click();
+            return;
+          }
           await sleep(200);
         }
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const btn = document.querySelector(".mobile-assistant");
-        btn?.addEventListener("click", openAndStartCall);
-      });
-    })();
-  </script>
-
-  <script>
-    (function () {
-      const OPEN_CLASS = "convai-open";
-      const WIDGET = "elevenlabs-convai";
-
-      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-      async function getShadowRoot() {
-        const el = document.querySelector(WIDGET);
-        if (!el) return null;
-
-        const start = Date.now();
-        while (!el.shadowRoot) {
-          if (Date.now() - start > 12000) return null;
-          await sleep(150);
-        }
-        return el.shadowRoot;
-      }
-
-      async function watchConversationEnd() {
+      async function setupAutoCollapse() {
         const shadow = await getShadowRoot();
         if (!shadow) return;
 
         const observer = new MutationObserver(() => {
-          const text = (shadow.textContent || "").toLowerCase();
-
-          if (
-            text.includes("how was this conversation") ||
-            text.includes("ended the conversation") ||
-            text.includes("conversation ended")
-          ) {
-            // ⬅️ ВОТ ГЛАВНОЕ
+          // Most reliable: when widget returns to "Start a call / Поговорити" state
+          // => collapse back to phone icon on mobile
+          if (isMobile() && isStartButtonVisible(shadow)) {
             document.body.classList.remove(OPEN_CLASS);
           }
         });
@@ -213,10 +201,17 @@
         });
       }
 
-      document.addEventListener("DOMContentLoaded", watchConversationEnd);
+      function setupButton() {
+        const btn = document.querySelector(BTN_SELECTOR);
+        btn?.addEventListener("click", openAndStartCall);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        setupButton();
+        setupAutoCollapse();
+      });
     })();
   </script>
-
 </body>
 
 </html>
