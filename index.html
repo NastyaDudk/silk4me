@@ -10,7 +10,7 @@
   <meta name="author" content="Silk4me" />
   <meta name="google-site-verification" content="TCLnyHIswT1paA_50G2Qy-OIybRX-8s9iLzGLgKFkD8" />
 
-  <!-- TITLE / DESCRIPTION (без, "преміальна", "ексклюзивна") -->
+  <!-- TITLE / DESCRIPTION -->
   <title>Silk4me — Black Collection | Шовк Mulberry 6A</title>
   <meta name="description"
     content="Silk4me — Black Collection із натурального шовку Mulberry 6A: наволочки, піжами та аксесуари. Комфортний сон і користь для шкіри та волосся." />
@@ -18,7 +18,7 @@
   <!-- CANONICAL -->
   <link rel="canonical" href="https://nastyadudk.github.io/silk4me/" />
 
-  <!-- THEME / APP ICONS -->
+  <!-- THEME / ICONS / MANIFEST -->
   <meta name="theme-color" content="#1f4c41" />
   <link rel="icon" href="/silk4me/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/silk4me/favicon-32x32.png" />
@@ -54,7 +54,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap"
     rel="stylesheet" />
 
-  <!-- STRUCTURED DATA (JSON-LD) — тоже без "преміальна/ексклюзив" -->
+  <!-- STRUCTURED DATA -->
   <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -84,33 +84,7 @@
             "url": "https://nastyadudk.github.io/silk4me/",
             "name": "Silk4me — Black Collection | Шовк Mulberry 6A",
             "isPartOf": { "@id": "https://nastyadudk.github.io/silk4me/#website" },
-            "about": { "@id": "https://nastyadudk.github.io/silk4me/#product" },
             "inLanguage": "uk"
-          },
-          {
-            "@type": "Brand",
-            "@id": "https://nastyadudk.github.io/silk4me/#brand",
-            "name": "Silk4me"
-          },
-          {
-            "@type": "Product",
-            "@id": "https://nastyadudk.github.io/silk4me/#product",
-            "name": "Silk4me Black Collection",
-            "brand": { "@id": "https://nastyadudk.github.io/silk4me/#brand" },
-            "description": "Black Collection із натурального шовку Mulberry 6A: наволочки, піжами та аксесуари.",
-            "material": "Mulberry silk",
-            "url": "https://nastyadudk.github.io/silk4me/",
-            "additionalProperty": [
-              { "@type": "PropertyValue", "name": "Silk grade", "value": "6A" },
-              { "@type": "PropertyValue", "name": "Momme", "value": "22" }
-            ],
-            "offers": {
-              "@type": "Offer",
-              "url": "https://silk4.me/product-category/blck_collection/",
-              "priceCurrency": "UAH",
-              "availability": "https://schema.org/InStock",
-              "seller": { "@id": "https://nastyadudk.github.io/silk4me/#organization" }
-            }
           }
         ]
       }
@@ -176,8 +150,8 @@
 <body>
   <div id="root"></div>
 
-  <!-- Vite build output (в dist) -->
-  <script type="module" src="./assets/index.js"></script>
+  <!-- Vite entry (ВАЖНО: именно так в корне) -->
+  <script type="module" src="/src/main.tsx"></script>
 
   <!-- ElevenLabs ConvAI -->
   <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
