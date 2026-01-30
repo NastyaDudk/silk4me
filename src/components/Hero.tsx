@@ -38,35 +38,21 @@ const Hero = () => {
                 className="text-left group"
                 aria-label="Перейти до Black Collection"
               >
-                {/* H1: коротко, по делу, с ключами */}
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-foreground group-hover:text-primary transition-colors">
-                  Black Collection Silk4me
+                  BLCK Kолекція
                 </h1>
               </button>
-
-              {/* Подзаголовок: ключи + смысл (НЕ простыня) */}
-              <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-                Натуральний шовк <span className="text-foreground/90">Mulberry 6A</span> для сну,
-                шкіри та волосся. У колекції —{" "}
-                <span className="text-foreground/90">чорна шовкова піжама</span>, наволочки та шовкові аксесуари.
-              </p>
             </div>
 
-            {/* Короткий список (читается лучше, чем длинный абзац) */}
-            <ul className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-xl space-y-2">
-              <li>— Піжама, наволочка, маска для сну</li>
-              <li>— Тюрбан, твістер, резинки (максі / міді / міні)</li>
-              <li>— Майка, шорти, рушник для обличчя</li>
-              <li>
-                — 22{" "}
-                <span className="text-foreground/90">
-                  momme
-                </span>{" "}
-                — показник щільності шовку для щоденного використання
-              </li>
-            </ul>
+            <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
+              {`Основа твоєї молодості і краси без зусиль.
+Основа здорового сну.
+Основа моменту «нарешті для себе».
 
-            {/* PROMO — centered on mobile, left on desktop */}
+Коли чорний заспокоює, а шовк піклується.`}
+            </p>
+
+            {/* PROMO — mobile centered, desktop left */}
             <div
               className="
                 mt-6 flex flex-col items-center text-center gap-3
@@ -92,7 +78,7 @@ const Hero = () => {
               </span>
             </div>
 
-            {/* BUTTONS — centered on mobile */}
+            {/* BUTTONS — centered on mobile, side-by-side on desktop */}
             <div
               className="
                 flex flex-col items-center gap-4 pt-6
@@ -130,7 +116,7 @@ const Hero = () => {
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">6A</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
-                  Mulberry
+                  найвища якість
                 </p>
               </div>
 
@@ -142,10 +128,31 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* SEO-подпись: видима, но очень деликатная */}
-            <p className="text-xs text-muted-foreground/70 max-w-xl leading-relaxed">
-              Silk4me Black Collection — чорна шовкова піжама та аксесуари з натурального шовку Mulberry 6A.
-            </p>
+            {/* SEO block: невидимо для пользователя, читабельно для Google/скринридеров */}
+            <div className="sr-only">
+              <h2>Black Collection Silk4me — вироби з натурального шовку Mulberry 6A</h2>
+
+              <p>
+                Black Collection від Silk4me включає: рушник для обличчя, шовковий твістер,
+                шовкові резинки (максі, міді, міні), шовкову майку, шовкові шорти,
+                шовкову маску для сну, тюрбан із шовку, шовкову наволочку та шовкову піжаму.
+              </p>
+
+              <h3>Чорна шовкова піжама Silk4me</h3>
+              <p>
+                Чорна шовкова піжама Silk4me виготовлена з натурального шовку Mulberry 6A.
+                Піжама входить до Black Collection та підходить для щоденного сну.
+              </p>
+
+              <p>
+                22 momme — це показник щільності шовку (мом), який впливає на зносостійкість
+                та відчуття тканини під час сну.
+              </p>
+
+              <p>
+                Перейдіть до повної колекції за посиланням: https://silk4.me/product-category/blck_collection/
+              </p>
+            </div>
           </div>
 
           {/* IMAGE */}
@@ -155,7 +162,7 @@ const Hero = () => {
             <div className="relative overflow-hidden">
               <img
                 src={silkModel}
-                alt="Чорна шовкова піжама Silk4me — Black Collection — Mulberry 6A"
+                alt="Silk4me Black Collection"
                 className="w-full h-[600px] object-cover object-top"
                 draggable={false}
               />
@@ -179,10 +186,10 @@ const Hero = () => {
                 style={{ animation: "badge-float 3.6s ease-in-out infinite" }}
               >
                 <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-2 text-center">
-                  Black Collection
+                  Хіт продажу
                 </p>
                 <p className="text-lg font-serif text-foreground">
-                  Чорна шовкова піжама Silk4me
+                  Шовкова піжама Black Edition
                 </p>
                 <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground">
                   Перейти до товару
@@ -205,4 +212,3 @@ const Hero = () => {
 };
 
 export default Hero;
- 
