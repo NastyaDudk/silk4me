@@ -19,19 +19,15 @@ const Pricing = () => {
   return (
     <section
       id="pricing"
-      className="
-        bg-background
-        pt-4 sm:pt-6 lg:pt-4
-        pb-12 sm:pb-14 lg:pb-16
-      "
+      className="bg-background pb-14 sm:pb-16 lg:pb-20"
     >
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
-          {/* CONTENT */}
-          <div className="space-y-6 text-center lg:text-left">
-            
-            {/* Заголовки */}
+          {/* LEFT — CONTENT */}
+          <div className="pt-6 lg:pt-10 space-y-7 text-center lg:text-left">
+
+            {/* Заголовок */}
             <div className="space-y-2">
               <p className="text-primary uppercase tracking-[0.3em] text-sm">
                 Ціни
@@ -56,7 +52,7 @@ const Pricing = () => {
                   key={index}
                   className="flex items-center gap-3 justify-center lg:justify-start"
                 >
-                  <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center">
+                  <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-primary" />
                   </div>
                   <span className="text-foreground">{feature}</span>
@@ -65,31 +61,35 @@ const Pricing = () => {
             </ul>
 
             {/* Текст + кнопка */}
-            <div className="pt-2 text-center lg:text-left">
-              <p className="text-sm text-muted-foreground mb-3 max-w-xl mx-auto lg:mx-0">
-                Ціни залежать від розміру та комплектації. Отримайте персональну
-                консультацію для підбору ідеального варіанту.
-              </p>
+            <div className="mt-12 lg:mt-16 text-center lg:text-left">
+  <p className="text-sm text-muted-foreground max-w-xl mx-auto lg:mx-0">
+    Ціни залежать від розміру та комплектації. Отримайте персональну
+    консультацію для підбору ідеального варіанту.
+  </p>
 
-              <Button
-                variant="luxury"
-                size="lg"
-                onClick={scrollToContact}
-                className="mx-auto lg:mx-0"
-              >
-                Дізнатися ціну
-              </Button>
-            </div>
+  <Button
+    variant="luxury"
+    size="lg"
+    onClick={scrollToContact}
+ className="mx-auto lg:mx-0 mt-20"
+  >
+    Дізнатися ціну
+  </Button>
+</div>
           </div>
 
-          {/* IMAGE CARD — РАМКУ НЕ ТРОГАЕМ */}
-          <div className="relative">
+          {/* RIGHT — IMAGE CARD */}
+          <div className="pt-6 lg:pt-10 relative">
             <div className="bg-card border border-border/50 p-6">
               <div className="w-full h-[420px] overflow-hidden">
                 <img
                   src={silkPillow}
                   alt="Silk4me silk pillow"
-                  className="w-full h-full object-cover scale-110"
+                  className="
+                    w-full h-full
+                    object-contain
+                    lg:object-cover lg:scale-110
+                  "
                 />
               </div>
 

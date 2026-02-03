@@ -61,10 +61,8 @@ const Contact = () => {
     <section id="contact" className="bg-silk-charcoal py-16">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-
           {/* LEFT */}
           <div className="space-y-8">
-
             {/* HEADINGS */}
             <div className="text-center lg:text-left space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
@@ -77,8 +75,11 @@ const Contact = () => {
               </h2>
             </div>
 
-            {/* FORM */}
-            <form onSubmit={handleSubmit} className="space-y-5">
+            {/* FORM (чуть уже + выше поля) */}
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
+            >
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Ваше ім'я"
@@ -87,7 +88,7 @@ const Contact = () => {
                     setFormData((p) => ({ ...p, name: e.target.value }))
                   }
                   required
-                  className="h-12 bg-background"
+                  className="h-14 bg-background"
                 />
 
                 <Input
@@ -97,7 +98,7 @@ const Contact = () => {
                     setFormData((p) => ({ ...p, phone: e.target.value }))
                   }
                   required
-                  className="h-12 bg-background"
+                  className="h-14 bg-background"
                 />
               </div>
 
@@ -107,7 +108,7 @@ const Contact = () => {
                 onChange={(e) =>
                   setFormData((p) => ({ ...p, message: e.target.value }))
                 }
-                className="min-h-[140px] bg-background resize-none"
+                className="min-h-[170px] bg-background resize-none"
               />
 
               {/* BUTTON */}
@@ -137,7 +138,7 @@ const Contact = () => {
               </div>
             </form>
 
-            {/* CONTACT LINKS */}
+            {/* CONTACT LINKS (в ряд на десктопе) */}
             <div
               className="
                 pt-4
@@ -148,6 +149,7 @@ const Contact = () => {
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
+                rel="noreferrer"
                 className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
                 <Instagram className="w-5 h-5" />
@@ -178,7 +180,6 @@ const Contact = () => {
               className="w-full h-[520px] object-cover"
             />
           </div>
-
         </div>
       </div>
     </section>
