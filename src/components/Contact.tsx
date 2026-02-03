@@ -58,16 +58,13 @@ const Contact = () => {
   const email = "Silkandnature@gmail.com";
 
   return (
-    <section
-      id="contact"
-      className="bg-silk-charcoal py-16" // ⬅️ было py-24
-    >
+    <section id="contact" className="bg-silk-charcoal py-16">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* LEFT */}
-          <div className="space-y-8">
+          <div className="space-y-8 text-center lg:text-left">
             {/* Заголовки */}
-            <div className="text-center space-y-3">
+            <div className="space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
               </p>
@@ -111,38 +108,40 @@ const Contact = () => {
                 className="min-h-[140px] bg-background resize-none"
               />
 
-    <div className="pt-2 flex justify-center">
-  <Button
-    type="submit"
-    disabled={isSubmitting}
-    className="
-      px-12
-      h-14
-      text-lg md:text-xl
-      font-normal
-      bg-[#E6C9A8]
-      text-[#1F3D34]
-      tracking-wide
-      hover:bg-[#EED7BD]
-      transition-all
-      duration-300
-      shadow-sm
-      hover:shadow-md
-      rounded-md
-    "
-  >
-    {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-    <Send className="w-5 h-5 ml-3 text-[#1F3D34]" />
-  </Button>
-</div>
+              {/* Кнопка: центр на mobile, слева на desktop */}
+              <div className="pt-2 flex justify-center lg:justify-start">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="
+                    px-12
+                    h-14
+                    text-lg md:text-xl
+                    font-normal
+                    bg-[#E6C9A8]
+                    text-[#1F3D34]
+                    tracking-wide
+                    hover:bg-[#EED7BD]
+                    transition-all
+                    duration-300
+                    shadow-sm
+                    hover:shadow-md
+                    rounded-md
+                  "
+                >
+                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+                  <Send className="w-5 h-5 ml-3 text-[#1F3D34]" />
+                </Button>
+              </div>
             </form>
 
-            {/* Контакты — БЕЗ лишнего воздуха снизу */}
-            <div className="flex flex-col items-center gap-4 pt-4">
+            {/* Контакты: центр на mobile, слева на desktop */}
+            <div className="flex flex-col items-center lg:items-start gap-4 pt-4">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
-                className="flex items-center gap-3 text-background/80 hover:text-gold"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
                 <Instagram className="w-5 h-5" />
                 Написати в Instagram
@@ -150,7 +149,7 @@ const Contact = () => {
 
               <a
                 href={`mailto:${email}`}
-                className="flex items-center gap-3 text-background/80 hover:text-gold"
+                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
                 <Mail className="w-5 h-5" />
                 Написати на пошту
@@ -170,6 +169,7 @@ const Contact = () => {
               src={silkLifestyle}
               alt="Silk4me lifestyle"
               className="w-full h-[520px] object-cover"
+              draggable={false}
             />
           </div>
         </div>
