@@ -19,85 +19,78 @@ const Pricing = () => {
   return (
     <section
       id="pricing"
-      className="bg-background pb-14 sm:pb-16 lg:pb-20"
+      className="bg-background pt-8 sm:pt-10 lg:pt-12 pb-16"
     >
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
-          {/* LEFT — CONTENT */}
-          <div className="pt-6 lg:pt-10 space-y-7 text-center lg:text-left">
+          {/* LEFT — TEXT */}
+          <div className="text-center lg:text-left space-y-8">
 
-            {/* Заголовок */}
-            <div className="space-y-2">
+            {/* HEAD */}
+            <div className="space-y-3">
               <p className="text-primary uppercase tracking-[0.3em] text-sm">
                 Ціни
               </p>
 
-              <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
+              <h2 className="text-4xl md:text-5xl font-serif font-light text-foreground">
                 Інвестиція в{" "}
                 <span className="text-primary">якість та преміум</span>
               </h2>
             </div>
 
-            {/* Опис */}
-            <p className="text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
+            {/* DESCRIPTION */}
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
               Ми не пропонуємо дешевих товарів. Silk4me — це преміум-бренд для тих,
               хто цінує справжню якість та готовий інвестувати в свій комфорт і красу.
             </p>
 
-            {/* Список */}
-            <ul className="space-y-3 max-w-xl mx-auto lg:mx-0">
+            {/* FEATURES */}
+            <ul className="space-y-4 max-w-xl mx-auto lg:mx-0">
               {features.map((feature, index) => (
                 <li
                   key={index}
-                  className="flex items-center gap-3 justify-center lg:justify-start"
+                  className="flex items-start gap-3 justify-center lg:justify-start"
                 >
-                  <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
+                  <div className="mt-1 w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-primary" />
                   </div>
-                  <span className="text-foreground">{feature}</span>
+
+                  <span className="text-base md:text-lg text-foreground">
+                    {feature}
+                  </span>
                 </li>
               ))}
             </ul>
 
-            {/* Текст + кнопка */}
-            <div className="mt-12 lg:mt-16 text-center lg:text-left">
-  <p className="text-sm text-muted-foreground max-w-xl mx-auto lg:mx-0">
-    Ціни залежать від розміру та комплектації. Отримайте персональну
-    консультацію для підбору ідеального варіанту.
-  </p>
+            {/* NOTE + BUTTON */}
+            <div className="pt-6 space-y-6 text-center lg:text-left">
+              <p className="text-base text-muted-foreground max-w-xl mx-auto lg:mx-0">
+                Ціни залежать від розміру та комплектації. Отримайте персональну
+                консультацію для підбору ідеального варіанту.
+              </p>
 
-  <Button
-    variant="luxury"
-    size="lg"
-    onClick={scrollToContact}
- className="mx-auto lg:mx-0 mt-20"
-  >
-    Дізнатися ціну
-  </Button>
-</div>
+              <Button
+                variant="luxury"
+                size="lg"
+                onClick={scrollToContact}
+                className="mx-auto lg:mx-0"
+              >
+                Дізнатися ціну
+              </Button>
+            </div>
           </div>
 
           {/* RIGHT — IMAGE CARD */}
-          <div className="pt-6 lg:pt-10 relative">
-            <div className="bg-card border border-border/50 p-4 lg:p-6">
-  <div className="
-    w-full
-    h-[260px] sm:h-[300px] lg:h-[420px]
-    overflow-hidden
-    flex items-center justify-center
-  ">
-    <img
-      src={silkPillow}
-      alt="Silk4me silk pillow"
-      className="
-        max-w-full
-        max-h-full
-        object-contain
-        lg:object-cover lg:scale-110
-      "
-    />
-  </div>
+          <div className="relative">
+            <div className="bg-card border border-border/50 p-6">
+              <div className="w-full aspect-[4/3] overflow-hidden flex items-center justify-center">
+                <img
+                  src={silkPillow}
+                  alt="Silk4me silk pillow"
+                  className="w-full h-full object-contain lg:object-cover"
+                />
+              </div>
 
               <div className="text-center space-y-4 mt-6">
                 <p className="text-sm text-muted-foreground uppercase tracking-wider">
@@ -108,7 +101,7 @@ const Pricing = () => {
                   Шовкова наволочка
                 </h3>
 
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   Бестселер бренду. Аксесуар, що дозволяє відчути користь шовку як
                   для шкіри, так і для волосся без зусиль.
                 </p>
@@ -121,7 +114,6 @@ const Pricing = () => {
               </div>
             </div>
           </div>
-          {/* /IMAGE CARD */}
 
         </div>
       </div>
