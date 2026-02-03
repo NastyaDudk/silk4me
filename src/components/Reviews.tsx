@@ -1,4 +1,4 @@
-import { Star, Quote } from "lucide-react";
+import { Star } from "lucide-react";
 
 const reviews = [
   {
@@ -22,14 +22,23 @@ const reviews = [
 ];
 
 const trustItems = [
-  { title: "Висока якість", text: "100% натуральний шовк, Mulberry 6A Grade, добірна сировина" },
-  { title: "Швидка доставка", text: "Швидка доставка. Відправка по Україні та Європі. Фірмове пакування кожного замовлення" },
-  { title: "Дбайлива підтримка", text: "Дбайлива підтримка. Ми поруч, щоб допомогти зробити найкращий вибір для Вас" },
+  {
+    title: "Висока якість",
+    text: "100% натуральний шовк, Mulberry 6A Grade, добірна сировина",
+  },
+  {
+    title: "Швидка доставка",
+    text: "Відправка по Україні та Європі. Фірмове пакування кожного замовлення",
+  },
+  {
+    title: "Дбайлива підтримка",
+    text: "Ми поруч, щоб допомогти зробити найкращий вибір для Вас",
+  },
 ];
 
 function Stars({ rating }: { rating: number }) {
   const full = Math.floor(rating);
-  const hasHalf = rating - full >= 0.4 && rating - full < 0.9; // “половинка”
+  const hasHalf = rating - full >= 0.4 && rating - full < 0.9;
   const empty = 5 - full - (hasHalf ? 1 : 0);
 
   return (
@@ -58,6 +67,18 @@ const Reviews = () => {
   return (
     <section id="reviews" className="py-20 bg-foreground text-background">
       <div className="container mx-auto px-6">
+        {/* Header (як у "Отримайте персональну консультацію": одна частина одним кольором, друга — іншим) */}
+        <div className="mb-14 text-center">
+          <p className="text-gold uppercase tracking-[0.3em] text-sm mb-3">
+            Відгуки
+          </p>
+
+          <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
+            Що кажуть наші клієнти
+           
+          </h2>
+        </div>
+
         {/* Reviews */}
         <div className="grid md:grid-cols-3 gap-6">
           {reviews.map((r) => (
@@ -79,7 +100,7 @@ const Reviews = () => {
           ))}
         </div>
 
-        {/* Вместо сомнительных цифр */}
+        {/* Trust items */}
         <div className="mt-14 grid md:grid-cols-3 gap-8 text-center">
           {trustItems.map((it) => (
             <div key={it.title} className="px-4">

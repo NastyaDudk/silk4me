@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
-// Локально -> localhost, в проде -> Render
 const isLocal =
   typeof window !== "undefined" &&
   (window.location.hostname === "localhost" ||
@@ -17,18 +16,6 @@ const DEFAULT_API = isLocal
   : "https://silk4me.onrender.com/api/lead";
 
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
-
-type LeadPayload = {
-  name: string;
-  phone: string;
-  message?: string;
-};
-
-type ApiResponse = {
-  ok?: boolean;
-  success?: boolean;
-  error?: string;
-};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -43,20 +30,10 @@ const Contact = () => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    const name = formData.name.trim();
-    const phone = formData.phone.trim();
-    const message = formData.message.trim();
-
-    if (!name || !phone) {
+    if (!formData.name.trim() || !formData.phone.trim()) {
       toast.error("Будь ласка, заповніть ім’я та телефон.");
       return;
     }
-
-    const payload: LeadPayload = {
-      name,
-      phone,
-      ...(message ? { message } : {}),
-    };
 
     setIsSubmitting(true);
 
@@ -64,46 +41,33 @@ const Contact = () => {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
 
-      // Render/сервер иногда возвращает не-JSON на ошибках — читаем безопасно
-      const raw = await res.text().catch(() => "");
-      let data: ApiResponse | null = null;
-
-      try {
-        data = raw ? (JSON.parse(raw) as ApiResponse) : null;
-      } catch {
-        data = null;
-      }
-
-      const ok = res.ok && (data?.ok === true || data?.success === true);
-
-      if (!ok) {
-        console.error("Lead submit error:", res.status, raw);
-        toast.error("Не вдалося надіслати запит. Спробуйте ще раз.");
-        return;
-      }
+      if (!res.ok) throw new Error();
 
       toast.success("✅ Запит надіслано! Ми звʼяжемося з вами найближчим часом.");
       setFormData({ name: "", phone: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Помилка з’єднання. Перевірте сервер або Render.");
+    } catch {
+      toast.error("Помилка з’єднання. Спробуйте пізніше.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const email = "Silkandnature" + "@gmail.com"; // чуть меньше спама, чем явный mailto
+  const email = "Silkandnature@gmail.com";
 
   return (
-    <section id="contact" className="py-24 bg-silk-charcoal">
+    <section
+      id="contact"
+      className="bg-silk-charcoal py-16" // ⬅️ было py-24
+    >
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* LEFT: Form */}
-          <div className="flex flex-col justify-between h-full space-y-8">
-            <div className="space-y-4">
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* LEFT */}
+          <div className="space-y-8">
+            {/* Заголовки */}
+            <div className="text-center space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
               </p>
@@ -114,108 +78,98 @@ const Contact = () => {
               </h2>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Имя + телефон */}
+            {/* Форма */}
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Ваше ім'я"
                   value={formData.name}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, name: e.target.value }))
+                    setFormData((p) => ({ ...p, name: e.target.value }))
                   }
                   required
-                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
+                  className="h-12 bg-background"
                 />
 
                 <Input
-                  type="tel"
-                  inputMode="tel"
                   placeholder="Телефон"
                   value={formData.phone}
                   onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, phone: e.target.value }))
+                    setFormData((p) => ({ ...p, phone: e.target.value }))
                   }
                   required
-                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
+                  className="h-12 bg-background"
                 />
               </div>
 
-              {/* Отступ перед текстовым полем */}
-              <div className="pt-4">
-                <Textarea
-                  placeholder="Ваше повідомлення (необов'язково)"
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, message: e.target.value }))
-                  }
-                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[160px] resize-none"
-                />
-              </div>
+              <Textarea
+                placeholder="Ваше повідомлення (необов'язково)"
+                value={formData.message}
+                onChange={(e) =>
+                  setFormData((p) => ({ ...p, message: e.target.value }))
+                }
+                className="min-h-[140px] bg-background resize-none"
+              />
 
-              {/* Отступ перед кнопкой */}
-              <div className="pt-4">
-                <Button
-                  type="submit"
-                  variant="luxury"
-                  size="lg"
-                  className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border-gold hover:border-gold-light"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                  <Send className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
+    <div className="pt-2 flex justify-center">
+  <Button
+    type="submit"
+    disabled={isSubmitting}
+    className="
+      px-12
+      h-14
+      text-lg md:text-xl
+      font-normal
+      bg-[#E6C9A8]
+      text-[#1F3D34]
+      tracking-wide
+      hover:bg-[#EED7BD]
+      transition-all
+      duration-300
+      shadow-sm
+      hover:shadow-md
+      rounded-md
+    "
+  >
+    {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+    <Send className="w-5 h-5 ml-3 text-[#1F3D34]" />
+  </Button>
+</div>
             </form>
 
-            {/* Contact Info (mobile center, desktop normal) */}
-            <div
-              className="
-                flex flex-col items-center text-center gap-6 pt-8
-                md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10
-              "
-            >
-              {/* Instagram */}
+            {/* Контакты — БЕЗ лишнего воздуха снизу */}
+            <div className="flex flex-col items-center gap-4 pt-4">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 group cursor-pointer"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
-                <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати в Instagram
-                </span>
+                <Instagram className="w-5 h-5" />
+                Написати в Instagram
               </a>
 
-              {/* Email */}
               <a
                 href={`mailto:${email}`}
-                className="flex items-center gap-3 group cursor-pointer"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
-                <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати на пошту
-                </span>
+                <Mail className="w-5 h-5" />
+                Написати на пошту
               </a>
 
-              {/* Location — не кликабельно */}
-              <div className="flex items-center gap-3 cursor-default">
-                <MapPin className="w-5 h-5 text-gold" />
-                <span className="text-sm text-background/80">
-                  Україна / Європа
-                </span>
+              <div className="flex items-center gap-3 text-background/70">
+                <MapPin className="w-5 h-5" />
+                Україна / Європа
               </div>
             </div>
           </div>
 
-          {/* RIGHT: Image — НЕ ТРОГАЕМ */}
+          {/* RIGHT IMAGE */}
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
               src={silkLifestyle}
-              alt="Silk4me Lifestyle"
-              className="w-full h-[560px] object-cover object-center"
-              draggable={false}
+              alt="Silk4me lifestyle"
+              className="w-full h-[520px] object-cover"
             />
           </div>
         </div>
@@ -225,5 +179,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
-
