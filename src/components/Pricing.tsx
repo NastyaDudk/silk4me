@@ -21,7 +21,7 @@ const Pricing = () => {
       id="pricing"
       className="
         bg-background
-        pt-6 sm:pt-8 lg:pt-6
+        pt-4 sm:pt-6 lg:pt-4
         pb-12 sm:pb-14 lg:pb-16
       "
     >
@@ -29,22 +29,27 @@ const Pricing = () => {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
           {/* CONTENT */}
-          <div className="space-y-8 text-center lg:text-left">
-            <div className="space-y-3">
+          <div className="space-y-6 text-center lg:text-left">
+            
+            {/* Заголовки */}
+            <div className="space-y-2">
               <p className="text-primary uppercase tracking-[0.3em] text-sm">
                 Ціни
               </p>
+
               <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
                 Інвестиція в{" "}
                 <span className="text-primary">якість та преміум</span>
               </h2>
             </div>
 
+            {/* Опис */}
             <p className="text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0">
               Ми не пропонуємо дешевих товарів. Silk4me — це преміум-бренд для тих,
               хто цінує справжню якість та готовий інвестувати в свій комфорт і красу.
             </p>
 
+            {/* Список */}
             <ul className="space-y-3 max-w-xl mx-auto lg:mx-0">
               {features.map((feature, index) => (
                 <li
@@ -59,8 +64,9 @@ const Pricing = () => {
               ))}
             </ul>
 
-            <div className="pt-4 text-center lg:text-left">
-              <p className="text-sm text-muted-foreground mb-4 max-w-xl mx-auto lg:mx-0">
+            {/* Текст + кнопка */}
+            <div className="pt-2 text-center lg:text-left">
+              <p className="text-sm text-muted-foreground mb-3 max-w-xl mx-auto lg:mx-0">
                 Ціни залежать від розміру та комплектації. Отримайте персональну
                 консультацію для підбору ідеального варіанту.
               </p>
@@ -75,45 +81,41 @@ const Pricing = () => {
               </Button>
             </div>
           </div>
-{/* IMAGE CARD */}
-<div className="relative">
-  <div className="bg-card border border-border/50 p-6">
-    <div className="w-full h-[420px] overflow-hidden">
-      <img
-        src={silkPillow}
-        alt="Silk4me silk pillow"
-        className="
-          w-full
-          h-full
-          object-cover
-          scale-110
-        "
-      />
-    </div>
 
-    <div className="text-center space-y-4 mt-6">
-      <p className="text-sm text-muted-foreground uppercase tracking-wider">
-        Популярний вибір
-      </p>
+          {/* IMAGE CARD — РАМКУ НЕ ТРОГАЕМ */}
+          <div className="relative">
+            <div className="bg-card border border-border/50 p-6">
+              <div className="w-full h-[420px] overflow-hidden">
+                <img
+                  src={silkPillow}
+                  alt="Silk4me silk pillow"
+                  className="w-full h-full object-cover scale-110"
+                />
+              </div>
 
-      <h3 className="text-2xl font-serif text-foreground">
-        Шовкова наволочка
-      </h3>
+              <div className="text-center space-y-4 mt-6">
+                <p className="text-sm text-muted-foreground uppercase tracking-wider">
+                  Популярний вибір
+                </p>
 
-      <p className="text-muted-foreground text-sm">
-        Бестселер бренду. Аксесуар, що дозволяє відчути користь шовку як
-        для шкіри, так і для волосся без зусиль.
-      </p>
+                <h3 className="text-2xl font-serif text-foreground">
+                  Шовкова наволочка
+                </h3>
 
-      <div className="pt-4 border-t border-border/50">
-        <p className="text-primary font-serif text-xl">
-          Преміум ціновий сегмент
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-{/* /IMAGE CARD */}
+                <p className="text-muted-foreground text-sm">
+                  Бестселер бренду. Аксесуар, що дозволяє відчути користь шовку як
+                  для шкіри, так і для волосся без зусиль.
+                </p>
+
+                <div className="pt-4 border-t border-border/50">
+                  <p className="text-primary font-serif text-xl">
+                    Преміум ціновий сегмент
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* /IMAGE CARD */}
 
         </div>
       </div>

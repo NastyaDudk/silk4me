@@ -60,11 +60,13 @@ const Contact = () => {
   return (
     <section id="contact" className="bg-silk-charcoal py-16">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+
           {/* LEFT */}
-          <div className="space-y-8 text-center lg:text-left">
-            {/* Заголовки */}
-            <div className="space-y-3">
+          <div className="space-y-8">
+
+            {/* HEADINGS */}
+            <div className="text-center lg:text-left space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
               </p>
@@ -75,7 +77,7 @@ const Contact = () => {
               </h2>
             </div>
 
-            {/* Форма */}
+            {/* FORM */}
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
@@ -108,7 +110,7 @@ const Contact = () => {
                 className="min-h-[140px] bg-background resize-none"
               />
 
-              {/* Кнопка: центр на mobile, слева на desktop */}
+              {/* BUTTON */}
               <div className="pt-2 flex justify-center lg:justify-start">
                 <Button
                   type="submit"
@@ -135,12 +137,17 @@ const Contact = () => {
               </div>
             </form>
 
-            {/* Контакты: центр на mobile, слева на desktop */}
-            <div className="flex flex-col items-center lg:items-start gap-4 pt-4">
+            {/* CONTACT LINKS */}
+            <div
+              className="
+                pt-4
+                flex flex-col items-center gap-4
+                lg:flex-row lg:items-center lg:justify-start lg:gap-10
+              "
+            >
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
-                rel="noopener noreferrer"
                 className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
                 <Instagram className="w-5 h-5" />
@@ -169,9 +176,9 @@ const Contact = () => {
               src={silkLifestyle}
               alt="Silk4me lifestyle"
               className="w-full h-[520px] object-cover"
-              draggable={false}
             />
           </div>
+
         </div>
       </div>
     </section>
