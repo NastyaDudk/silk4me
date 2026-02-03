@@ -4,36 +4,39 @@ const About = () => {
   return (
     <section
       id="about"
-      className="bg-silk-charcoal py-12 sm:py-14 lg:py-16"
+      className="bg-silk-charcoal pt-20 pb-24"
     >
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+        {/* ВАЖНО: items-start для идеального выравнивания */}
+        <div className="grid lg:grid-cols-2 gap-14 items-start">
 
-          {/* Image */}
+          {/* IMAGE */}
           <div className="relative">
-            <div className="inline-block border-2 border-gold/50 p-2">
+            {/* Рамка плотнее и аккуратнее */}
+            <div className="inline-block border-2 border-gold/60 p-2">
               <img
                 src={silkCollection}
                 alt="Silk4me Black Collection Items"
                 className="
                   block
                   w-full
-                  h-[420px]
-                  sm:h-[480px]
-                  lg:h-[560px]
+                  h-[460px]
+                  sm:h-[520px]
+                  lg:h-[600px]
                   object-cover
                   object-[72%_center]
                 "
+                draggable={false}
               />
             </div>
           </div>
 
-          {/* Content */}
-          <div className="space-y-10">
+          {/* CONTENT */}
+          <div className="flex flex-col">
 
             {/* Headings */}
-            <div className="space-y-4">
-              <p className="text-gold uppercase tracking-[0.3em] text-sm">
+            <div className="mb-10">
+              <p className="text-gold uppercase tracking-[0.3em] text-sm mb-4">
                 Про колекцію
               </p>
 
@@ -43,16 +46,22 @@ const About = () => {
               </h2>
             </div>
 
-            {/* Text — УВЕЛИЧЕН */}
-            <div className="space-y-7 text-background/80 leading-relaxed text-xl lg:text-[1.35rem]">
+            {/* Text */}
+            <div className="space-y-6 text-background/80 text-lg leading-[1.75] max-w-xl">
               <p>
                 Поза трендами. Поза поясненнями. Завжди впевнений. Завжди актуальний.
                 Чорний колір. Саме тому BLCK колекція — наші бестселери.
               </p>
 
               <p>
-                Саме зараз на всі чорні вироби SILK4ME діє знижка -15% за промокодом
-                <strong className="text-background"> BLCK-15</strong>.
+                Саме зараз на всі{" "}
+                <span className="text-background">
+                  чорні вироби Silk4me
+                </span>{" "}
+                діє знижка -15% за{" "}
+                <span className="text-gold font-medium">
+                  промокодом BLCK-15
+                </span>.
                 Пропозиція обмежена.
               </p>
 
@@ -63,8 +72,9 @@ const About = () => {
               </p>
             </div>
 
-            {/* Facts */}
-            <div className="grid grid-cols-2 gap-8 pt-4">
+            {/* Facts — этот блок задаёт НИЗ, совпадающий с рамкой */}
+           {/* Facts */}
+             <div className="mt-20 grid grid-cols-2 gap-10">
               <div className="border-l-2 border-gold pl-4">
                 <p className="text-3xl font-serif text-background">
                   Mulberry
