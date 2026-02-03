@@ -81,39 +81,42 @@ const Pricing = () => {
             </div>
           </div>
 
-          {/* RIGHT — IMAGE CARD */}
-          <div className="relative">
-            <div className="bg-card border border-border/50 p-6">
-              <div className="w-full aspect-[4/3] overflow-hidden flex items-center justify-center">
-                <img
-                  src={silkPillow}
-                  alt="Silk4me silk pillow"
-                  className="w-full h-full object-contain lg:object-cover"
-                />
-              </div>
+         {/* RIGHT — IMAGE CARD */}
+<div className="relative">
+  <div className="bg-card border border-border/50 p-6">
+    <div className="w-full aspect-[4/3] overflow-hidden flex items-center justify-center">
+      <img
+        src={silkPillow}
+        alt="Silk4me silk pillow"
+        className="w-full h-full object-contain lg:object-cover"
+      />
+    </div>
 
-              <div className="text-center space-y-4 mt-6">
-                <p className="text-sm text-muted-foreground uppercase tracking-wider">
-                  Популярний вибір
-                </p>
+    <div className="text-center space-y-5 mt-6">
+      <p className="text-xs text-muted-foreground uppercase tracking-[0.25em]">
+        Популярний вибір
+      </p>
 
-                <h3 className="text-2xl font-serif text-foreground">
-                  Шовкова наволочка
-                </h3>
+      <h3 className="text-2xl font-serif font-medium text-foreground leading-snug">
+        Шовкова наволочка
+      </h3>
 
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  Бестселер бренду. Аксесуар, що дозволяє відчути користь шовку як
-                  для шкіри, так і для волосся без зусиль.
-                </p>
+      <p className="text-muted-foreground text-base leading-[1.75] max-w-md mx-auto">
+        Бестселер бренду. Аксесуар, що дозволяє відчути користь шовку
+        <span className="text-foreground/80">
+          {" "}для шкіри та волосся
+        </span>{" "}
+        без жодних зусиль.
+      </p>
 
-                <div className="pt-4 border-t border-border/50">
-                  <p className="text-primary font-serif text-xl">
-                    Преміум ціновий сегмент
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="pt-5 border-t border-border/50">
+        <p className="text-primary font-serif text-lg tracking-wide">
+          Преміум ціновий сегмент
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
         </div>
       </div>

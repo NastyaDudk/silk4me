@@ -7,13 +7,13 @@ const About = () => {
       className="bg-silk-charcoal pt-20 pb-24"
     >
       <div className="container mx-auto px-6">
-        {/* ВАЖНО: items-start для идеального выравнивания */}
+        {/* items-start — идеальное выравнивание верха */}
         <div className="grid lg:grid-cols-2 gap-14 items-start">
 
           {/* IMAGE */}
           <div className="relative">
-            {/* Рамка плотнее и аккуратнее */}
-            <div className="inline-block border-2 border-gold/60 p-2">
+            {/* Рамка ближе к фото и чуть плотнее */}
+            <div className="inline-block border-[3px] border-gold/60 p-2">
               <img
                 src={silkCollection}
                 alt="Silk4me Black Collection Items"
@@ -24,7 +24,7 @@ const About = () => {
                   sm:h-[520px]
                   lg:h-[600px]
                   object-cover
-                  object-[72%_center]
+                  object-[43%_center]
                 "
                 draggable={false}
               />
@@ -47,7 +47,7 @@ const About = () => {
             </div>
 
             {/* Text */}
-            <div className="space-y-6 text-background/80 text-lg leading-[1.75] max-w-xl">
+            <div className="space-y-6 text-background/80 text-lg leading-[1.75] max-w-xl font-normal">
               <p>
                 Поза трендами. Поза поясненнями. Завжди впевнений. Завжди актуальний.
                 Чорний колір. Саме тому BLCK колекція — наші бестселери.
@@ -55,7 +55,7 @@ const About = () => {
 
               <p>
                 Саме зараз на всі{" "}
-                <span className="text-background">
+                <span className="text-gold font-medium">
                   чорні вироби Silk4me
                 </span>{" "}
                 діє знижка -15% за{" "}
@@ -72,9 +72,8 @@ const About = () => {
               </p>
             </div>
 
-            {/* Facts — этот блок задаёт НИЗ, совпадающий с рамкой */}
-           {/* Facts */}
-             <div className="mt-20 grid grid-cols-2 gap-10">
+            {/* Facts — низ совпадает с рамкой изображения */}
+            <div className="mt-20 grid grid-cols-2 gap-10">
               <div className="border-l-2 border-gold pl-4">
                 <p className="text-3xl font-serif text-background">
                   Mulberry
@@ -88,7 +87,7 @@ const About = () => {
                 <p className="text-3xl font-serif text-background">
                   Україна
                 </p>
-                <p className="text-base text-background/70">
+                <p className="text-base text-background/70 whitespace-nowrap">
                   Український бренд
                 </p>
               </div>

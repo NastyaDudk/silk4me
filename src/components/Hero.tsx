@@ -20,22 +20,23 @@ const Hero = () => {
   return (
     <section
       className="
-        relative min-h-screen flex items-center overflow-hidden
+        relative min-h-screen overflow-hidden
         pt-24 sm:pt-28 lg:pt-24
-        pb-10 lg:pb-0
+        pb-14 sm:pb-16 lg:pb-10
       "
     >
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* важно: lg:items-stretch чтобы левый блок был высотой как правый (для идеальной линии снизу) */}
+        {/* lg:items-stretch — чтобы низ/верх слева и справа совпадали визуально */}
         <div className="grid lg:grid-cols-2 gap-12 items-center lg:items-stretch">
           {/* TEXT */}
           <div className="animate-fade-in flex flex-col h-full">
             {/* TOP CONTENT */}
             <div className="space-y-7">
-              <div className="space-y-3">
+              {/* Заголовок — чуть выше (меньше воздуха сверху) */}
+              <div className="space-y-2 -mt-1">
                 <button
                   type="button"
                   onClick={goToCollection}
@@ -56,10 +57,10 @@ const Hero = () => {
 Коли чорний заспокоює, а шовк піклується.`}
               </p>
 
-              {/* PROMO — mobile centered, desktop left */}
+              {/* PROMO */}
               <div
                 className="
-                  mt-6 flex flex-col items-center text-center gap-3
+                  mt-5 flex flex-col items-center text-center gap-3
                   sm:flex-row sm:items-center sm:text-left sm:justify-start sm:gap-4
                 "
               >
@@ -82,10 +83,10 @@ const Hero = () => {
                 </span>
               </div>
 
-              {/* BUTTONS — немного уже, чтобы не налазили на картинку на десктопе */}
+              {/* BUTTONS — чуть ниже */}
               <div
                 className="
-                  flex flex-col items-center gap-4 pt-6
+                  flex flex-col items-center gap-4 pt-8
                   sm:flex-row sm:items-start sm:justify-start
                 "
               >
@@ -93,7 +94,7 @@ const Hero = () => {
                   variant="luxury"
                   size="lg"
                   onClick={scrollToContact}
-                  className="w-full max-w-[300px] text-center sm:w-[300px]"
+                  className="w-full max-w-[320px] text-center sm:w-[320px]"
                 >
                   Отримати консультацію
                 </Button>
@@ -102,15 +103,15 @@ const Hero = () => {
                   variant="luxuryOutline"
                   size="lg"
                   onClick={goToCollection}
-                  className="w-full max-w-[300px] text-center sm:w-[300px]"
+                  className="w-full max-w-[320px] text-center sm:w-[320px]"
                 >
                   Переглянути колекцію
                 </Button>
               </div>
             </div>
 
-            {/* STATS — прижимаем вниз, чтобы нижняя линия совпала с низом рамки фото */}
-            <div className="mt-auto pt-10">
+            {/* STATS — прижимаем вниз + немного больше воздуха снизу */}
+            <div className="mt-auto pt-10 pb-2">
               <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
                 <div className="text-center">
                   <div className="text-4xl font-medium text-foreground">100%</div>
@@ -162,11 +163,12 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* IMAGE — не лезет под шапку, верх рамки на одном уровне с заголовком, рамка ближе и чуть жирнее */}
-          <div className="relative hidden lg:block">
-            <div className="relative">
-              <div className="border-[2.5px] border-border/70 p-[6px]">
-                <div className="relative overflow-hidden">
+          {/* IMAGE */}
+          <div className="relative hidden lg:block h-full">
+            <div className="relative h-full">
+              {/* рамка ближе и чуть жирнее */}
+              <div className="border-[3px] border-border/70 p-[4px] h-full">
+                <div className="relative overflow-hidden h-full">
                   <img
                     src={silkModel}
                     alt="Silk4me Black Collection"

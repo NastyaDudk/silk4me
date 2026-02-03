@@ -32,36 +32,36 @@ const Header = () => {
         ? /^https?:\/\//i.test(href)
         : !!itemOrHref.external || /^https?:\/\//i.test(href);
 
-    // внешняя ссылка
     if (isExternal) {
       window.open(href, "_blank", "noopener,noreferrer");
       closeMenu();
       return;
     }
 
-    // наверх
     if (href === "#") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       closeMenu();
       return;
     }
 
-    // якорь
     if (href.startsWith("#")) {
-      const el = document.querySelector(href);
-      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.querySelector(href)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
       closeMenu();
     }
   };
 
-  const linkClass =
-    "text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors duration-300";
+  /** ЧУТЬ КРУПНЕЕ + СПОКОЙНЕЕ */
+ const linkClass =
+  "text-[0.9rem] uppercase tracking-[0.18em] text-green-forest/90 hover:text-green-forest transition-colors duration-300";
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black/10">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo + Brand (ведет к консультации) */}
+          {/* Logo + Brand — НЕ ТРОГАЕМ */}
           <button
             type="button"
             onClick={() => go("#contact")}
@@ -79,7 +79,7 @@ const Header = () => {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+         <nav className="hidden md:flex items-center gap-10">
             {navItems.map((item) =>
               item.external ? (
                 <a
@@ -112,14 +112,14 @@ const Header = () => {
             aria-label="Toggle menu"
             aria-expanded={isOpen}
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isOpen && (
           <nav className="md:hidden pt-6 pb-4 border-t border-black/10 mt-4">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5">
               {navItems.map((item) =>
                 item.external ? (
                   <a
