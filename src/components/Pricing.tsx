@@ -80,18 +80,24 @@ const Pricing = () => {
 
           {/* RIGHT — IMAGE CARD */}
           <div className="pt-6 lg:pt-10 relative">
-            <div className="bg-card border border-border/50 p-6">
-              <div className="w-full h-[420px] overflow-hidden">
-                <img
-                  src={silkPillow}
-                  alt="Silk4me silk pillow"
-                  className="
-                    w-full h-full
-                    object-contain
-                    lg:object-cover lg:scale-110
-                  "
-                />
-              </div>
+            <div className="bg-card border border-border/50 p-4 lg:p-6">
+  <div className="
+    w-full
+    h-[260px] sm:h-[300px] lg:h-[420px]
+    overflow-hidden
+    flex items-center justify-center
+  ">
+    <img
+      src={silkPillow}
+      alt="Silk4me silk pillow"
+      className="
+        max-w-full
+        max-h-full
+        object-contain
+        lg:object-cover lg:scale-110
+      "
+    />
+  </div>
 
               <div className="text-center space-y-4 mt-6">
                 <p className="text-sm text-muted-foreground uppercase tracking-wider">
