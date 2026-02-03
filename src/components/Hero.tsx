@@ -30,7 +30,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* TEXT */}
-          <div className="space-y-7 animate-fade-in">
+          <div className="space-y-8 animate-fade-in">
             <div className="space-y-3">
               <button
                 type="button"
@@ -44,7 +44,8 @@ const Hero = () => {
               </button>
             </div>
 
-            <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
+            {/* MAIN TEXT — УВЕЛИЧЕН */}
+            <p className="text-muted-foreground text-2xl leading-relaxed max-w-xl whitespace-pre-line">
               {`Основа твоєї молодості і краси без зусиль.
 Основа здорового сну.
 Основа моменту «нарешті для себе».
@@ -52,14 +53,14 @@ const Hero = () => {
 Коли чорний заспокоює, а шовк піклується.`}
             </p>
 
-            {/* PROMO — mobile centered, desktop left */}
+            {/* PROMO */}
             <div
               className="
-                mt-6 flex flex-col items-center text-center gap-3
-                sm:flex-row sm:items-center sm:text-left sm:justify-start sm:gap-4
+                mt-6 flex flex-col items-center text-center gap-4
+                sm:flex-row sm:items-center sm:text-left sm:justify-start sm:gap-5
               "
             >
-              <span className="text-sm tracking-[0.25em] uppercase text-foreground">
+              <span className="text-base tracking-[0.25em] uppercase text-foreground">
                 Знижка за промокодом
               </span>
 
@@ -68,8 +69,8 @@ const Hero = () => {
                   rounded-lg
                   border border-primary/40
                   bg-primary/10
-                  px-5 py-2
-                  text-sm font-semibold
+                  px-6 py-2.5
+                  text-base font-semibold
                   tracking-[0.3em] uppercase
                   text-primary
                 "
@@ -78,10 +79,10 @@ const Hero = () => {
               </span>
             </div>
 
-            {/* BUTTONS — centered on mobile, side-by-side on desktop */}
+            {/* BUTTONS */}
             <div
               className="
-                flex flex-col items-center gap-4 pt-6
+                flex flex-col items-center gap-5 pt-8
                 sm:flex-row sm:items-start
               "
             >
@@ -89,7 +90,7 @@ const Hero = () => {
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
-                className="w-full max-w-[320px] text-center sm:w-[320px]"
+                className="w-full max-w-[340px] text-center sm:w-[340px]"
               >
                 Отримати консультацію
               </Button>
@@ -98,59 +99,42 @@ const Hero = () => {
                 variant="luxuryOutline"
                 size="lg"
                 onClick={goToCollection}
-                className="w-full max-w-[320px] text-center sm:w-[320px]"
+                className="w-full max-w-[340px] text-center sm:w-[340px]"
               >
                 Переглянути колекцію
               </Button>
             </div>
 
-            {/* STATS */}
-            <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
+            {/* STATS — чуть крупнее */}
+            <div className="grid grid-cols-3 gap-10 pt-12 border-t border-border/50 max-w-xl">
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">100%</div>
-                <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
+                <p className="mt-2 text-base uppercase tracking-wide text-muted-foreground">
                   натуральний шовк
                 </p>
               </div>
 
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">6A</div>
-                <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
+                <p className="mt-2 text-base uppercase tracking-wide text-muted-foreground">
                   найвища якість
                 </p>
               </div>
 
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">22</div>
-                <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
+                <p className="mt-2 text-base uppercase tracking-wide text-muted-foreground">
                   momme
                 </p>
               </div>
             </div>
 
-            {/* SEO block: невидимо для пользователя, читабельно для Google/скринридеров */}
+            {/* SEO block */}
             <div className="sr-only">
               <h2>Black Collection Silk4me — вироби з натурального шовку Mulberry 6A</h2>
-
               <p>
                 Black Collection від Silk4me включає: рушник для обличчя, шовковий твістер,
-                шовкові резинки (максі, міді, міні), шовкову майку, шовкові шорти,
-                шовкову маску для сну, тюрбан із шовку, шовкову наволочку та шовкову піжаму.
-              </p>
-
-              <h3>Чорна шовкова піжама Silk4me</h3>
-              <p>
-                Чорна шовкова піжама Silk4me виготовлена з натурального шовку Mulberry 6A.
-                Піжама входить до Black Collection та підходить для щоденного сну.
-              </p>
-
-              <p>
-                22 momme — це показник щільності шовку (мом), який впливає на зносостійкість
-                та відчуття тканини під час сну.
-              </p>
-
-              <p>
-                Перейдіть до повної колекції за посиланням: https://silk4.me/product-category/blck_collection/
+                шовкові резинки, наволочки, тюрбани, маски для сну та шовкову піжаму.
               </p>
             </div>
           </div>
