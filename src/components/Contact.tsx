@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,6 +6,9 @@ import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
+/* =========================
+   API URL
+========================= */
 const isLocal =
   typeof window !== "undefined" &&
   (window.location.hostname === "localhost" ||
@@ -17,8 +20,22 @@ const DEFAULT_API = isLocal
 
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 
+/* =========================
+   TYPES
+========================= */
+type FormData = {
+  name: string;
+  phone: string;
+  message: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
+};
+
 const Contact = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     phone: "",
     message: "",
@@ -26,6 +43,25 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /* =========================
+     READ UTM FROM URL (once)
+  ========================= */
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    setFormData((prev) => ({
+      ...prev,
+      utm_source: params.get("utm_source") || undefined,
+      utm_medium: params.get("utm_medium") || undefined,
+      utm_campaign: params.get("utm_campaign") || undefined,
+      utm_content: params.get("utm_content") || undefined,
+      utm_term: params.get("utm_term") || undefined,
+    }));
+  }, []);
+
+  /* =========================
+     SUBMIT
+  ========================= */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -47,7 +83,12 @@ const Contact = () => {
       if (!res.ok) throw new Error();
 
       toast.success("✅ Запит надіслано! Ми звʼяжемося з вами найближчим часом.");
-      setFormData({ name: "", phone: "", message: "" });
+      setFormData((prev) => ({
+        ...prev,
+        name: "",
+        phone: "",
+        message: "",
+      }));
     } catch {
       toast.error("Помилка з’єднання. Спробуйте пізніше.");
     } finally {
@@ -75,7 +116,7 @@ const Contact = () => {
               </h2>
             </div>
 
-            {/* FORM (чуть уже + выше поля) */}
+            {/* FORM */}
             <form
               onSubmit={handleSubmit}
               className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
@@ -111,46 +152,30 @@ const Contact = () => {
                 className="min-h-[170px] bg-background resize-none"
               />
 
-              {/* BUTTON */}
               <div className="pt-2 flex justify-center lg:justify-start">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
                   className="
-                    px-12
-                    h-14
-                    text-lg md:text-xl
-                    font-normal
-                    bg-[#E6C9A8]
-                    text-[#1F3D34]
-                    tracking-wide
-                    hover:bg-[#EED7BD]
-                    transition-all
-                    duration-300
-                    shadow-sm
-                    hover:shadow-md
+                    px-12 h-14 text-lg md:text-xl
+                    bg-[#E6C9A8] text-[#1F3D34]
+                    hover:bg-[#EED7BD] transition-all
                     rounded-md
                   "
                 >
                   {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                  <Send className="w-5 h-5 ml-3 text-[#1F3D34]" />
+                  <Send className="w-5 h-5 ml-3" />
                 </Button>
               </div>
             </form>
 
-            {/* CONTACT LINKS (в ряд на десктопе) */}
-            <div
-              className="
-                pt-4
-                flex flex-col items-center gap-4
-                lg:flex-row lg:items-center lg:justify-start lg:gap-10
-              "
-            >
+            {/* CONTACT LINKS */}
+            <div className="pt-4 flex flex-col items-center gap-4 lg:flex-row lg:gap-10">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
                 <Instagram className="w-5 h-5" />
                 Написати в Instagram
@@ -158,7 +183,7 @@ const Contact = () => {
 
               <a
                 href={`mailto:${email}`}
-                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
                 <Mail className="w-5 h-5" />
                 Написати на пошту
