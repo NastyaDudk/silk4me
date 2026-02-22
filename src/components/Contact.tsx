@@ -13,11 +13,9 @@ const isLocal =
   typeof window !== "undefined" &&
   ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  (isLocal
-    ? "http://localhost:5050/api/lead"
-    : "https://silk4me.onrender.com/api/lead");
+const API_URL = isLocal
+  ? "http://localhost:5050/api/lead"
+  : "https://silk4me-api.onrender.com/api/lead";
 
 /* =========================
    TYPES
@@ -79,38 +77,46 @@ const Contact = () => {
      SUBMIT
   ========================= */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isSubmitting) return;
+  e.preventDefault();
+  if (isSubmitting) return;
 
-    if (!validate()) return;
+  if (!validate()) return;
 
-    setIsSubmitting(true);
+  setIsSubmitting(true);
 
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+  try {
+    console.log("📤 Sending lead:", formData);
 
-      if (!res.ok) throw new Error();
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-      toast.success("✅ Запит успішно надіслано!");
+    console.log("📥 Response status:", res.status);
 
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
-      setErrors({});
-    } catch {
-      toast.error("Сталася помилка. Спробуйте пізніше.");
-    } finally {
-      setIsSubmitting(false);
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("❌ API error:", text);
+      throw new Error();
     }
-  };
 
+    toast.success("✅ Запит успішно надіслано!");
+
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+    setErrors({});
+  } catch (err) {
+    console.error("❌ Submit failed:", err);
+    toast.error("Сталася помилка. Спробуйте пізніше.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   return (
     <section id="contact" className="bg-silk-charcoal py-16">
       <div className="container mx-auto px-6">
