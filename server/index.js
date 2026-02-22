@@ -63,14 +63,9 @@ async function sendToTelegram({ name, email, phone, message }) {
 /* =========================
    HUBSPOT (CREATE CONTACT)
 ========================= */
-async function sendToHubSpot({ name, email, phone, message }) {
+async function sendToHubSpot({ name, email, phone }) {
   if (!HUBSPOT_TOKEN) {
     console.error("❌ HUBSPOT_TOKEN missing");
-    return;
-  }
-
-  if (!email) {
-    console.error("❌ Email missing → HubSpot skipped");
     return;
   }
 
@@ -87,8 +82,6 @@ async function sendToHubSpot({ name, email, phone, message }) {
           lastname,
           phone,
           lifecyclestage: "lead",
-          lead_source: "Landing BLCK",
-          message: message || "",
         },
       },
       {
@@ -96,11 +89,10 @@ async function sendToHubSpot({ name, email, phone, message }) {
           Authorization: `Bearer ${HUBSPOT_TOKEN}`,
           "Content-Type": "application/json",
         },
-        timeout: 10000,
       },
     );
 
-    console.log("✅ HubSpot contact created:", res.data.id);
+    console.log("✅ HubSpot contact CREATED:", res.data.id);
   } catch (err) {
     console.error(
       "❌ HubSpot ERROR:",
