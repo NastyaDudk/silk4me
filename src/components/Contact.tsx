@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
@@ -47,6 +46,7 @@ const Contact = () => {
     message: "",
   });
 
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /* =========================
@@ -72,26 +72,21 @@ const Contact = () => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!formData.name.trim()) {
-      toast.error("Будь ласка, введіть імʼя");
-      return;
-    }
+    if (!formData.name.trim()) return;
 
     if (!formData.email.trim()) {
-      toast.error("Будь ласка, введіть email");
+      setEmailError("Будь ласка, введіть електронну пошту");
       return;
     }
 
     if (!EMAIL_REGEX.test(formData.email)) {
-      toast.error("Введіть коректну електронну адресу");
+      setEmailError("Введіть коректну електронну адресу");
       return;
     }
 
-    if (!formData.phone.trim()) {
-      toast.error("Будь ласка, введіть телефон");
-      return;
-    }
+    if (!formData.phone.trim()) return;
 
+    setEmailError(null);
     setIsSubmitting(true);
 
     try {
@@ -103,17 +98,14 @@ const Contact = () => {
 
       if (!res.ok) throw new Error();
 
-      toast.success("✅ Запит успішно надіслано!");
-
-      setFormData((prev) => ({
-        ...prev,
+      setFormData({
         name: "",
         email: "",
         phone: "",
         message: "",
-      }));
+      });
     } catch {
-      toast.error("Сталася помилка. Спробуйте пізніше.");
+      // тихо — UX лучше без лишнего шума
     } finally {
       setIsSubmitting(false);
     }
@@ -125,12 +117,11 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* LEFT */}
           <div className="space-y-8">
-            {/* HEADINGS */}
             <div className="text-center lg:text-left space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
               </p>
-              <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
+              <h2 className="text-3xl md:text-4xl font-serif text-background">
                 Отримайте{" "}
                 <span className="text-gold">персональну консультацію</span>
               </h2>
@@ -139,8 +130,8 @@ const Contact = () => {
             {/* FORM */}
             <form
               onSubmit={handleSubmit}
-              className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
               noValidate
+              className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
             >
               {/* NAME + EMAIL */}
               <div className="grid md:grid-cols-2 gap-4">
@@ -150,21 +141,26 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData((p) => ({ ...p, name: e.target.value }))
                   }
-                  required
                   className="h-14 bg-background"
                 />
 
-                <Input
-                  type="email"
-                  inputMode="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, email: e.target.value }))
-                  }
-                  required
-                  className="h-14 bg-background"
-                />
+                <div>
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={(e) => {
+                      setFormData((p) => ({ ...p, email: e.target.value }));
+                      setEmailError(null);
+                    }}
+                    className="h-14 bg-background"
+                  />
+                  {emailError && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {emailError}
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* PHONE */}
@@ -174,7 +170,6 @@ const Contact = () => {
                 onChange={(e) =>
                   setFormData((p) => ({ ...p, phone: e.target.value }))
                 }
-                required
                 className="h-14 bg-background"
               />
 
@@ -189,23 +184,20 @@ const Contact = () => {
               />
 
               {/* BUTTON */}
-              <div className="pt-2 flex justify-center lg:justify-start">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="
-                    px-12 h-14 text-lg md:text-xl
-                    bg-[#E6C9A8] text-[#1F3D34]
-                    hover:bg-[#EED7BD]
-                    transition-all duration-300
-                    shadow-sm hover:shadow-md
-                    rounded-md
-                  "
-                >
-                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                  <Send className="w-5 h-5 ml-3" />
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="
+                  px-12 h-14 text-lg
+                  bg-[#E6C9A8] text-[#1F3D34]
+                  hover:bg-[#EED7BD]
+                  transition-all duration-300
+                  rounded-md
+                "
+              >
+                {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+                <Send className="w-5 h-5 ml-3" />
+              </Button>
             </form>
 
             {/* LINKS */}
@@ -214,7 +206,7 @@ const Contact = () => {
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
                 <Instagram className="w-5 h-5" />
                 Instagram
@@ -222,7 +214,7 @@ const Contact = () => {
 
               <a
                 href="mailto:Silkandnature@gmail.com"
-                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
                 <Mail className="w-5 h-5" />
                 Email
@@ -236,11 +228,11 @@ const Contact = () => {
           </div>
 
           {/* IMAGE */}
-          <div className="relative hidden lg:block">
+          <div className="hidden lg:block relative">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
               src={silkLifestyle}
-              alt="Silk4me lifestyle"
+              alt="Silk4me"
               className="w-full h-[520px] object-cover"
             />
           </div>
