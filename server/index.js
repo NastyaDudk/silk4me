@@ -50,17 +50,18 @@ app.get("/", (_, res) => res.send("✅ API is running"));
 app.get("/api/test", (_, res) => res.json({ ok: true }));
 
 /* =========================
-   TELEGRAM (AXIOS!)
+   TELEGRAM
 ========================= */
-async function sendToTelegram({ name, phone, message }) {
+async function sendToTelegram({ name, email, phone, message }) {
   if (!TG_TOKEN || !TG_CHAT_ID) return;
 
   const text =
     `🧾 New lead\n` +
     `👤 Name: ${name}\n` +
+    `📧 Email: ${email}\n` +
     `📞 Phone: ${phone}\n` +
     `💬 Message: ${message || "—"}\n` +
-    `🌐 Source: landing blck`;
+    `🌐 Source: landing`;
 
   await axios.post(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
     chat_id: TG_CHAT_ID,
@@ -70,7 +71,7 @@ async function sendToTelegram({ name, phone, message }) {
 }
 
 /* =========================
-   HUBSPOT
+   HUBSPOT (EMAIL IS REQUIRED!)
 ========================= */
 async function sendToHubSpot(data) {
   if (!HUBSPOT_TOKEN) {
@@ -79,12 +80,13 @@ async function sendToHubSpot(data) {
   }
 
   const [firstname, ...rest] = data.name.trim().split(" ");
-  const lastname = rest.join(" ") || "—";
+  const lastname = rest.join(" ") || "";
 
   await axios.post(
     "https://api.hubapi.com/crm/v3/objects/contacts",
     {
       properties: {
+        email: data.email, // 🔴 КЛЮЧЕВО
         firstname,
         lastname,
         phone: data.phone,
@@ -94,7 +96,8 @@ async function sendToHubSpot(data) {
         utm_campaign: data.utm_campaign,
         utm_content: data.utm_content,
         utm_term: data.utm_term,
-        lead_source: "Landing page blck",
+        lifecyclestage: "lead",
+        lead_source: "Landing page",
       },
     },
     {
@@ -110,22 +113,23 @@ async function sendToHubSpot(data) {
    LEAD ENDPOINT
 ========================= */
 app.post("/api/lead", async (req, res) => {
-  const { name, phone } = req.body;
+  const { name, email, phone } = req.body || {};
 
-  if (!name || !phone) {
+  // 🔒 строгая валидация
+  if (!name || !email || !phone) {
     return res.status(400).json({
       ok: false,
-      error: "name_and_phone_required",
+      error: "name_email_phone_required",
     });
   }
 
   try {
     await Promise.all([sendToTelegram(req.body), sendToHubSpot(req.body)]);
 
-    res.json({ ok: true });
+    return res.json({ ok: true });
   } catch (err) {
     console.error("❌ Lead error:", err.response?.data || err.message);
-    res.status(500).json({ ok: false });
+    return res.status(500).json({ ok: false });
   }
 });
 

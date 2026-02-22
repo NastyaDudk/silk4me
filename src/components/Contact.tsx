@@ -46,7 +46,7 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /* =========================
-     READ UTM FROM URL (once)
+     READ UTM FROM URL
   ========================= */
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -77,11 +77,6 @@ const Contact = () => {
       return;
     }
 
-    if (!formData.email.includes("@")) {
-      toast.error("Будь ласка, введіть коректний email.");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
@@ -109,7 +104,7 @@ const Contact = () => {
     }
   };
 
-  const emailContact = "Silkandnature@gmail.com";
+  const supportEmail = "Silkandnature@gmail.com";
 
   return (
     <section id="contact" className="bg-silk-charcoal py-16">
@@ -134,6 +129,7 @@ const Contact = () => {
               onSubmit={handleSubmit}
               className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
             >
+              {/* NAME + EMAIL */}
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Ваше ім'я"
@@ -155,18 +151,20 @@ const Contact = () => {
                   required
                   className="h-14 bg-background"
                 />
-
-                <Input
-                  placeholder="Телефон"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, phone: e.target.value }))
-                  }
-                  required
-                  className="h-14 bg-background md:col-span-2"
-                />
               </div>
 
+              {/* PHONE */}
+              <Input
+                placeholder="Телефон"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData((p) => ({ ...p, phone: e.target.value }))
+                }
+                required
+                className="h-14 bg-background"
+              />
+
+              {/* MESSAGE */}
               <Textarea
                 placeholder="Ваше повідомлення (необов'язково)"
                 value={formData.message}
@@ -176,6 +174,7 @@ const Contact = () => {
                 className="min-h-[170px] bg-background resize-none"
               />
 
+              {/* BUTTON */}
               <div className="pt-2 flex justify-center lg:justify-start">
                 <Button
                   type="submit"
@@ -183,8 +182,8 @@ const Contact = () => {
                   className="
                     px-12 h-14 text-lg md:text-xl
                     bg-[#E6C9A8] text-[#1F3D34]
-                    hover:bg-[#EED7BD] transition-all
-                    rounded-md
+                    hover:bg-[#EED7BD]
+                    transition-all rounded-md
                   "
                 >
                   {isSubmitting ? "Надсилання..." : "Надіслати запит"}
@@ -206,7 +205,7 @@ const Contact = () => {
               </a>
 
               <a
-                href={`mailto:${emailContact}`}
+                href={`mailto:${supportEmail}`}
                 className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
                 <Mail className="w-5 h-5" />
