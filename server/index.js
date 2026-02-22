@@ -59,7 +59,7 @@ async function sendToTelegram({ name, email, phone, message }) {
     `📧 Email: ${email}\n` +
     `📞 Phone: ${phone}\n` +
     `💬 Message: ${message || "—"}\n` +
-    `🌐 Source: landing`;
+    `🌐 Source: лендінг blck`;
 
   await axios.post(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
     chat_id: TG_CHAT_ID,
