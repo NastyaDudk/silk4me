@@ -6,20 +6,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <meta name="robots" content="index,follow" />
-  <meta name="author" content="Silk4me" />
 
-  <!-- TITLE -->
-  <title>Silk4me — Black Collection | Шовк Mulberry 6A</title>
+  <title>Silk4me — Black Collection</title>
   <meta name="description"
-    content="Silk4me — Black Collection із натурального шовку Mulberry 6A: наволочки, піжами та аксесуари." />
+    content="Silk4me — натуральний шовк Mulberry 6A. Персональні консультації та преміальні вироби." />
 
-  <!-- CANONICAL -->
   <link rel="canonical" href="https://nastyadudk.github.io/silk4me/" />
 
   <!-- ICONS -->
   <link rel="icon" href="/silk4me/favicon.ico" />
-  <meta name="theme-color" content="#1f4c41" />
+  <link rel="apple-touch-icon" href="/silk4me/apple-touch-icon.png" />
 
   <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,15 +24,14 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap"
     rel="stylesheet" />
 
-  <!-- STYLES -->
+  <!-- STYLES FOR VOICE ASSISTANT -->
   <style>
-    /* =========================
-       MOBILE ASSISTANT BUTTON
-    ========================= */
+    /* ===== Floating phone button ===== */
     .mobile-assistant {
       position: fixed;
-      right: 16px;
-      bottom: 24px;
+      right: 20px;
+      bottom: 120px;
+      /* ⬅️ НЕ ВНИЗУ */
       width: 56px;
       height: 56px;
       border-radius: 9999px;
@@ -44,10 +39,10 @@
       color: #fff;
       border: none;
       font-size: 22px;
-      display: none;
+      display: grid;
       place-items: center;
-      z-index: 999999;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      z-index: 100000;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .25);
       cursor: pointer;
     }
 
@@ -55,114 +50,79 @@
       transform: translateY(1px);
     }
 
-    /* =========================
-       ELEVENLABS WIDGET
-    ========================= */
+    /* ===== ElevenLabs widget positioning ===== */
     elevenlabs-convai {
-      cursor: default;
+      position: fixed;
+      right: 20px;
+      bottom: 190px;
+      /* ⬅️ выше кнопки */
+      max-height: calc(100vh - 360px);
+      /* ⬅️ НИЖЕ КАРТИНКИ НЕ ОПУСТИТСЯ */
+      z-index: 99999;
     }
 
+    /* ===== Mobile tweaks ===== */
     @media (max-width: 640px) {
-      .mobile-assistant {
-        display: grid;
-      }
-
       elevenlabs-convai {
-        position: fixed;
-        right: 16px;
-        bottom: 120px;
-        /* ⬅️ ВАЖНО: выше соц-иконок */
-        z-index: 999998;
-        opacity: 0;
-        pointer-events: none;
-        transform: translateY(8px);
-        transition: opacity 0.25s ease, transform 0.25s ease;
+        right: 12px;
+        bottom: 180px;
+        max-height: calc(100vh - 300px);
       }
 
-      body.convai-open elevenlabs-convai {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0);
-      }
-
-      body.convai-open .mobile-assistant {
-        display: none;
+      .mobile-assistant {
+        right: 12px;
+        bottom: 110px;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- React root -->
   <div id="root"></div>
 
   <!-- Vite entry -->
   <script type="module" src="/src/main.tsx"></script>
 
-  <!-- =========================
-       ELEVENLABS CONVAI
-  ========================= -->
+  <!-- ElevenLabs Voice Assistant -->
   <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async></script>
 
-  <!-- Mobile phone button -->
+  <!-- Phone button -->
   <button class="mobile-assistant" aria-label="Поговорити з консультантом">
     📞
   </button>
 
-  <!-- =========================
-       CONTROL SCRIPT
-  ========================= -->
+  <!-- JS logic -->
   <script>
     (function () {
-      const OPEN_CLASS = "convai-open";
-      const BTN = document.querySelector(".mobile-assistant");
-      const WIDGET = document.querySelector("elevenlabs-convai");
+      const btn = document.querySelector(".mobile-assistant");
+      const widget = document.querySelector("elevenlabs-convai");
 
-      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      if (!btn || !widget) return;
 
-      async function getShadowRoot() {
-        if (!WIDGET) return null;
-        const start = Date.now();
-        while (!WIDGET.shadowRoot) {
-          if (Date.now() - start > 10000) return null;
-          await sleep(150);
-        }
-        return WIDGET.shadowRoot;
-      }
+      btn.addEventListener("click", async () => {
+        // пробуем нажать кнопку старта внутри виджета
+        const startCall = async () => {
+          const root = widget.shadowRoot;
+          if (!root) return false;
 
-      function findStartButton(shadow) {
-        const buttons = shadow.querySelectorAll("button,[role='button'],a");
-        for (const el of buttons) {
-          const text = (el.textContent || "").toLowerCase();
-          if (
-            text.includes("start") ||
-            text.includes("call") ||
-            text.includes("поговор")
-          ) {
-            return el;
+          const buttons = root.querySelectorAll("button, [role='button']");
+          for (const b of buttons) {
+            const text = (b.textContent || "").toLowerCase();
+            if (text.includes("start") || text.includes("поговор")) {
+              b.click();
+              return true;
+            }
           }
-        }
-        return null;
-      }
+          return false;
+        };
 
-      async function openAssistant() {
-        document.body.classList.add(OPEN_CLASS);
-
-        const shadow = await getShadowRoot();
-        if (!shadow) return;
-
+        // ждём загрузку shadowRoot
         for (let i = 0; i < 20; i++) {
-          const btn = findStartButton(shadow);
-          if (btn) {
-            btn.click();
-            return;
-          }
-          await sleep(200);
+          if (await startCall()) break;
+          await new Promise(r => setTimeout(r, 300));
         }
-      }
-
-      BTN?.addEventListener("click", openAssistant);
+      });
     })();
   </script>
 </body>
