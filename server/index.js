@@ -82,7 +82,6 @@ async function sendToHubSpot({ name, email, phone, message }) {
           lastname,
           phone,
           lifecyclestage: "lead",
-          lead_source: "Landing BLCK",
           message: message || "",
         },
       },
