@@ -70,7 +70,7 @@ async function sendToHubSpot({ name, email, phone, message }) {
   }
 
   if (!email) {
-    console.error("❌ Email missing");
+    console.error("❌ Email missing → HubSpot skipped");
     return;
   }
 
@@ -78,8 +78,8 @@ async function sendToHubSpot({ name, email, phone, message }) {
   const lastname = rest.join(" ") || "";
 
   try {
-    const res = await axios.post(
-      "https://api.hubapi.com/crm/v3/objects/contacts",
+    const res = await axios.put(
+      "https://api.hubapi.com/crm/v3/objects/contacts/id/email",
       {
         properties: {
           email,
@@ -88,6 +88,7 @@ async function sendToHubSpot({ name, email, phone, message }) {
           phone,
           lifecyclestage: "lead",
           lead_source: "Landing BLCK",
+          message: message || "",
         },
       },
       {
@@ -99,7 +100,7 @@ async function sendToHubSpot({ name, email, phone, message }) {
       },
     );
 
-    console.log("✅ HubSpot contact created:", res.data.id);
+    console.log("✅ HubSpot contact UPSERTED:", res.data.id);
   } catch (err) {
     console.error(
       "❌ HubSpot ERROR:",
