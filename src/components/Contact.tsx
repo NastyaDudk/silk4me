@@ -25,6 +25,7 @@ const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 ========================= */
 type FormData = {
   name: string;
+  email: string;
   phone: string;
   message: string;
   utm_source?: string;
@@ -37,6 +38,7 @@ type FormData = {
 const Contact = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
+    email: "",
     phone: "",
     message: "",
   });
@@ -66,8 +68,17 @@ const Contact = () => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      toast.error("Будь ласка, заповніть ім’я та телефон.");
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim()
+    ) {
+      toast.error("Будь ласка, заповніть ім’я, email та телефон.");
+      return;
+    }
+
+    if (!formData.email.includes("@")) {
+      toast.error("Будь ласка, введіть коректний email.");
       return;
     }
 
@@ -83,9 +94,11 @@ const Contact = () => {
       if (!res.ok) throw new Error();
 
       toast.success("✅ Запит надіслано! Ми звʼяжемося з вами найближчим часом.");
+
       setFormData((prev) => ({
         ...prev,
         name: "",
+        email: "",
         phone: "",
         message: "",
       }));
@@ -96,7 +109,7 @@ const Contact = () => {
     }
   };
 
-  const email = "Silkandnature@gmail.com";
+  const emailContact = "Silkandnature@gmail.com";
 
   return (
     <section id="contact" className="bg-silk-charcoal py-16">
@@ -133,13 +146,24 @@ const Contact = () => {
                 />
 
                 <Input
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, email: e.target.value }))
+                  }
+                  required
+                  className="h-14 bg-background"
+                />
+
+                <Input
                   placeholder="Телефон"
                   value={formData.phone}
                   onChange={(e) =>
                     setFormData((p) => ({ ...p, phone: e.target.value }))
                   }
                   required
-                  className="h-14 bg-background"
+                  className="h-14 bg-background md:col-span-2"
                 />
               </div>
 
@@ -182,7 +206,7 @@ const Contact = () => {
               </a>
 
               <a
-                href={`mailto:${email}`}
+                href={`mailto:${emailContact}`}
                 className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
                 <Mail className="w-5 h-5" />
