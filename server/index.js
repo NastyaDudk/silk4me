@@ -5,7 +5,7 @@ import axios from "axios";
 const app = express();
 
 /* =========================
-   BASIC
+   MIDDLEWARE
 ========================= */
 app.use(express.json());
 
@@ -15,6 +15,7 @@ app.use(
       "http://localhost:5173",
       "http://127.0.0.1:5173",
       "https://nastyadudk.github.io",
+      "https://nastyadudk.github.io/silk4me",
     ],
   }),
 );
@@ -23,14 +24,8 @@ app.use(
    ENV
 ========================= */
 const TG_TOKEN = process.env.TG_BOT_TOKEN;
-const TG_CHAT_ID_RAW = process.env.TG_CHAT_ID;
+const TG_CHAT_ID = process.env.TG_CHAT_ID;
 const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
-
-// 🔥 ВАЖНО
-const TG_CHAT_ID =
-  TG_CHAT_ID_RAW && !Number.isNaN(Number(TG_CHAT_ID_RAW))
-    ? Number(TG_CHAT_ID_RAW)
-    : TG_CHAT_ID_RAW;
 
 /* =========================
    HEALTH
@@ -41,41 +36,41 @@ app.get("/api/test", (_, res) => res.json({ ok: true }));
 /* =========================
    TELEGRAM
 ========================= */
-async function sendToTelegram(data) {
+async function sendToTelegram({ name, email, phone, message }) {
   if (!TG_TOKEN || !TG_CHAT_ID) {
-    console.error("❌ Telegram ENV missing", {
-      TG_TOKEN: !!TG_TOKEN,
-      TG_CHAT_ID,
-    });
+    console.error("❌ Telegram ENV missing");
     return;
   }
 
-  console.log("➡️ Sending to Telegram:", data.email);
-
-  const res = await axios.post(
+  await axios.post(
     `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
     {
-      chat_id: TG_CHAT_ID,
+      chat_id: TG_CHAT_ID, // ❗️СТРОКОЙ, НЕ NUMBER
       text:
         `🧾 New lead\n` +
-        `👤 ${data.name}\n` +
-        `📧 ${data.email}\n` +
-        `📞 ${data.phone}\n` +
-        `💬 ${data.message || "—"}\n` +
-        `🌐 Джерело: Landing BLCK`,
+        `👤 Name: ${name}\n` +
+        `📧 Email: ${email}\n` +
+        `📞 Phone: ${phone}\n` +
+        `💬 Message: ${message || "—"}\n` +
+        `🌐 Source: Landing BLCK`,
     },
     { timeout: 5000 },
   );
 
-  console.log("✅ Telegram sent:", res.data.ok);
+  console.log("✅ Telegram sent:", email);
 }
 
 /* =========================
-   HUBSPOT
+   HUBSPOT (UPSERT by email)
 ========================= */
-async function sendToHubSpot({ name, email, phone }) {
-  if (!HUBSPOT_TOKEN || !email) {
-    console.warn("⚠️ HubSpot skipped: token or email missing");
+async function sendToHubSpot({ name, email, phone, message }) {
+  if (!HUBSPOT_TOKEN) {
+    console.error("❌ HUBSPOT_TOKEN missing");
+    return;
+  }
+
+  if (!email) {
+    console.error("❌ Email missing → HubSpot skipped");
     return;
   }
 
@@ -93,6 +88,7 @@ async function sendToHubSpot({ name, email, phone }) {
           phone,
           lifecyclestage: "lead",
           lead_source: "Landing BLCK",
+          message: message || "",
         },
       },
       {
@@ -100,22 +96,22 @@ async function sendToHubSpot({ name, email, phone }) {
           Authorization: `Bearer ${HUBSPOT_TOKEN}`,
           "Content-Type": "application/json",
         },
-        timeout: 5000,
+        timeout: 8000,
       },
     );
 
-    console.log("✅ HubSpot OK:", res.data.id);
+    console.log("✅ HubSpot UPSERT OK:", res.data.id);
   } catch (err) {
     console.error(
       "❌ HubSpot ERROR:",
       err.response?.status,
-      err.response?.data || err.message,
+      JSON.stringify(err.response?.data, null, 2),
     );
   }
 }
 
 /* =========================
-   LEAD
+   LEAD ENDPOINT
 ========================= */
 app.post("/api/lead", (req, res) => {
   const { name, email, phone, message } = req.body || {};
@@ -123,20 +119,19 @@ app.post("/api/lead", (req, res) => {
   console.log("📩 Lead received:", email);
 
   if (!name || !email || !phone) {
-    console.error("❌ Validation failed", req.body);
     return res.status(400).json({ ok: false });
   }
 
-  // ✅ UI — МГНОВЕННО
+  // ⚡ МГНОВЕННЫЙ ОТВЕТ ФРОНТУ
   res.json({ ok: true });
 
-  // 🔥 ФОН
+  // 🔥 ФОНОВЫЕ ЗАДАЧИ
   sendToTelegram({ name, email, phone, message }).catch((e) =>
-    console.error("❌ Telegram error:", e.response?.data || e.message),
+    console.error("TG error:", e.message),
   );
 
-  sendToHubSpot({ name, email, phone }).catch((e) =>
-    console.error("❌ HubSpot error:", e.response?.data || e.message),
+  sendToHubSpot({ name, email, phone, message }).catch((e) =>
+    console.error("HS error:", e.message),
   );
 });
 
