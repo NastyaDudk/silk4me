@@ -29,8 +29,6 @@ app.use(
       if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
       return cb(new Error("CORS blocked"), false);
     },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
   }),
 );
 
@@ -71,7 +69,7 @@ async function sendToTelegram({ name, email, phone, message }) {
 }
 
 /* =========================
-   HUBSPOT (EMAIL IS REQUIRED!)
+   HUBSPOT
 ========================= */
 async function sendToHubSpot(data) {
   if (!HUBSPOT_TOKEN) {
@@ -79,25 +77,30 @@ async function sendToHubSpot(data) {
     return;
   }
 
+  if (!data.email) {
+    console.warn("⚠️ Email missing → HubSpot skipped");
+    return;
+  }
+
   const [firstname, ...rest] = data.name.trim().split(" ");
   const lastname = rest.join(" ") || "";
+
+  console.log("📨 HubSpot payload:", {
+    email: data.email,
+    firstname,
+    lastname,
+    phone: data.phone,
+  });
 
   await axios.post(
     "https://api.hubapi.com/crm/v3/objects/contacts",
     {
       properties: {
-        email: data.email, // 🔴 КЛЮЧЕВО
+        email: data.email, // 🔴 ОБЯЗАТЕЛЬНО
         firstname,
         lastname,
         phone: data.phone,
-        message: data.message,
-        utm_source: data.utm_source,
-        utm_medium: data.utm_medium,
-        utm_campaign: data.utm_campaign,
-        utm_content: data.utm_content,
-        utm_term: data.utm_term,
         lifecyclestage: "lead",
-        lead_source: "Landing page",
       },
     },
     {
@@ -113,7 +116,7 @@ async function sendToHubSpot(data) {
    LEAD ENDPOINT
 ========================= */
 app.post("/api/lead", async (req, res) => {
-  const { name, email, phone } = req.body || {};
+  const { name, email, phone, message } = req.body || {};
 
   // 🔒 строгая валидация
   if (!name || !email || !phone) {
@@ -124,7 +127,8 @@ app.post("/api/lead", async (req, res) => {
   }
 
   try {
-    await Promise.all([sendToTelegram(req.body), sendToHubSpot(req.body)]);
+    await sendToTelegram({ name, email, phone, message });
+    await sendToHubSpot({ name, email, phone, message });
 
     return res.json({ ok: true });
   } catch (err) {

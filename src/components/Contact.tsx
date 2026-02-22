@@ -35,7 +35,7 @@ type FormData = {
 };
 
 /* =========================
-   EMAIL REGEX (простая, но надёжная)
+   EMAIL REGEX
 ========================= */
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -73,17 +73,22 @@ const Contact = () => {
     if (isSubmitting) return;
 
     if (!formData.name.trim()) {
-      toast.error("Введіть імʼя");
+      toast.error("Будь ласка, введіть імʼя");
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      toast.error("Будь ласка, введіть email");
       return;
     }
 
     if (!EMAIL_REGEX.test(formData.email)) {
-      toast.error("Введіть коректний email");
+      toast.error("Введіть коректну електронну адресу");
       return;
     }
 
     if (!formData.phone.trim()) {
-      toast.error("Введіть телефон");
+      toast.error("Будь ласка, введіть телефон");
       return;
     }
 
@@ -98,7 +103,7 @@ const Contact = () => {
 
       if (!res.ok) throw new Error();
 
-      toast.success("✅ Запит надіслано!");
+      toast.success("✅ Запит успішно надіслано!");
 
       setFormData((prev) => ({
         ...prev,
@@ -108,7 +113,7 @@ const Contact = () => {
         message: "",
       }));
     } catch {
-      toast.error("Помилка. Спробуйте пізніше.");
+      toast.error("Сталася помилка. Спробуйте пізніше.");
     } finally {
       setIsSubmitting(false);
     }
@@ -120,11 +125,12 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* LEFT */}
           <div className="space-y-8">
-            <div className="space-y-3 text-center lg:text-left">
+            {/* HEADINGS */}
+            <div className="text-center lg:text-left space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
               </p>
-              <h2 className="text-3xl md:text-4xl font-serif text-background">
+              <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
                 Отримайте{" "}
                 <span className="text-gold">персональну консультацію</span>
               </h2>
@@ -134,6 +140,7 @@ const Contact = () => {
             <form
               onSubmit={handleSubmit}
               className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
+              noValidate
             >
               {/* NAME + EMAIL */}
               <div className="grid md:grid-cols-2 gap-4">
@@ -181,46 +188,59 @@ const Contact = () => {
                 className="min-h-[170px] bg-background resize-none"
               />
 
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-12 h-14 bg-[#E6C9A8] text-[#1F3D34]"
-              >
-                {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                <Send className="w-5 h-5 ml-3" />
-              </Button>
+              {/* BUTTON */}
+              <div className="pt-2 flex justify-center lg:justify-start">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="
+                    px-12 h-14 text-lg md:text-xl
+                    bg-[#E6C9A8] text-[#1F3D34]
+                    hover:bg-[#EED7BD]
+                    transition-all duration-300
+                    shadow-sm hover:shadow-md
+                    rounded-md
+                  "
+                >
+                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+                  <Send className="w-5 h-5 ml-3" />
+                </Button>
+              </div>
             </form>
 
             {/* LINKS */}
-            <div className="flex flex-col gap-4 lg:flex-row">
+            <div className="pt-4 flex flex-col items-center gap-4 lg:flex-row lg:gap-10">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noreferrer"
-                className="flex gap-2 text-background/80 hover:text-gold"
+                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
-                <Instagram /> Instagram
+                <Instagram className="w-5 h-5" />
+                Instagram
               </a>
 
               <a
                 href="mailto:Silkandnature@gmail.com"
-                className="flex gap-2 text-background/80 hover:text-gold"
+                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
-                <Mail /> Email
+                <Mail className="w-5 h-5" />
+                Email
               </a>
 
-              <div className="flex gap-2 text-background/70">
-                <MapPin /> Україна / Європа
+              <div className="flex items-center gap-3 text-background/70">
+                <MapPin className="w-5 h-5" />
+                Україна / Європа
               </div>
             </div>
           </div>
 
           {/* IMAGE */}
-          <div className="hidden lg:block relative">
+          <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
               src={silkLifestyle}
-              alt="Silk4me"
+              alt="Silk4me lifestyle"
               className="w-full h-[520px] object-cover"
             />
           </div>
