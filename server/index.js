@@ -122,7 +122,6 @@ async function sendToHubSpot(data) {
 app.post("/api/lead", async (req, res) => {
   const { name, email, phone, message } = req.body || {};
 
-  // 🔒 строгая валидация
   if (!name || !email || !phone) {
     return res.status(400).json({
       ok: false,
@@ -130,15 +129,17 @@ app.post("/api/lead", async (req, res) => {
     });
   }
 
-  try {
-    await sendToTelegram({ name, email, phone, message });
-    await sendToHubSpot({ name, email, phone, message });
+  // ✅ СРАЗУ отвечаем пользователю
+  res.json({ ok: true });
 
-    return res.json({ ok: true });
-  } catch (err) {
-    console.error("❌ Lead error:", err.response?.data || err.message);
-    return res.status(500).json({ ok: false });
-  }
+  // 🔥 всё ниже — в фоне, не блокирует UI
+  sendToTelegram({ name, email, phone, message }).catch((err) =>
+    console.error("❌ Telegram error:", err.response?.data || err.message),
+  );
+
+  sendToHubSpot({ name, email, phone, message }).catch((err) =>
+    console.error("❌ HubSpot error:", err.response?.data || err.message),
+  );
 });
 
 /* =========================
