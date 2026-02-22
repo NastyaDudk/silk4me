@@ -61,7 +61,8 @@ async function sendToTelegram(data) {
         `👤 ${data.name}\n` +
         `📧 ${data.email}\n` +
         `📞 ${data.phone}\n` +
-        `💬 ${data.message || "—"}`,
+        `💬 ${data.message || "—"}\n` +
+        `🌐 Джерело: Landing BLCK`,
     },
     { timeout: 5000 },
   );
@@ -73,37 +74,44 @@ async function sendToTelegram(data) {
    HUBSPOT
 ========================= */
 async function sendToHubSpot({ name, email, phone }) {
-  if (!HUBSPOT_TOKEN) {
-    console.warn("⚠️ HubSpot token missing");
+  if (!HUBSPOT_TOKEN || !email) {
+    console.warn("⚠️ HubSpot skipped: token or email missing");
     return;
   }
 
   const [firstname, ...rest] = name.trim().split(" ");
-  const lastname = rest.join(" ");
+  const lastname = rest.join(" ") || "";
 
-  console.log("➡️ Sending to HubSpot:", email);
-
-  const res = await axios.post(
-    "https://api.hubapi.com/crm/v3/objects/contacts",
-    {
-      properties: {
-        email,
-        firstname,
-        lastname,
-        phone,
-        lifecyclestage: "lead",
+  try {
+    const res = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
+      {
+        properties: {
+          email,
+          firstname,
+          lastname,
+          phone,
+          lifecyclestage: "lead",
+          lead_source: "Landing BLCK",
+        },
       },
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${HUBSPOT_TOKEN}`,
-        "Content-Type": "application/json",
+      {
+        headers: {
+          Authorization: `Bearer ${HUBSPOT_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 5000,
       },
-      timeout: 5000,
-    },
-  );
+    );
 
-  console.log("✅ HubSpot saved:", res.data.id);
+    console.log("✅ HubSpot OK:", res.data.id);
+  } catch (err) {
+    console.error(
+      "❌ HubSpot ERROR:",
+      err.response?.status,
+      err.response?.data || err.message,
+    );
+  }
 }
 
 /* =========================

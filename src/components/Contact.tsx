@@ -172,21 +172,24 @@ const Contact = () => {
               </div>
 
               {/* PHONE */}
-              <div>
-                <Input
-                  placeholder="Телефон"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, phone: e.target.value }))
-                  }
-                  className="h-14 bg-background"
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-sm text-background/70">
-                    {errors.phone}
-                  </p>
-                )}
-              </div>
+<div>
+  <Input
+    placeholder="Телефон"
+    inputMode="tel"
+    value={formData.phone}
+    onChange={(e) => {
+      const sanitized = e.target.value.replace(/[^\d+]/g, "");
+      setFormData((p) => ({ ...p, phone: sanitized }));
+    }}
+    className="h-14 bg-background"
+  />
+
+  {errors.phone && (
+    <p className="mt-1 text-sm text-background/70">
+      {errors.phone}
+    </p>
+  )}
+</div>
 
               {/* MESSAGE */}
               <Textarea
