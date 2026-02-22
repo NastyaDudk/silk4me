@@ -24,7 +24,7 @@ app.use(
    ENV
 ========================= */
 const TG_TOKEN = process.env.TG_BOT_TOKEN;
-const TG_CHAT_ID = process.env.TG_CHAT_ID;
+const TG_CHAT_ID = process.env.TG_CHAT_ID; // строка — ОК
 const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
 
 /* =========================
@@ -45,7 +45,7 @@ async function sendToTelegram({ name, email, phone, message }) {
   await axios.post(
     `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
     {
-      chat_id: TG_CHAT_ID, // ❗️СТРОКОЙ, НЕ NUMBER
+      chat_id: TG_CHAT_ID,
       text:
         `🧾 New lead\n` +
         `👤 Name: ${name}\n` +
@@ -61,7 +61,7 @@ async function sendToTelegram({ name, email, phone, message }) {
 }
 
 /* =========================
-   HUBSPOT (UPSERT by email)
+   HUBSPOT (CREATE CONTACT)
 ========================= */
 async function sendToHubSpot({ name, email, phone, message }) {
   if (!HUBSPOT_TOKEN) {
@@ -78,8 +78,8 @@ async function sendToHubSpot({ name, email, phone, message }) {
   const lastname = rest.join(" ") || "";
 
   try {
-    const res = await axios.put(
-      "https://api.hubapi.com/crm/v3/objects/contacts/id/email",
+    const res = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/contacts",
       {
         properties: {
           email,
@@ -100,7 +100,7 @@ async function sendToHubSpot({ name, email, phone, message }) {
       },
     );
 
-    console.log("✅ HubSpot contact UPSERTED:", res.data.id);
+    console.log("✅ HubSpot contact created:", res.data.id);
   } catch (err) {
     console.error(
       "❌ HubSpot ERROR:",
@@ -109,6 +109,7 @@ async function sendToHubSpot({ name, email, phone, message }) {
     );
   }
 }
+
 /* =========================
    LEAD ENDPOINT
 ========================= */
@@ -118,13 +119,14 @@ app.post("/api/lead", (req, res) => {
   console.log("📩 Lead received:", email);
 
   if (!name || !email || !phone) {
+    console.error("❌ Validation failed:", req.body);
     return res.status(400).json({ ok: false });
   }
 
-  // ⚡ МГНОВЕННЫЙ ОТВЕТ ФРОНТУ
+  // ⚡ мгновенный ответ фронту
   res.json({ ok: true });
 
-  // 🔥 ФОНОВЫЕ ЗАДАЧИ
+  // 🔥 фоновые задачи
   sendToTelegram({ name, email, phone, message }).catch((e) =>
     console.error("TG error:", e.message),
   );
