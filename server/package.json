@@ -6,13 +6,12 @@
   "author": "Anastasiia Dudka <sopiloka@gmail.com>",
   "license": "ISC",
   "description": "Silk4me API + Telegram bot",
-
   "scripts": {
     "start": "node index.js",
     "bot": "node bot.cjs"
   },
-
   "dependencies": {
+    "axios": "^1.13.5",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",
