@@ -69,7 +69,7 @@ async function sendToTelegram({ name, email, phone, message }) {
 }
 
 /* =========================
-   HUBSPOT
+   HUBSPOT (CREATE OR UPDATE)
 ========================= */
 async function sendToHubSpot(data) {
   if (!HUBSPOT_TOKEN) {
@@ -85,31 +85,35 @@ async function sendToHubSpot(data) {
   const [firstname, ...rest] = data.name.trim().split(" ");
   const lastname = rest.join(" ") || "";
 
-  console.log("📨 HubSpot payload:", {
-    email: data.email,
-    firstname,
-    lastname,
-    phone: data.phone,
-  });
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
+      {
+        properties: {
+          email: data.email,
+          firstname,
+          lastname,
+          phone: data.phone,
+          lifecyclestage: "lead",
+          lead_source: "лендінг BLCK",
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${HUBSPOT_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
-  await axios.post(
-    "https://api.hubapi.com/crm/v3/objects/contacts",
-    {
-      properties: {
-        email: data.email, // 🔴 ОБЯЗАТЕЛЬНО
-        firstname,
-        lastname,
-        phone: data.phone,
-        lifecyclestage: "lead",
-      },
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${HUBSPOT_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-    },
-  );
+    console.log("✅ HubSpot contact saved:", response.data.id);
+  } catch (err) {
+    console.error(
+      "❌ HubSpot error:",
+      err.response?.status,
+      err.response?.data || err.message,
+    );
+  }
 }
 
 /* =========================

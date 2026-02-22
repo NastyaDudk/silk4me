@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
@@ -26,11 +27,12 @@ type FormData = {
   email: string;
   phone: string;
   message: string;
-  utm_source?: string;
-  utm_medium?: string;
-  utm_campaign?: string;
-  utm_content?: string;
-  utm_term?: string;
+};
+
+type Errors = {
+  name?: string;
+  email?: string;
+  phone?: string;
 };
 
 /* =========================
@@ -46,24 +48,32 @@ const Contact = () => {
     message: "",
   });
 
-  const [emailError, setEmailError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Errors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /* =========================
-     READ UTM FROM URL
+     VALIDATION
   ========================= */
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+  const validate = (): boolean => {
+    const newErrors: Errors = {};
 
-    setFormData((prev) => ({
-      ...prev,
-      utm_source: params.get("utm_source") || undefined,
-      utm_medium: params.get("utm_medium") || undefined,
-      utm_campaign: params.get("utm_campaign") || undefined,
-      utm_content: params.get("utm_content") || undefined,
-      utm_term: params.get("utm_term") || undefined,
-    }));
-  }, []);
+    if (!formData.name.trim()) {
+      newErrors.name = "Будь ласка, введіть імʼя";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Будь ласка, введіть email";
+    } else if (!EMAIL_REGEX.test(formData.email)) {
+      newErrors.email = "Введіть коректну електронну адресу";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Будь ласка, введіть телефон";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   /* =========================
      SUBMIT
@@ -72,21 +82,8 @@ const Contact = () => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!formData.name.trim()) return;
+    if (!validate()) return;
 
-    if (!formData.email.trim()) {
-      setEmailError("Будь ласка, введіть електронну пошту");
-      return;
-    }
-
-    if (!EMAIL_REGEX.test(formData.email)) {
-      setEmailError("Введіть коректну електронну адресу");
-      return;
-    }
-
-    if (!formData.phone.trim()) return;
-
-    setEmailError(null);
     setIsSubmitting(true);
 
     try {
@@ -98,14 +95,17 @@ const Contact = () => {
 
       if (!res.ok) throw new Error();
 
+      toast.success("✅ Запит успішно надіслано!");
+
       setFormData({
         name: "",
         email: "",
         phone: "",
         message: "",
       });
+      setErrors({});
     } catch {
-      // тихо — UX лучше без лишнего шума
+      toast.error("Сталася помилка. Спробуйте пізніше.");
     } finally {
       setIsSubmitting(false);
     }
@@ -117,6 +117,7 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* LEFT */}
           <div className="space-y-8">
+            {/* HEADINGS */}
             <div className="text-center lg:text-left space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
@@ -130,48 +131,62 @@ const Contact = () => {
             {/* FORM */}
             <form
               onSubmit={handleSubmit}
-              noValidate
               className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
+              noValidate
             >
               {/* NAME + EMAIL */}
               <div className="grid md:grid-cols-2 gap-4">
-                <Input
-                  placeholder="Ваше імʼя"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, name: e.target.value }))
-                  }
-                  className="h-14 bg-background"
-                />
+                <div>
+                  <Input
+                    placeholder="Ваше імʼя"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData((p) => ({ ...p, name: e.target.value }))
+                    }
+                    className="h-14 bg-background"
+                  />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-background/70">
+                      {errors.name}
+                    </p>
+                  )}
+                </div>
 
                 <div>
                   <Input
                     type="email"
+                    inputMode="email"
                     placeholder="Email"
                     value={formData.email}
-                    onChange={(e) => {
-                      setFormData((p) => ({ ...p, email: e.target.value }));
-                      setEmailError(null);
-                    }}
+                    onChange={(e) =>
+                      setFormData((p) => ({ ...p, email: e.target.value }))
+                    }
                     className="h-14 bg-background"
                   />
-                  {emailError && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {emailError}
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-background/70">
+                      {errors.email}
                     </p>
                   )}
                 </div>
               </div>
 
               {/* PHONE */}
-              <Input
-                placeholder="Телефон"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData((p) => ({ ...p, phone: e.target.value }))
-                }
-                className="h-14 bg-background"
-              />
+              <div>
+                <Input
+                  placeholder="Телефон"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, phone: e.target.value }))
+                  }
+                  className="h-14 bg-background"
+                />
+                {errors.phone && (
+                  <p className="mt-1 text-sm text-background/70">
+                    {errors.phone}
+                  </p>
+                )}
+              </div>
 
               {/* MESSAGE */}
               <Textarea
@@ -184,20 +199,22 @@ const Contact = () => {
               />
 
               {/* BUTTON */}
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="
-                  px-12 h-14 text-lg
-                  bg-[#E6C9A8] text-[#1F3D34]
-                  hover:bg-[#EED7BD]
-                  transition-all duration-300
-                  rounded-md
-                "
-              >
-                {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                <Send className="w-5 h-5 ml-3" />
-              </Button>
+              <div className="pt-2 flex justify-center lg:justify-start">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="
+                    px-12 h-14 text-lg
+                    bg-[#E6C9A8] text-[#1F3D34]
+                    hover:bg-[#EED7BD]
+                    transition-all duration-300
+                    rounded-md
+                  "
+                >
+                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+                  <Send className="w-5 h-5 ml-3" />
+                </Button>
+              </div>
             </form>
 
             {/* LINKS */}
@@ -206,7 +223,7 @@ const Contact = () => {
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 text-background/80 hover:text-gold"
+                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
                 <Instagram className="w-5 h-5" />
                 Instagram
@@ -214,7 +231,7 @@ const Contact = () => {
 
               <a
                 href="mailto:Silkandnature@gmail.com"
-                className="flex items-center gap-3 text-background/80 hover:text-gold"
+                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
               >
                 <Mail className="w-5 h-5" />
                 Email
@@ -228,11 +245,11 @@ const Contact = () => {
           </div>
 
           {/* IMAGE */}
-          <div className="hidden lg:block relative">
+          <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
               src={silkLifestyle}
-              alt="Silk4me"
+              alt="Silk4me lifestyle"
               className="w-full h-[520px] object-cover"
             />
           </div>
