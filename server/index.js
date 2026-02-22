@@ -63,7 +63,7 @@ async function sendToTelegram({ name, email, phone, message }) {
 /* =========================
    HUBSPOT (CREATE CONTACT)
 ========================= */
-async function sendToHubSpot({ name, email, phone }) {
+async function sendToHubSpot({ name, email, phone, message }) {
   if (!HUBSPOT_TOKEN) {
     console.error("❌ HUBSPOT_TOKEN missing");
     return;
@@ -74,7 +74,7 @@ async function sendToHubSpot({ name, email, phone }) {
 
   try {
     const res = await axios.post(
-      "https://api.hubapi.com/crm/v3/objects/contacts",
+      "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
       {
         properties: {
           email,
@@ -82,6 +82,8 @@ async function sendToHubSpot({ name, email, phone }) {
           lastname,
           phone,
           lifecyclestage: "lead",
+          lead_source: "Landing BLCK",
+          message: message || "",
         },
       },
       {
@@ -92,7 +94,7 @@ async function sendToHubSpot({ name, email, phone }) {
       },
     );
 
-    console.log("✅ HubSpot contact CREATED:", res.data.id);
+    console.log("✅ HubSpot contact saved:", res.data.id);
   } catch (err) {
     console.error(
       "❌ HubSpot ERROR:",
