@@ -5,33 +5,9 @@ import axios from "axios";
 const app = express();
 
 /* =========================
-   CORS
+   MIDDLEWARE
 ========================= */
-const ALLOWED_ORIGINS = [
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  "https://nastyadudk.github.io",
-  "https://nastyadudk.github.io/silk4me",
-  "https://re-silk.silk4.me",
-];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (ALLOWED_ORIGINS.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error("CORS blocked"));
-    },
-    methods: ["POST"],
-    allowedHeaders: ["Content-Type"],
-  }),
-);
-
-/* =========================
-   BODY
-========================= */
+app.use(cors()); // ← 🔥 БЕЗ origin callback
 app.use(express.json());
 
 /* =========================
@@ -57,21 +33,17 @@ app.post("/api/lead", async (req, res) => {
       return res.status(400).json({ ok: false });
     }
 
-    // 🔥 ответ СРАЗУ
+    // ✅ ответ СРАЗУ
     res.status(200).json({ ok: true });
 
     // Telegram
     if (TG_TOKEN && TG_CHAT_ID) {
-      await axios.post(
-        `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
-        {
-          chat_id: TG_CHAT_ID,
-          text:
-            `🧾 New lead\n` +
-            `👤 ${name}\n📧 ${email}\n📞 ${phone}\n💬 ${message || "—"}`,
-        },
-        { timeout: 5000 },
-      );
+      await axios.post(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+        chat_id: TG_CHAT_ID,
+        text:
+          `🧾 New lead\n` +
+          `👤 ${name}\n📧 ${email}\n📞 ${phone}\n💬 ${message || "—"}`,
+      });
     }
 
     // HubSpot
@@ -105,4 +77,6 @@ app.post("/api/lead", async (req, res) => {
    START
 ========================= */
 const PORT = process.env.PORT || 5050;
-app.listen(PORT, () => console.log("🚀 Server running on", PORT));
+app.listen(PORT, () => {
+  console.log("🚀 Server running on", PORT);
+});
