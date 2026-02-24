@@ -5,33 +5,41 @@ import axios from "axios";
 const app = express();
 
 /* =========================
-   BASIC MIDDLEWARE
+   CORS — СТРОГО ПЕРВЫМ
 ========================= */
-app.use(express.json());
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://nastyadudk.github.io",
+  "https://nastyadudk.github.io/silk4me",
+  "https://re-silk.silk4.me",
+];
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://127.0.0.1:5173",
-      "https://nastyadudk.github.io",
-      "https://nastyadudk.github.io/silk4me",
-      "https://re-silk.silk4.me",
-    ],
+    origin: function (origin, callback) {
+      // allow requests without origin (Postman, curl)
+      if (!origin) return callback(null, true);
+
+      if (ALLOWED_ORIGINS.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.error("❌ CORS blocked origin:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    },
     methods: ["POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   }),
 );
 
-// ⬅️ ВАЖЛИВО: один-єдиний options
+// ⬅️ ВАЖНО: OPTIONS тоже с тем же CORS
 app.options("/api/lead", cors());
 
 /* =========================
-   ENV
+   BODY
 ========================= */
-const TG_TOKEN = process.env.TG_BOT_TOKEN;
-const TG_CHAT_ID = process.env.TG_CHAT_ID;
-const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
+app.use(express.json());
 
 /* =========================
    HEALTH
@@ -41,17 +49,24 @@ app.get("/", (_, res) => {
 });
 
 /* =========================
+   ENV
+========================= */
+const TG_TOKEN = process.env.TG_BOT_TOKEN;
+const TG_CHAT_ID = process.env.TG_CHAT_ID;
+const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
+
+/* =========================
    LEAD
 ========================= */
 app.post("/api/lead", async (req, res) => {
   try {
-    const { name, email, phone, message } = req.body;
+    const { name, email, phone, message } = req.body || {};
 
     if (!name || !email || !phone) {
-      return res.status(400).json({ ok: false, error: "Missing fields" });
+      return res.status(400).json({ ok: false });
     }
 
-    // ✅ ВАЖЛИВО: відповідаємо фронту ОДРАЗУ
+    // 🔥 КЛЮЧЕВОЕ: отвечаем фронту сразу
     res.status(200).json({ ok: true });
 
     /* ---------- Telegram ---------- */
@@ -103,7 +118,7 @@ app.post("/api/lead", async (req, res) => {
 /* =========================
    START
 ========================= */
-const PORT = 5050;
+const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on ${PORT}`);
 });
