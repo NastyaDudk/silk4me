@@ -33,9 +33,6 @@ type Errors = {
   phone?: string;
 };
 
-/* =========================
-   EMAIL REGEX
-========================= */
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Contact = () => {
@@ -50,9 +47,16 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /* =========================
+     WAKE UP RENDER
+  ========================= */
+  useEffect(() => {
+    fetch("https://silk4me-api.onrender.com/api/test").catch(() => {});
+  }, []);
+
+  /* =========================
      VALIDATION
   ========================= */
-  const validate = (): boolean => {
+  const validate = () => {
     const newErrors: Errors = {};
 
     if (!formData.name.trim()) {
@@ -77,53 +81,57 @@ const Contact = () => {
      SUBMIT
   ========================= */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  if (isSubmitting) return;
+    e.preventDefault();
+    if (isSubmitting) return;
+    if (!validate()) return;
 
-  if (!validate()) return;
+    setIsSubmitting(true);
 
-  setIsSubmitting(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  try {
-    console.log("📤 Sending lead:", formData);
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+        signal: controller.signal,
+      });
 
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+      clearTimeout(timeoutId);
 
-    console.log("📥 Response status:", res.status);
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("API ERROR:", text);
+        throw new Error("Request failed");
+      }
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("❌ API error:", text);
-      throw new Error();
+      toast.success("✅ Запит успішно надіслано!");
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+      setErrors({});
+    } catch (err: any) {
+      if (err.name === "AbortError") {
+        toast.error("Сервер прокидається, спробуйте ще раз 🙏");
+      } else {
+        toast.error("Сталася помилка. Спробуйте пізніше.");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
+  };
 
-    toast.success("✅ Запит успішно надіслано!");
-
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    });
-    setErrors({});
-  } catch (err) {
-    console.error("❌ Submit failed:", err);
-    toast.error("Сталася помилка. Спробуйте пізніше.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
   return (
     <section id="contact" className="bg-silk-charcoal py-16">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* LEFT */}
           <div className="space-y-8">
-            {/* HEADINGS */}
             <div className="text-center lg:text-left space-y-3">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
                 Контакти
@@ -134,70 +142,45 @@ const Contact = () => {
               </h2>
             </div>
 
-            {/* FORM */}
             <form
               onSubmit={handleSubmit}
               className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
               noValidate
             >
-              {/* NAME + EMAIL */}
               <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <Input
-                    placeholder="Ваше імʼя"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData((p) => ({ ...p, name: e.target.value }))
-                    }
-                    className="h-14 bg-background"
-                  />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-background/70">
-                      {errors.name}
-                    </p>
-                  )}
-                </div>
+                <Input
+                  placeholder="Ваше імʼя"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, name: e.target.value }))
+                  }
+                  className="h-14 bg-background"
+                />
 
-                <div>
-                  <Input
-                    type="email"
-                    inputMode="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData((p) => ({ ...p, email: e.target.value }))
-                    }
-                    className="h-14 bg-background"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-background/70">
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, email: e.target.value }))
+                  }
+                  className="h-14 bg-background"
+                />
               </div>
 
-              {/* PHONE */}
-<div>
-  <Input
-    placeholder="Телефон"
-    inputMode="tel"
-    value={formData.phone}
-    onChange={(e) => {
-      const sanitized = e.target.value.replace(/[^\d+]/g, "");
-      setFormData((p) => ({ ...p, phone: sanitized }));
-    }}
-    className="h-14 bg-background"
-  />
+              <Input
+                placeholder="Телефон"
+                inputMode="tel"
+                value={formData.phone}
+                onChange={(e) =>
+                  setFormData((p) => ({
+                    ...p,
+                    phone: e.target.value.replace(/[^\d+]/g, ""),
+                  }))
+                }
+                className="h-14 bg-background"
+              />
 
-  {errors.phone && (
-    <p className="mt-1 text-sm text-background/70">
-      {errors.phone}
-    </p>
-  )}
-</div>
-
-              {/* MESSAGE */}
               <Textarea
                 placeholder="Ваше повідомлення (необовʼязково)"
                 value={formData.message}
@@ -207,48 +190,35 @@ const Contact = () => {
                 className="min-h-[170px] bg-background resize-none"
               />
 
-              {/* BUTTON */}
-              <div className="pt-2 flex justify-center lg:justify-start">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="
-                    px-12 h-14 text-lg
-                    bg-[#E6C9A8] text-[#1F3D34]
-                    hover:bg-[#EED7BD]
-                    transition-all duration-300
-                    rounded-md
-                  "
-                >
-                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                  <Send className="w-5 h-5 ml-3" />
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-12 h-14 text-lg bg-[#E6C9A8] text-[#1F3D34]"
+              >
+                {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+                <Send className="w-5 h-5 ml-3" />
+              </Button>
             </form>
 
-            {/* LINKS */}
-            <div className="pt-4 flex flex-col items-center gap-4 lg:flex-row lg:gap-10">
+            <div className="pt-4 flex flex-col gap-4 lg:flex-row lg:gap-10">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
-                <Instagram className="w-5 h-5" />
-                Instagram
+                <Instagram className="w-5 h-5" /> Instagram
               </a>
 
               <a
                 href="mailto:Silkandnature@gmail.com"
-                className="flex items-center gap-3 text-background/80 hover:text-gold transition-colors"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
               >
-                <Mail className="w-5 h-5" />
-                Email
+                <Mail className="w-5 h-5" /> Email
               </a>
 
               <div className="flex items-center gap-3 text-background/70">
-                <MapPin className="w-5 h-5" />
-                Україна / Європа
+                <MapPin className="w-5 h-5" /> Україна / Європа
               </div>
             </div>
           </div>
