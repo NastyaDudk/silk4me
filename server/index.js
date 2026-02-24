@@ -14,9 +14,9 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://127.0.0.1:5173",
-      "https://nastyadudk.github.io",
-      "https://nastyadudk.github.io/silk4me",
+      "https://re-silk.silk4.me",
     ],
+    methods: ["POST"],
   }),
 );
 
