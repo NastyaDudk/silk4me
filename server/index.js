@@ -1,48 +1,65 @@
 import express from "express";
-import cors from "cors";
 import axios from "axios";
 
 const app = express();
+app.set("trust proxy", 1);
 
 /* =========================
    MIDDLEWARE
 ========================= */
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "http://127.0.0.1:5173",
-      "https://re-silk.silk4.me",
-    ],
-    methods: ["POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  }),
-);
+// 🔥 ЯВНЫЙ CORS + OPTIONS (БЕЗ cors-пакета)
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://nastyadudk.github.io",
+    "https://nastyadudk.github.io/silk4me",
+    "https://re-silk.silk4.me",
+  ];
 
-// обязательно
-app.options("*", cors());
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+
+  // 🔥 PRE-FLIGHT
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 /* =========================
    ENV
 ========================= */
 const TG_TOKEN = process.env.TG_BOT_TOKEN;
-const TG_CHAT_ID = process.env.TG_CHAT_ID; // строка — ОК
+const TG_CHAT_ID = process.env.TG_CHAT_ID;
 const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
 
 /* =========================
    HEALTH
 ========================= */
-app.get("/", (_, res) => res.send("✅ API running"));
-app.get("/api/test", (_, res) => res.json({ ok: true }));
+app.get("/", (_, res) => {
+  res.send("✅ API running");
+});
+
+app.get("/api/test", (_, res) => {
+  res.json({ ok: true });
+});
 
 /* =========================
    TELEGRAM
 ========================= */
 async function sendToTelegram({ name, email, phone, message }) {
   if (!TG_TOKEN || !TG_CHAT_ID) {
-    console.error("❌ Telegram ENV missing");
+    console.warn("Telegram ENV missing");
     return;
   }
 
@@ -55,56 +72,44 @@ async function sendToTelegram({ name, email, phone, message }) {
         `👤 Name: ${name}\n` +
         `📧 Email: ${email}\n` +
         `📞 Phone: ${phone}\n` +
-        `💬 Message: ${message || "—"}\n` +
-        `🌐 Source: Landing BLCK`,
+        `💬 Message: ${message || "—"}`,
     },
     { timeout: 5000 },
   );
-
-  console.log("✅ Telegram sent:", email);
 }
 
 /* =========================
-   HUBSPOT (CREATE CONTACT)
+   HUBSPOT
 ========================= */
 async function sendToHubSpot({ name, email, phone, message }) {
   if (!HUBSPOT_TOKEN) {
-    console.error("❌ HUBSPOT_TOKEN missing");
+    console.warn("HubSpot token missing");
     return;
   }
 
   const [firstname, ...rest] = name.trim().split(" ");
   const lastname = rest.join(" ") || "";
 
-  try {
-    const res = await axios.post(
-      "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
-      {
-        properties: {
-          email,
-          firstname,
-          lastname,
-          phone,
-          lifecyclestage: "lead",
-          message: message || "",
-        },
+  await axios.post(
+    "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
+    {
+      properties: {
+        email,
+        firstname,
+        lastname,
+        phone,
+        lifecyclestage: "lead",
+        message: message || "",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${HUBSPOT_TOKEN}`,
-          "Content-Type": "application/json",
-        },
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${HUBSPOT_TOKEN}`,
+        "Content-Type": "application/json",
       },
-    );
-
-    console.log("✅ HubSpot contact saved:", res.data.id);
-  } catch (err) {
-    console.error(
-      "❌ HubSpot ERROR:",
-      err.response?.status,
-      JSON.stringify(err.response?.data, null, 2),
-    );
-  }
+      timeout: 5000,
+    },
+  );
 }
 
 /* =========================
@@ -113,24 +118,16 @@ async function sendToHubSpot({ name, email, phone, message }) {
 app.post("/api/lead", (req, res) => {
   const { name, email, phone, message } = req.body || {};
 
-  console.log("📩 Lead received:", email);
-
   if (!name || !email || !phone) {
-    console.error("❌ Validation failed:", req.body);
     return res.status(400).json({ ok: false });
   }
 
-  // ⚡ мгновенный ответ фронту
+  // ⚡ СРАЗУ отвечаем фронту
   res.json({ ok: true });
 
-  // 🔥 фоновые задачи
-  sendToTelegram({ name, email, phone, message }).catch((e) =>
-    console.error("TG error:", e.message),
-  );
-
-  sendToHubSpot({ name, email, phone, message }).catch((e) =>
-    console.error("HS error:", e.message),
-  );
+  // 🔥 фон
+  sendToTelegram({ name, email, phone, message }).catch(() => {});
+  sendToHubSpot({ name, email, phone, message }).catch(() => {});
 });
 
 /* =========================

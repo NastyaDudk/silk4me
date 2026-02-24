@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,7 +35,7 @@ type Errors = {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const Contact = () => {
+export default function Contact() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -47,34 +47,21 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /* =========================
-     WAKE UP RENDER
-  ========================= */
-  useEffect(() => {
-    fetch("https://silk4me-api.onrender.com/api/test").catch(() => {});
-  }, []);
-
-  /* =========================
      VALIDATION
   ========================= */
   const validate = () => {
-    const newErrors: Errors = {};
+    const e: Errors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Будь ласка, введіть імʼя";
-    }
-
+    if (!formData.name.trim()) e.name = "Введіть імʼя";
     if (!formData.email.trim()) {
-      newErrors.email = "Будь ласка, введіть email";
+      e.email = "Введіть email";
     } else if (!EMAIL_REGEX.test(formData.email)) {
-      newErrors.email = "Введіть коректну електронну адресу";
+      e.email = "Некоректний email";
     }
+    if (!formData.phone.trim()) e.phone = "Введіть телефон";
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Будь ласка, введіть телефон";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
   /* =========================
@@ -87,23 +74,17 @@ const Contact = () => {
 
     setIsSubmitting(true);
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
-
     try {
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(formData),
-        signal: controller.signal,
       });
 
-      clearTimeout(timeoutId);
-
       if (!res.ok) {
-        const text = await res.text();
-        console.error("API ERROR:", text);
-        throw new Error("Request failed");
+        throw new Error(`Server error ${res.status}`);
       }
 
       toast.success("✅ Запит успішно надіслано!");
@@ -115,12 +96,9 @@ const Contact = () => {
         message: "",
       });
       setErrors({});
-    } catch (err: any) {
-      if (err.name === "AbortError") {
-        toast.error("Сервер прокидається, спробуйте ще раз 🙏");
-      } else {
-        toast.error("Сталася помилка. Спробуйте пізніше.");
-      }
+    } catch (err) {
+      console.error(err);
+      toast.error("❌ Помилка. Спробуйте пізніше.");
     } finally {
       setIsSubmitting(false);
     }
@@ -137,49 +115,53 @@ const Contact = () => {
                 Контакти
               </p>
               <h2 className="text-3xl md:text-4xl font-serif text-background">
-                Отримайте{" "}
-                <span className="text-gold">персональну консультацію</span>
+                Отримайте <span className="text-gold">персональну консультацію</span>
               </h2>
             </div>
 
             <form
               onSubmit={handleSubmit}
-              className="space-y-5 max-w-[560px] mx-auto lg:mx-0"
+              className="space-y-5 max-w-[560px]"
               noValidate
             >
               <div className="grid md:grid-cols-2 gap-4">
-                <Input
-                  placeholder="Ваше імʼя"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, name: e.target.value }))
-                  }
-                  className="h-14 bg-background"
-                />
+                <div>
+                  <Input
+                    placeholder="Ваше імʼя"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData((p) => ({ ...p, name: e.target.value }))
+                    }
+                  />
+                  {errors.name && <p className="text-sm">{errors.name}</p>}
+                </div>
 
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, email: e.target.value }))
-                  }
-                  className="h-14 bg-background"
-                />
+                <div>
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData((p) => ({ ...p, email: e.target.value }))
+                    }
+                  />
+                  {errors.email && <p className="text-sm">{errors.email}</p>}
+                </div>
               </div>
 
-              <Input
-                placeholder="Телефон"
-                inputMode="tel"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData((p) => ({
-                    ...p,
-                    phone: e.target.value.replace(/[^\d+]/g, ""),
-                  }))
-                }
-                className="h-14 bg-background"
-              />
+              <div>
+                <Input
+                  placeholder="Телефон"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData((p) => ({
+                      ...p,
+                      phone: e.target.value.replace(/[^\d+]/g, ""),
+                    }))
+                  }
+                />
+                {errors.phone && <p className="text-sm">{errors.phone}</p>}
+              </div>
 
               <Textarea
                 placeholder="Ваше повідомлення (необовʼязково)"
@@ -187,45 +169,29 @@ const Contact = () => {
                 onChange={(e) =>
                   setFormData((p) => ({ ...p, message: e.target.value }))
                 }
-                className="min-h-[170px] bg-background resize-none"
               />
 
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-12 h-14 text-lg bg-[#E6C9A8] text-[#1F3D34]"
-              >
-                {isSubmitting ? "Надсилання..." : "Надіслати запит"}
-                <Send className="w-5 h-5 ml-3" />
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Надсилання..." : "Надіслати"}
+                <Send className="ml-2 w-4 h-4" />
               </Button>
             </form>
 
-            <div className="pt-4 flex flex-col gap-4 lg:flex-row lg:gap-10">
-              <a
-                href="https://www.instagram.com/silk4me"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-3 text-background/80 hover:text-gold"
-              >
-                <Instagram className="w-5 h-5" /> Instagram
+            <div className="flex gap-6 text-background/80">
+              <a href="https://instagram.com/silk4me" target="_blank">
+                <Instagram />
               </a>
-
-              <a
-                href="mailto:Silkandnature@gmail.com"
-                className="flex items-center gap-3 text-background/80 hover:text-gold"
-              >
-                <Mail className="w-5 h-5" /> Email
+              <a href="mailto:Silkandnature@gmail.com">
+                <Mail />
               </a>
-
-              <div className="flex items-center gap-3 text-background/70">
-                <MapPin className="w-5 h-5" /> Україна / Європа
+              <div className="flex items-center gap-2">
+                <MapPin /> Україна / Європа
               </div>
             </div>
           </div>
 
           {/* IMAGE */}
-          <div className="relative hidden lg:block">
-            <div className="absolute -inset-4 border border-gold/20" />
+          <div className="hidden lg:block">
             <img
               src={silkLifestyle}
               alt="Silk4me lifestyle"
@@ -236,6 +202,4 @@ const Contact = () => {
       </div>
     </section>
   );
-};
-
-export default Contact;
+}
