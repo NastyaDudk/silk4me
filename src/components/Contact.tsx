@@ -14,7 +14,7 @@ const isLocal =
   ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
 const API_URL = isLocal
-  ? "http://localhost:5050/api/lead"
+  ? "https://localhost:5050/api/lead"
   : "https://silk4me-api.onrender.com/api/lead";
 
 /* =========================
