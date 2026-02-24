@@ -5,7 +5,7 @@ import axios from "axios";
 const app = express();
 
 /* =========================
-   CORS — СТРОГО ПЕРВЫМ
+   CORS
 ========================= */
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
@@ -17,24 +17,17 @@ const ALLOWED_ORIGINS = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests without origin (Postman, curl)
+    origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-
       if (ALLOWED_ORIGINS.includes(origin)) {
         return callback(null, true);
       }
-
-      console.error("❌ CORS blocked origin:", origin);
-      return callback(new Error("Not allowed by CORS"));
+      return callback(new Error("CORS blocked"));
     },
-    methods: ["POST", "OPTIONS"],
+    methods: ["POST"],
     allowedHeaders: ["Content-Type"],
   }),
 );
-
-// ⬅️ ВАЖНО: OPTIONS тоже с тем же CORS
-app.options("/api/lead", cors());
 
 /* =========================
    BODY
@@ -44,9 +37,7 @@ app.use(express.json());
 /* =========================
    HEALTH
 ========================= */
-app.get("/", (_, res) => {
-  res.send("✅ API running");
-});
+app.get("/", (_, res) => res.send("API OK"));
 
 /* =========================
    ENV
@@ -66,10 +57,10 @@ app.post("/api/lead", async (req, res) => {
       return res.status(400).json({ ok: false });
     }
 
-    // 🔥 КЛЮЧЕВОЕ: отвечаем фронту сразу
+    // 🔥 ответ СРАЗУ
     res.status(200).json({ ok: true });
 
-    /* ---------- Telegram ---------- */
+    // Telegram
     if (TG_TOKEN && TG_CHAT_ID) {
       await axios.post(
         `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
@@ -77,27 +68,22 @@ app.post("/api/lead", async (req, res) => {
           chat_id: TG_CHAT_ID,
           text:
             `🧾 New lead\n` +
-            `👤 ${name}\n` +
-            `📧 ${email}\n` +
-            `📞 ${phone}\n` +
-            `💬 ${message || "—"}`,
+            `👤 ${name}\n📧 ${email}\n📞 ${phone}\n💬 ${message || "—"}`,
         },
         { timeout: 5000 },
       );
     }
 
-    /* ---------- HubSpot ---------- */
+    // HubSpot
     if (HUBSPOT_TOKEN) {
       const [firstname, ...rest] = name.split(" ");
-      const lastname = rest.join(" ");
-
       await axios.post(
         "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
         {
           properties: {
             email,
             firstname,
-            lastname,
+            lastname: rest.join(" "),
             phone,
             lifecyclestage: "lead",
           },
@@ -110,8 +96,8 @@ app.post("/api/lead", async (req, res) => {
         },
       );
     }
-  } catch (err) {
-    console.error("❌ Lead error:", err.message);
+  } catch (e) {
+    console.error("Lead error:", e.message);
   }
 });
 
@@ -119,6 +105,4 @@ app.post("/api/lead", async (req, res) => {
    START
 ========================= */
 const PORT = process.env.PORT || 5050;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on ${PORT}`);
-});
+app.listen(PORT, () => console.log("🚀 Server running on", PORT));
