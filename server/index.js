@@ -16,9 +16,13 @@ app.use(
       "http://127.0.0.1:5173",
       "https://re-silk.silk4.me",
     ],
-    methods: ["POST"],
+    methods: ["POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
   }),
 );
+
+// обязательно
+app.options("*", cors());
 
 /* =========================
    ENV
