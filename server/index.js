@@ -1,6 +1,6 @@
-import express from "express";
-import cors from "cors";
-import axios from "axios";
+const express = require("express");
+const cors = require("cors");
+const axios = require("axios");
 
 const app = express();
 
@@ -13,7 +13,9 @@ app.use(express.json());
 /* =========================
    HEALTH
 ========================= */
-app.get("/", (_, res) => res.send("API OK"));
+app.get("/", (req, res) => {
+  res.status(200).send("API OK");
+});
 
 /* =========================
    ENV
@@ -26,16 +28,16 @@ const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
    LEAD
 ========================= */
 app.post("/api/lead", async (req, res) => {
+  const { name, email, phone, message } = req.body || {};
+
+  if (!name || !email || !phone) {
+    return res.status(400).json({ ok: false });
+  }
+
+  // ✅ отвечаем сразу (Render любит это)
+  res.status(200).json({ ok: true });
+
   try {
-    const { name, email, phone, message } = req.body || {};
-
-    if (!name || !email || !phone) {
-      return res.status(400).json({ ok: false });
-    }
-
-    // ✅ отвечаем сразу
-    res.status(200).json({ ok: true });
-
     /* -------------------------
        TELEGRAM
     ------------------------- */
@@ -67,8 +69,6 @@ app.post("/api/lead", async (req, res) => {
             lastname: rest.join(" "),
             phone,
             lifecyclestage: "lead",
-
-            // 🔥 ВАЖНОЕ МЕСТО
             source_custom: "BLCK",
           },
         },
@@ -89,6 +89,7 @@ app.post("/api/lead", async (req, res) => {
    START
 ========================= */
 const PORT = process.env.PORT || 5050;
+
 app.listen(PORT, () => {
-  console.log("🚀 Server running on", PORT);
+  console.log("🚀 Server running on port", PORT);
 });
