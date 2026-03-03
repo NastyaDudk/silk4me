@@ -1,6 +1,7 @@
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
+import express from "express";
+import cors from "cors";
+import axios from "axios";
+import "dotenv/config";
 
 const app = express();
 
@@ -34,7 +35,7 @@ app.post("/api/lead", async (req, res) => {
     return res.status(400).json({ ok: false });
   }
 
-  // ✅ отвечаем сразу (Render любит это)
+  // ✅ отвечаем сразу (важно для Render)
   res.status(200).json({ ok: true });
 
   try {
