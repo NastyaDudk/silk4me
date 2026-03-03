@@ -7,7 +7,7 @@ const app = express();
 /* =========================
    MIDDLEWARE
 ========================= */
-app.use(cors()); // ← 🔥 БЕЗ origin callback
+app.use(cors());
 app.use(express.json());
 
 /* =========================
@@ -33,22 +33,31 @@ app.post("/api/lead", async (req, res) => {
       return res.status(400).json({ ok: false });
     }
 
-    // ✅ ответ СРАЗУ
+    // ✅ отвечаем сразу
     res.status(200).json({ ok: true });
 
-    // Telegram
+    /* -------------------------
+       TELEGRAM
+    ------------------------- */
     if (TG_TOKEN && TG_CHAT_ID) {
       await axios.post(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
         chat_id: TG_CHAT_ID,
         text:
           `🧾 New lead\n` +
-          `👤 ${name}\n📧 ${email}\n📞 ${phone}\n💬 ${message || "—"}`,
+          `📍 Source: BLCK\n` +
+          `👤 ${name}\n` +
+          `📧 ${email}\n` +
+          `📞 ${phone}\n` +
+          `💬 ${message || "—"}`,
       });
     }
 
-    // HubSpot
+    /* -------------------------
+       HUBSPOT
+    ------------------------- */
     if (HUBSPOT_TOKEN) {
       const [firstname, ...rest] = name.split(" ");
+
       await axios.post(
         "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
         {
@@ -58,6 +67,9 @@ app.post("/api/lead", async (req, res) => {
             lastname: rest.join(" "),
             phone,
             lifecyclestage: "lead",
+
+            // 🔥 ВАЖНОЕ МЕСТО
+            source_custom: "BLCK",
           },
         },
         {
@@ -69,7 +81,7 @@ app.post("/api/lead", async (req, res) => {
       );
     }
   } catch (e) {
-    console.error("Lead error:", e.message);
+    console.error("Lead error:", e.response?.data || e.message);
   }
 });
 
