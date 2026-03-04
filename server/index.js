@@ -29,13 +29,18 @@ const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
    LEAD
 ========================= */
 app.post("/api/lead", async (req, res) => {
-  const { name, email, phone, message } = req.body || {};
+  const {
+    name,
+    email,
+    phone,
+    message,
+    source = "BLCK", // если source не пришёл — будет BLCK
+  } = req.body || {};
 
   if (!name || !email || !phone) {
     return res.status(400).json({ ok: false });
   }
 
-  // ✅ отвечаем сразу (важно для Render)
   res.status(200).json({ ok: true });
 
   try {
@@ -47,7 +52,7 @@ app.post("/api/lead", async (req, res) => {
         chat_id: TG_CHAT_ID,
         text:
           `🧾 New lead\n` +
-          `📍 Source: BLCK\n` +
+          `📍 Source: ${source}\n` +
           `👤 ${name}\n` +
           `📧 ${email}\n` +
           `📞 ${phone}\n` +
@@ -70,7 +75,7 @@ app.post("/api/lead", async (req, res) => {
             lastname: rest.join(" "),
             phone,
             lifecyclestage: "lead",
-            source_custom: "BLCK",
+            source_custom: source,
           },
         },
         {
