@@ -2,61 +2,68 @@
 <html lang="uk">
 
 <head>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta https-equiv="x-ua-compatible" content="ie=edge" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
 
-  <title>Silk4me — Black Collection</title>
+  <title>Silk4me — BLCK Mulberry Silk Collection 22 Momme</title>
+
   <meta name="description"
-    content="Silk4me — натуральний шовк Mulberry 6A. Персональні консультації та преміальні вироби." />
+    content="BLCK collection by Silk4me. Mulberry silk 22 momme: silk pillowcases, sleep masks, towels and silk sleepwear made from натурального шовку." />
 
-  <link rel="canonical" href="https://nastyadudk.github.io/silk4me/" />
+  <meta name="keywords"
+    content="mulberry silk, silk pillowcase, silk sleep mask, silk sleepwear, silk bedding, mulberry silk 22 momme, шовкова наволочка, натуральний шовк" />
 
-  <!-- ICONS -->
-  <link rel="icon" href="/silk4me/favicon.ico" />
-  <link rel="apple-touch-icon" href="/silk4me/apple-touch-icon.png" />
+  <link rel="canonical" href="https://black.silk4.me/" />
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:title" content="BLCK Mulberry Silk Collection 22 Momme" />
+  <meta property="og:description"
+    content="Mulberry silk pillowcases, sleep masks, towels and silk sleepwear made from 22 momme silk." />
+  <meta property="og:image" content="https://black.silk4.me/preview.jpg" />
+  <meta property="og:url" content="https://black.silk4.me/" />
+  <meta property="og:type" content="website" />
+
+  <!-- TWITTER -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BLCK Mulberry Silk Collection" />
+  <meta name="twitter:description"
+    content="Mulberry silk pillowcases, sleep masks and silk sleepwear made from 22 momme silk." />
+  <meta name="twitter:image" content="https://black.silk4.me/preview.jpg" />
 
   <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap"
     rel="stylesheet" />
 
-  <!-- =========================
-       VOICE ASSISTANT STYLES
-  ========================== -->
   <style>
-    /* =========================
-       DESKTOP — ассистент ВИДЕН
-    ========================== */
     elevenlabs-convai {
       position: fixed;
       right: 24px;
       bottom: 180px;
-      /* ⬅️ ниже картинки, не в самом низу */
       max-height: 420px;
       z-index: 99999;
     }
 
-    /* =========================
-       PHONE BUTTON — HIDDEN BY DEFAULT
-    ========================== */
     .mobile-assistant {
       display: none;
     }
 
-    /* =========================
-       MOBILE ONLY
-    ========================== */
-    @media (max-width: 640px) {
+    @media (max-width:640px) {
 
-      /* ассистент скрыт */
       elevenlabs-convai {
         display: none;
       }
 
-      /* 📞 кнопка */
       .mobile-assistant {
         display: grid;
         position: fixed;
@@ -71,7 +78,7 @@
         font-size: 22px;
         place-items: center;
         z-index: 100000;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, .25);
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
       }
@@ -79,64 +86,82 @@
       .mobile-assistant:active {
         transform: translateY(1px);
       }
+
     }
   </style>
+
 </head>
 
 <body>
+
   <div id="root"></div>
 
-  <!-- Vite -->
   <script type="module" src="/src/main.tsx"></script>
 
-  <!-- =========================
-       ELEVENLABS ASSISTANT
-  ========================== -->
-  <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9">
-  </elevenlabs-convai>
+  <!-- ELEVENLABS -->
+
+  <elevenlabs-convai agent-id="agent_2101kfzp9g9deyd8462gp5q2dss9"></elevenlabs-convai>
+
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async></script>
 
-  <!-- 📞 MOBILE BUTTON -->
   <button class="mobile-assistant" aria-label="Поговорити з консультантом">
     📞
   </button>
 
-  <!-- =========================
-       MOBILE LOGIC
-  ========================== -->
   <script>
+
     (function () {
-      if (window.matchMedia("(min-width: 641px)").matches) return;
+
+      if (window.matchMedia("(min-width:641px)").matches) return;
 
       const btn = document.querySelector(".mobile-assistant");
       const widget = document.querySelector("elevenlabs-convai");
+
       if (!btn || !widget) return;
 
-      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
       async function tryStartCall() {
+
         const root = widget.shadowRoot;
+
         if (!root) return false;
 
         const buttons = root.querySelectorAll("button,[role='button']");
+
         for (const b of buttons) {
+
           const t = (b.textContent || "").toLowerCase();
+
           if (t.includes("start") || t.includes("поговор")) {
+
             b.click();
             return true;
+
           }
+
         }
+
         return false;
+
       }
 
       btn.addEventListener("click", async () => {
+
         for (let i = 0; i < 20; i++) {
+
           if (await tryStartCall()) break;
+
           await sleep(300);
+
         }
+
       });
+
     })();
+
   </script>
+
 </body>
 
 </html>
