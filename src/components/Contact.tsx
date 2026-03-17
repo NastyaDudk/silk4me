@@ -220,7 +220,7 @@ export default function Contact() {
               </a>
 
               <a
-                href="mailto:Silkandnature@gmail.com"
+                href="mailto:info@silk4.me"
                 className="flex items-center gap-3 hover:text-gold"
               >
                 <Mail className="w-5 h-5" />
